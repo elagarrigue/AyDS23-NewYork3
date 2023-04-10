@@ -24,6 +24,7 @@ internal class SongRepositoryImpl(
             else -> {
                 try {
                     spotifySong = spotifyTrackService.getSong(term)
+                    println(spotifySong)
 
                     spotifySong?.let {
                         when {
