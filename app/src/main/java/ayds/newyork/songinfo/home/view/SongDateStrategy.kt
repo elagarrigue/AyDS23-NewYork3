@@ -46,20 +46,20 @@ internal class MonthSongDateStrategy: SongDateStrategy {
 internal class YearSongDateStrategy: SongDateStrategy {
 
     override fun getSongDate(releaseDate: String): String {
-        val anio = releaseDate.split("-")[0].toInt()
-        val bisiesto = esBisiesto(anio)
+        val year = releaseDate.split("-")[0].toInt()
+        val leap = isLeap(year)
 
-        val result = if (bisiesto) {
-            "$anio (leap year)"
+        val result = if (leap) {
+            "$year (leap year)"
         } else {
-            "$anio (not a leap year)"
+            "$year (not a leap year)"
         }
 
         return result
     }
 
-    private fun esBisiesto(anio: Int): Boolean {
-        return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)
+    private fun isLeap(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
 }
