@@ -23,15 +23,11 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
         }
     }
     private fun datePrecisionYear(song: SpotifySong): String {
-        var release_date = song.releaseDate
-        var release_date_precision = song.releaseDatePrecision
+        val strategy = SongDateStrategyFactory.get(song.releaseDatePrecision)
 
-        return when {
-            release_date_precision == "day" -> "99/99/9999"
-            release_date_precision == "month" -> "MMMM, YYYY"
-            release_date_precision == "year" -> "YYYY (not a leap year)"
-            else -> ""
-        }
-
+        return strategy.getSongDate(song.releaseDate)
     }
+
+
+
 }

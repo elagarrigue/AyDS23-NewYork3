@@ -66,6 +66,6 @@ internal class YearSongDateStrategy: SongDateStrategy {
 
 internal class EmptySongDateStrategy: SongDateStrategy {
     override fun getSongDate(releaseDate: String): String {
-        return "test"
+        return ""
     }
 }
