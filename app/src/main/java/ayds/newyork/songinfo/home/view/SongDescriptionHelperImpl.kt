@@ -18,8 +18,20 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "Year: ${song.year}"
+                        "Release date: ${datePrecisionYear(song)}"
             else -> "Song not found"
+        }
+    }
+
+    private fun datePrecisionYear(song: SpotifySong): String {
+        var release_date = song.releaseDate
+        var release_date_precision = song.releaseDatePrecision
+
+        return when {
+            release_date_precision == "day" -> "99/99/9999"
+            release_date_precision == "month" -> "MMMM, YYYY"
+            release_date_precision == "year" -> "YYYY (not a leap year)"
+            else -> ""
         }
     }
 }
