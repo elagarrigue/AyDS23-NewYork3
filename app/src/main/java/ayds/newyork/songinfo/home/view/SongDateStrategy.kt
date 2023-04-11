@@ -9,7 +9,12 @@ interface SongDateStrategy {
 internal class DaySongDateStrategy: SongDateStrategy {
 
     override fun getSongDate(releaseDate: String): String {
-        return ""
+        val delim = "-"
+        val arr = releaseDate.split(delim).toTypedArray()
+        val day = arr.get(2)
+        val month = arr.get(1)
+        val year = arr.get(0)
+        return "$day/$month/$year"
     }
 
 }
@@ -57,4 +62,10 @@ internal class YearSongDateStrategy: SongDateStrategy {
         return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)
     }
 
+}
+
+internal class EmptySongDateStrategy: SongDateStrategy {
+    override fun getSongDate(releaseDate: String): String {
+        return "test"
+    }
 }
