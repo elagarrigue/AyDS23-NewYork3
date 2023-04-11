@@ -11,23 +11,20 @@ interface SongDescriptionHelper {
 internal class SongDescriptionHelperImpl : SongDescriptionHelper {
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
-            is SpotifySong ->
-                "${
-                    "Song: ${song.songName} " +
-                            if (song.isLocallyStored) "[*]" else ""
-                }\n" +
-                        "Artist: ${song.artistName}\n" +
-                        "Album: ${song.albumName}\n" +
-                        "Release date: ${datePrecisionYear(song)}"
+            is SpotifySong -> buildSongDescriptionText(song)
             else -> "Song not found"
         }
     }
-    private fun datePrecisionYear(song: SpotifySong): String {
+
+    private fun buildSongDescriptionText(song: SpotifySong): String {
         val strategy = SongDateStrategyFactory.get(song.releaseDatePrecision)
-
-        return strategy.getSongDate(song.releaseDate)
+        return "${
+            "Song: ${song.songName} " +
+                    if (song.isLocallyStored) "[*]" else ""
+        }\n" +
+                "Artist: ${song.artistName}\n" +
+                "Album: ${song.albumName}\n" +
+                "Release date: ${strategy.getSongDate(song.releaseDate)}"
     }
-
-
 
 }
