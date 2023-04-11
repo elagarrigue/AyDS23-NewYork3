@@ -28,4 +28,8 @@ internal class YearSongDateStrategy: SongDateStrategy {
         TODO("Not yet implemented")
     }
 
+    private fun esBisiesto(anio: Int): Boolean {
+        return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)
+    }
+
 }
