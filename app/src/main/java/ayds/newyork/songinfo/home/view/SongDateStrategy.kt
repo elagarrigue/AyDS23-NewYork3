@@ -9,7 +9,7 @@ interface SongDateStrategy {
 internal class DaySongDateStrategy: SongDateStrategy {
 
     override fun getSongDate(releaseDate: String): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
 }
@@ -41,7 +41,20 @@ internal class MonthSongDateStrategy: SongDateStrategy {
 internal class YearSongDateStrategy: SongDateStrategy {
 
     override fun getSongDate(releaseDate: String): String {
-        TODO("Not yet implemented")
+        val anio = releaseDate.split("-")[0].toInt()
+        val bisiesto = esBisiesto(anio)
+
+        val result = if (bisiesto) {
+            "$anio (leap year)"
+        } else {
+            "$anio (not a leap year)"
+        }
+
+        return result
+    }
+
+    private fun esBisiesto(anio: Int): Boolean {
+        return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)
     }
 
 }
