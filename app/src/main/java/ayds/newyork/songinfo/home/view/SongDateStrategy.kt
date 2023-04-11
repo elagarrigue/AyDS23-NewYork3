@@ -42,9 +42,8 @@ internal class YearSongDateStrategy: SongDateStrategy {
 
     override fun getSongDate(releaseDate: String): String {
         val anio = releaseDate.split("-")[0].toInt()
-        val bisiesto = esBisiesto(anio) // Check if the year is a leap year using the esBisiesto function
+        val bisiesto = esBisiesto(anio)
 
-        // Construct the result string with the year and leap year status
         val result = if (bisiesto) {
             "$anio (leap year)"
         } else {
