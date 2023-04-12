@@ -4,9 +4,9 @@ interface SongDateStrategyFactory {
     fun get(releaseDatePrecision: String): SongDateStrategy
 }
 
-object SongDateStrategyFactoryImpl {
+object SongDateStrategyFactoryImpl: SongDateStrategyFactory {
 
-    fun get(releaseDatePrecision: String): SongDateStrategy {
+    override fun get(releaseDatePrecision: String): SongDateStrategy {
         return when (releaseDatePrecision) {
             "day" -> DaySongDateStrategy()
             "month" -> MonthSongDateStrategy()

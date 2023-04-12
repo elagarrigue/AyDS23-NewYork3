@@ -8,7 +8,10 @@ interface SongDescriptionHelper {
     fun getSongDescriptionText(song: Song = EmptySong): String
 }
 
-internal class SongDescriptionHelperImpl : SongDescriptionHelper {
+internal class SongDescriptionHelperImpl(): SongDescriptionHelper {
+
+    private val songDateStrategyFactory: SongDateStrategyFactory = HomeViewInjector.songDateStrategyFactory
+
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
             is SpotifySong -> buildSongDescriptionText(song)
@@ -17,14 +20,17 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
     }
 
     private fun buildSongDescriptionText(song: SpotifySong): String {
-        val strategy = SongDateStrategyFactory.get(song.releaseDatePrecision)
         return "${
             "Song: ${song.songName} " +
                     if (song.isLocallyStored) "[*]" else ""
         }\n" +
                 "Artist: ${song.artistName}\n" +
                 "Album: ${song.albumName}\n" +
-                "Release date: ${strategy.getSongDate(song.releaseDate)}"
+                "Release date: ${getSongDate(song.releaseDatePrecision, song.releaseDate)}"
+    }
+
+    private fun getSongDate(releaseDatePrecision: String, releaseDate: String): String {
+        return songDateStrategyFactory.get(releaseDatePrecision).getSongDate(releaseDate)
     }
 
 }
