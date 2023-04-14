@@ -4,7 +4,7 @@ interface SongDateFactory {
     fun get(releaseDatePrecision: String): SongDateStrategy
 }
 
-object SongDateFactoryImpl: SongDateFactory {
+internal class SongDateFactoryImpl: SongDateFactory {
 
     override fun get(releaseDatePrecision: String): SongDateStrategy {
         return when (releaseDatePrecision) {
