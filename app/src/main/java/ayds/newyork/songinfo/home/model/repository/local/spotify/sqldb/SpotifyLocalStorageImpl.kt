@@ -59,7 +59,6 @@ internal class SpotifyLocalStorageImpl(
             put(IMAGE_URL_COLUMN, song.imageUrl)
         }
 
-
         writableDatabase?.insert(SONGS_TABLE, null, values)
     }
 
