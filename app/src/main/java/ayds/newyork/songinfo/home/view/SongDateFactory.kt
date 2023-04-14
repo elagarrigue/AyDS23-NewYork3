@@ -1,10 +1,10 @@
 package ayds.newyork.songinfo.home.view
 
-interface SongDateStrategyFactory {
+interface SongDateFactory {
     fun get(releaseDatePrecision: String): SongDateStrategy
 }
 
-object SongDateStrategyFactoryImpl: SongDateStrategyFactory {
+object SongDateFactoryImpl: SongDateFactory {
 
     override fun get(releaseDatePrecision: String): SongDateStrategy {
         return when (releaseDatePrecision) {

@@ -10,7 +10,7 @@ interface SongDescriptionHelper {
 
 internal class SongDescriptionHelperImpl(): SongDescriptionHelper {
 
-    private val songDateStrategyFactory: SongDateStrategyFactory = HomeViewInjector.songDateStrategyFactory
+    private val songDateFactory: SongDateFactory = HomeViewInjector.songDateFactory
 
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
@@ -30,7 +30,7 @@ internal class SongDescriptionHelperImpl(): SongDescriptionHelper {
     }
 
     private fun getSongDate(releaseDatePrecision: String, releaseDate: String): String {
-        return songDateStrategyFactory.get(releaseDatePrecision).getSongDate(releaseDate)
+        return songDateFactory.get(releaseDatePrecision).getSongDate(releaseDate)
     }
 
 }
