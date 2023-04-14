@@ -8,9 +8,7 @@ interface SongDescriptionHelper {
     fun getSongDescriptionText(song: Song = EmptySong): String
 }
 
-internal class SongDescriptionHelperImpl(): SongDescriptionHelper {
-
-    private val songDateFactory: SongDateFactory = HomeViewInjector.songDateFactory
+internal class SongDescriptionHelperImpl(private val songDateFactory: SongDateFactory): SongDescriptionHelper {
 
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
