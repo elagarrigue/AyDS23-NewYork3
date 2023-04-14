@@ -26,5 +26,4 @@ internal class SongDescriptionHelperImpl(private val songDateFactory: SongDateFa
                 "Album: ${song.albumName}\n" +
                 "Release date: ${songDateFactory.get(song.releaseDatePrecision).getSongDate(song.releaseDate)}"
     }
-
 }

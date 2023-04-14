@@ -15,7 +15,6 @@ internal class DaySongDateStrategy: SongDateStrategy {
         val year = yearMonthDay[0]
         return "$day/$month/$year"
     }
-
 }
 
 internal class MonthSongDateStrategy: SongDateStrategy {
@@ -39,7 +38,6 @@ internal class MonthSongDateStrategy: SongDateStrategy {
         }
         return "$monthName, ${monthAndYear[0]}"
     }
-
 }
 
 internal class YearSongDateStrategy: SongDateStrategy {

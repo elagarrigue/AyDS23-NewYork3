@@ -14,5 +14,4 @@ internal class SongDateFactoryImpl: SongDateFactory {
             else -> EmptySongDateStrategy()
         }
     }
-
 }
