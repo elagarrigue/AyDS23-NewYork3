@@ -19,12 +19,12 @@ public class DataBase extends SQLiteOpenHelper {
   {
     SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-    ContentValues values = new ContentValues();
-    values.put("artist", artist);
-    values.put("info", info);
-    values.put("source", 1);
+    ContentValues artistData = new ContentValues();
+    artistData.put("artist", artist);
+    artistData.put("info", info);
+    artistData.put("source", 1);
 
-    long newRowId = db.insert("artists", null, values);
+    long newRowId = db.insert("artists", null, artistData);
   }
 
   public static String getInfo(DataBase dbHelper, String artist)
@@ -53,16 +53,15 @@ public class DataBase extends SQLiteOpenHelper {
             sortOrder
     );
 
-    List<String> items = new ArrayList<String>();
-    while(cursor.moveToNext()) {
-      String info = cursor.getString(
-              cursor.getColumnIndexOrThrow("info"));
-      items.add(info);
+    String item = null;
+    if (cursor.moveToFirst()) {
+      item = cursor.getString(cursor.getColumnIndexOrThrow("info"));
+    } else {
+      item = null;
     }
     cursor.close();
 
-    if(items.isEmpty()) return null;
-    else return items.get(0);
+    return item;
   }
 
   public DataBase(Context context) {
