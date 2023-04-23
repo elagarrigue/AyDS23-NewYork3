@@ -27,8 +27,18 @@ class OtherInfoWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+
+        initProperties()
+        initDataBase()
+    }
+
+    private fun initProperties() {
         textMoreDetails = findViewById(R.id.textMoreDetails)
-        open(intent.getStringExtra("artistName"))
+    }
+
+    private fun initDataBase() {
+        dataBase = DataBase(this)
+        getArtistInfo(intent.getStringExtra(ARTIST_NAME_EXTRA))
     }
 
     private fun getArtistInfo(artistName: String?) {
@@ -76,11 +86,6 @@ class OtherInfoWindow : AppCompatActivity() {
                 textMoreDetails!!.text = Html.fromHtml(finalText)
             }
         }.start()
-    }
-
-    private fun open(artist: String?) {
-        dataBase = DataBase(this)
-        getArtistInfo(artist)
     }
 
     companion object {
