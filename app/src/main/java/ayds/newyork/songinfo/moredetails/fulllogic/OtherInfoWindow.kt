@@ -20,7 +20,10 @@ import java.io.IOException
 import java.util.*
 
 class OtherInfoWindow : AppCompatActivity() {
+
     private var textMoreDetails: TextView? = null
+    private var dataBase: DataBase? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
@@ -28,7 +31,7 @@ class OtherInfoWindow : AppCompatActivity() {
         open(intent.getStringExtra("artistName"))
     }
 
-    fun getArtistInfo(artistName: String?) {
+    private fun getArtistInfo(artistName: String?) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.nytimes.com/svc/search/v2/")
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -78,7 +81,6 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private var dataBase: DataBase? = null
     private fun open(artist: String?) {
         dataBase = DataBase(this)
         DataBase.saveArtist(dataBase, "test", "sarasa")
