@@ -94,23 +94,24 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
+    private fun textToHtml(text: String, term: String?): String {
+        val builder = StringBuilder()
+        builder.append("<html><div width=400>")
+        builder.append("<font face=\"arial\">")
+        val textWithBold = text
+            .replace("'", " ")
+            .replace("\n", "<br>")
+            .replace(
+                "(?i)$term".toRegex(),
+                "<b>" + term!!.uppercase(Locale.getDefault()) + "</b>"
+            )
+        builder.append(textWithBold)
+        builder.append("</font></div></html>")
+        return builder.toString()
+    }
+
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
         const val TITLE_IMAGE_URL =  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-        fun textToHtml(text: String, term: String?): String {
-            val builder = StringBuilder()
-            builder.append("<html><div width=400>")
-            builder.append("<font face=\"arial\">")
-            val textWithBold = text
-                .replace("'", " ")
-                .replace("\n", "<br>")
-                .replace(
-                    "(?i)$term".toRegex(),
-                    "<b>" + term!!.uppercase(Locale.getDefault()) + "</b>"
-                )
-            builder.append(textWithBold)
-            builder.append("</font></div></html>")
-            return builder.toString()
-        }
     }
 }
