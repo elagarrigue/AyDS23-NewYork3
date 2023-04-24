@@ -82,10 +82,16 @@ class OtherInfoWindow : AppCompatActivity() {
             }
             val finalText = text
             runOnUiThread {
-                imageLoader.loadImageIntoView(TITLE_IMAGE_URL, titleImageView)
                 moreDetailsTextView.text = Html.fromHtml(finalText)
             }
+            updateTitleImageView()
         }.start()
+    }
+
+    private fun updateTitleImageView() {
+        runOnUiThread {
+            imageLoader.loadImageIntoView(TITLE_IMAGE_URL, titleImageView)
+        }
     }
 
     companion object {
