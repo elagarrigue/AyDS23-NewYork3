@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -59,7 +58,6 @@ class OtherInfoWindow : AppCompatActivity() {
                 val callResponse: Response<String>
                 try {
                     callResponse = NYTimesAPI.getArtistInfo(artistName).execute()
-                    Log.e("TAG", "JSON " + callResponse.body())
                     val gson = Gson()
                     val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
                     val response = jobj["response"].asJsonObject
