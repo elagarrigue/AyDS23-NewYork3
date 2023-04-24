@@ -10,9 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.utils.UtilsInjector
+import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.squareup.picasso.Picasso
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -24,6 +25,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
     private lateinit var dataBase: DataBase
+    private val imageLoader: ImageLoader = UtilsInjector.imageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +86,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
             val finalText = text
             runOnUiThread {
-                Picasso.get().load(imageUrl).into(titleImageView)
+                imageLoader.loadImageIntoView(imageUrl, titleImageView)
                 moreDetailsTextView!!.text = Html.fromHtml(finalText)
             }
         }.start()
