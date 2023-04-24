@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
@@ -60,7 +59,6 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
                 "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)")
-        Log.i("DB", "DB created")
     }
 
     @Override
