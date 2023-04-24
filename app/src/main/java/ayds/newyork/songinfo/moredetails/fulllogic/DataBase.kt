@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
+private const val NYTIMES_SOURCE = 1
+
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
     companion object {
@@ -15,8 +17,9 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             val values = ContentValues().apply {
                 put("artist", artist)
                 put("info", info)
-                put("source", 1)
+                put("source", NYTIMES_SOURCE)
             }
+
             db.insert("artists", null, values)
         }
 
@@ -28,7 +31,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             return if (items.isEmpty()) {
                 null
             } else {
-                items[0]
+                items.first()
             }
         }
 
@@ -39,19 +42,22 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             val selection = "artist = ?"
             val selectionArgs = arrayOf(artist)
             val sortOrder = "artist DESC"
-
+            val items: MutableList<String> = mutableListOf()
             val cursor = db.query(
                 "artists", projection, selection, selectionArgs, null, null, sortOrder
             )
 
-            val items: MutableList<String> = mutableListOf()
-            while (cursor.moveToNext()) {
-                val info = cursor.getString(
-                    cursor.getColumnIndexOrThrow("info")
-                )
-                items.add(info)
+            try {
+                while (cursor.moveToNext()) {
+                    val info = cursor.getString(
+                        cursor.getColumnIndexOrThrow("info")
+                    )
+                    items.add(info)
+                }
+                cursor.close()
+            } catch (err: IllegalArgumentException) {
+                items.clear()
             }
-            cursor.close()
 
             return items
         }
@@ -68,6 +74,4 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
 
     }
-
-
 }
