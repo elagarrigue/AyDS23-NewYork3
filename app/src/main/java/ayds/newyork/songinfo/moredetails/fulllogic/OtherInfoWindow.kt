@@ -33,6 +33,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
         initProperties()
         initDataBase()
+        updateTitleImageView()
     }
 
     private fun initProperties() {
@@ -49,14 +50,14 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistInfo(artistName: String?) {
         Thread {
             var text = DataBase.getInfo(dataBase, artistName)
-            if (text != null) { // exists in db
+            val isInDataBase = text != null
+            if (isInDataBase) {
                 text = "[*]$text"
-            } else { // get from service
+            } else {
                 val callResponse: Response<String>
                 try {
                     callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
-                    val gson = Gson()
-                    val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
+                    val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
                     val response = jobj["response"].asJsonObject
                     val _abstract = response["docs"].asJsonArray[0].asJsonObject["abstract"]
                     val url = response["docs"].asJsonArray[0].asJsonObject["web_url"]
@@ -81,7 +82,6 @@ class OtherInfoWindow : AppCompatActivity() {
             runOnUiThread {
                 moreDetailsTextView.text = Html.fromHtml(finalText)
             }
-            updateTitleImageView()
         }.start()
     }
 
