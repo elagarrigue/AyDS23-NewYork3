@@ -7,25 +7,39 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
-
     companion object {
 
         @JvmStatic
         fun saveArtist(dbHelper: DataBase, artist: String, info: String) {
             val db = dbHelper.writableDatabase
-            val values = buildValues(artist, info)
+            val values = ContentValues().apply {
+                put("artist", artist)
+                put("info", info)
+                put("source", 1)
+            }
             db.insert("artists", null, values)
         }
 
         @JvmStatic
         fun getInfo(dbHelper: DataBase, artist: String): String? {
             val db = dbHelper.readableDatabase
+            val items = searchArtistInfo(db, artist)
+
+            return if (items.isEmpty()) {
+                null
+            } else {
+                items[0]
+            }
+        }
+
+        private fun searchArtistInfo(db: SQLiteDatabase, artist: String): MutableList<String> {
             val projection = arrayOf(
                 "id", "artist", "info"
             )
             val selection = "artist = ?"
             val selectionArgs = arrayOf(artist)
             val sortOrder = "artist DESC"
+
             val cursor = db.query(
                 "artists", projection, selection, selectionArgs, null, null, sortOrder
             )
@@ -39,18 +53,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             }
             cursor.close()
 
-            return when {
-                items.isEmpty() -> null
-                else -> items[0]
-            }
-        }
-
-        private fun buildValues(artist: String, info: String): ContentValues {
-            return ContentValues().apply {
-                put("artist", artist)
-                put("info", info)
-                put("source", 1)
-            }
+            return items
         }
     }
 
