@@ -80,18 +80,17 @@ class OtherInfoWindow : AppCompatActivity() {
                     e1.printStackTrace()
                 }
             }
-            val imageUrl =
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
             val finalText = text
             runOnUiThread {
-                imageLoader.loadImageIntoView(imageUrl, titleImageView)
-                moreDetailsTextView!!.text = Html.fromHtml(finalText)
+                imageLoader.loadImageIntoView(TITLE_IMAGE_URL, titleImageView)
+                moreDetailsTextView.text = Html.fromHtml(finalText)
             }
         }.start()
     }
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
+        const val TITLE_IMAGE_URL =  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
         fun textToHtml(text: String, term: String?): String {
             val builder = StringBuilder()
             builder.append("<html><div width=400>")
