@@ -23,7 +23,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
-    private var dataBase: DataBase? = null
+    private lateinit var dataBase: DataBase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
