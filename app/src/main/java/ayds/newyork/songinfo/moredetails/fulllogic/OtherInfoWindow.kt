@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
-import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +23,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
+    private lateinit var openUrlButton: Button
     private lateinit var dataBase: DataBase
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
 
@@ -37,6 +38,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun initProperties() {
         moreDetailsTextView = findViewById(R.id.textMoreDetails)
         titleImageView = findViewById(R.id.imageView)
+        openUrlButton = findViewById(R.id.openUrlButton)
     }
 
     private fun initDataBase() {
@@ -45,11 +47,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfo(artistName: String?) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.nytimes.com/svc/search/v2/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val NYTimesAPI = retrofit.create(NYTimesAPI::class.java)
         Thread {
             var text = DataBase.getInfo(dataBase, artistName)
             if (text != null) { // exists in db
@@ -57,7 +54,7 @@ class OtherInfoWindow : AppCompatActivity() {
             } else { // get from service
                 val callResponse: Response<String>
                 try {
-                    callResponse = NYTimesAPI.getArtistInfo(artistName).execute()
+                    callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
                     val gson = Gson()
                     val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
                     val response = jobj["response"].asJsonObject
@@ -71,7 +68,7 @@ class OtherInfoWindow : AppCompatActivity() {
                         DataBase.saveArtist(dataBase, artistName, text)
                     }
                     val urlString = url.asString
-                    findViewById<View>(R.id.openUrlButton).setOnClickListener {
+                    openUrlButton.setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.data = Uri.parse(urlString)
                         startActivity(intent)
@@ -113,5 +110,11 @@ class OtherInfoWindow : AppCompatActivity() {
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
         const val TITLE_IMAGE_URL =  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+        private const val NEW_YORK_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
+        private val newYorkTimesRetrofit = Retrofit.Builder()
+            .baseUrl(NEW_YORK_TIMES_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(NYTimesAPI::class.java)
     }
 }
