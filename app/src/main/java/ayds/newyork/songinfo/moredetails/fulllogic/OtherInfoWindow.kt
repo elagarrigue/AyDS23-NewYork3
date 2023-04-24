@@ -22,6 +22,7 @@ import java.util.*
 class OtherInfoWindow : AppCompatActivity() {
 
     private lateinit var moreDetailsTextView: TextView
+    private lateinit var titleImageView: ImageView
     private var dataBase: DataBase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initProperties() {
         moreDetailsTextView = findViewById(R.id.textMoreDetails)
+        titleImageView = findViewById(R.id.imageView)
     }
 
     private fun initDataBase() {
@@ -82,7 +84,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
             val finalText = text
             runOnUiThread {
-                Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+                Picasso.get().load(imageUrl).into(titleImageView)
                 moreDetailsTextView!!.text = Html.fromHtml(finalText)
             }
         }.start()
