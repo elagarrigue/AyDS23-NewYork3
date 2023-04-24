@@ -21,7 +21,7 @@ import java.util.*
 
 class OtherInfoWindow : AppCompatActivity() {
 
-    private var textMoreDetails: TextView? = null
+    private lateinit var moreDetailsTextView: TextView
     private var dataBase: DataBase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        textMoreDetails = findViewById(R.id.textMoreDetails)
+        moreDetailsTextView = findViewById(R.id.textMoreDetails)
     }
 
     private fun initDataBase() {
@@ -83,7 +83,7 @@ class OtherInfoWindow : AppCompatActivity() {
             val finalText = text
             runOnUiThread {
                 Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
-                textMoreDetails!!.text = Html.fromHtml(finalText)
+                moreDetailsTextView!!.text = Html.fromHtml(finalText)
             }
         }.start()
     }
