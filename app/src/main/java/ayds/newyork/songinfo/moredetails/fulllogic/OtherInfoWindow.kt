@@ -19,6 +19,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.util.*
 
+private const val RESPONSE = "response"
+private const val DOCS = "docs"
+private const val ABSTRACT = "abstract"
+private const val WEB_URL = "web_url"
+
 class OtherInfoWindow : AppCompatActivity() {
 
     private lateinit var moreDetailsTextView: TextView
@@ -58,13 +63,13 @@ class OtherInfoWindow : AppCompatActivity() {
                 try {
                     callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
                     val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-                    val response = jobj["response"].asJsonObject
-                    val _abstract = response["docs"].asJsonArray[0].asJsonObject["abstract"]
-                    val url = response["docs"].asJsonArray[0].asJsonObject["web_url"]
-                    if (_abstract == null) {
+                    val response = jobj[RESPONSE].asJsonObject
+                    val abstract = response[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
+                    val url = response[DOCS].asJsonArray[0].asJsonObject[WEB_URL]
+                    if (abstract == null) {
                         text = "No Results"
                     } else {
-                        text = _abstract.asString.replace("\\n", "\n")
+                        text = abstract.asString.replace("\\n", "\n")
                         text = textToHtml(text, artistName)
                         DataBase.saveArtist(dataBase, artistName, text)
                     }
