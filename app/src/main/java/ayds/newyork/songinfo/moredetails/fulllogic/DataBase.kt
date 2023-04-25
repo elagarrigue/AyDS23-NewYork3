@@ -9,9 +9,11 @@ private const val NYTIMES_SOURCE = 1
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
-    
-        fun saveArtist(dbHelper: DataBase, artist: String, info: String) {
-            val db = dbHelper.writableDatabase
+
+        fun saveArtist(artist: String, info: String) {
+            val db = this.writableDatabase
+
+
             val values = ContentValues().apply {
                 put("artist", artist)
                 put("info", info)
@@ -21,42 +23,42 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             db.insert("artists", null, values)
         }
 
-        fun getInfo(dbHelper: DataBase, artist: String): String? {
-            val db = dbHelper.readableDatabase
-            val items = searchArtistInfo(db, artist)
+        fun getInfo( artist: String): String? {
+            val db = this.readableDatabase
 
-            return if (items.isEmpty()) {
+            val item = searchArtistInfo(db, artist)
+
+            return if (item == "") {
                 null
             } else {
-                items.first()
+                item
             }
         }
 
-        private fun searchArtistInfo(db: SQLiteDatabase, artist: String): MutableList<String> {
+        private fun searchArtistInfo(db: SQLiteDatabase, artist: String): String {
             val projection = arrayOf(
                 "id", "artist", "info"
             )
             val selection = "artist = ?"
             val selectionArgs = arrayOf(artist)
             val sortOrder = "artist DESC"
-            val items: MutableList<String> = mutableListOf()
             val cursor = db.query(
                 "artists", projection, selection, selectionArgs, null, null, sortOrder
             )
-
+            var item = ""
             try {
-                while (cursor.moveToNext()) {
-                    val info = cursor.getString(
-                        cursor.getColumnIndexOrThrow("info")
-                    )
-                    items.add(info)
+
+                if (cursor.moveToFirst()) {
+                    item = cursor.getString(cursor.getColumnIndexOrThrow("info"));
+                } else {
+                    item = "";
                 }
                 cursor.close()
             } catch (err: IllegalArgumentException) {
-                items.clear()
+                item = ""
             }
 
-            return items
+            return item
         }
 
 
