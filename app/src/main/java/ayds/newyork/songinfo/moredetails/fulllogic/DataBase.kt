@@ -9,9 +9,7 @@ private const val NYTIMES_SOURCE = 1
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
-    companion object {
-
-        @JvmStatic
+    
         fun saveArtist(dbHelper: DataBase, artist: String, info: String) {
             val db = dbHelper.writableDatabase
             val values = ContentValues().apply {
@@ -23,7 +21,6 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             db.insert("artists", null, values)
         }
 
-        @JvmStatic
         fun getInfo(dbHelper: DataBase, artist: String): String? {
             val db = dbHelper.readableDatabase
             val items = searchArtistInfo(db, artist)
@@ -61,7 +58,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
 
             return items
         }
-    }
+
 
     @Override
     override fun onCreate(db: SQLiteDatabase) {
