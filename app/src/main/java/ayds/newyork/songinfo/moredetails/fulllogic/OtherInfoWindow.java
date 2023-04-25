@@ -65,7 +65,7 @@ public class OtherInfoWindow extends AppCompatActivity {
           @Override
           public void run() {
 
-            String text = dataBase.getInfo(artistName);
+            String text = DataBase.getInfo(dataBase, artistName);
 
 
             if (text != null) { // exists in db
@@ -96,7 +96,7 @@ public class OtherInfoWindow extends AppCompatActivity {
 
                   // save to DB  <o/
 
-                  dataBase.saveArtist(artistName, text);
+                  DataBase.saveArtist(dataBase, artistName, text);
                 }
 
 
@@ -148,11 +148,11 @@ public class OtherInfoWindow extends AppCompatActivity {
 
     dataBase = new DataBase(this);
 
-    dataBase.saveArtist( "test", "sarasa");
+    DataBase.saveArtist(dataBase, "test", "sarasa");
 
 
-    Log.e("TAG", ""+ dataBase.getInfo("test"));
-    Log.e("TAG",""+ dataBase.getInfo("nada"));
+    Log.e("TAG", ""+ DataBase.getInfo(dataBase,"test"));
+    Log.e("TAG",""+ DataBase.getInfo(dataBase,"nada"));
 
     getARtistInfo(artist);
   }
