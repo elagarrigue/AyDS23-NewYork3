@@ -17,7 +17,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 private const val RESPONSE = "response"
 private const val DOCS = "docs"
