@@ -2,58 +2,68 @@ package ayds.newyork.songinfo.moredetails.fulllogic
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
+private const val TABLE_NAME = "artists"
+private const val COLUMN_ID = "id"
+private const val COLUMN_ARTIST = "artist"
+private const val COLUMN_SOURCE = "source"
+private const val COLUMN_INFO = "info"
 private const val NYTIMES_SOURCE = 1
+private const val SELECTION_FILTER = "$COLUMN_ARTIST = ?"
+private const val SELECTION_ORDER = "$COLUMN_ARTIST = desc"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
-        fun saveArtist(artist: String, info: String) {
-            val db = this.writableDatabase
-
-            val values = ContentValues().apply {
-                put("artist", artist)
-                put("info", info)
-                put("source", NYTIMES_SOURCE)
-            }
-
-            db.insert("artists", null, values)
+    fun saveArtist(artist: String, info: String) {
+        val values = ContentValues().apply {
+            put(COLUMN_ARTIST, artist)
+            put(COLUMN_INFO, info)
+            put(COLUMN_SOURCE, NYTIMES_SOURCE)
         }
 
-        fun getInfo(artist: String): String? {
-            val db = this.readableDatabase
-            val item = searchArtistInfo(db, artist)
+        this.writableDatabase.insert(TABLE_NAME, null, values)
+    }
 
-            return if (item == "") {
-                null
-            } else {
-                item
-            }
+    fun getInfo(artist: String): String? {
+        val artistInfo = searchArtistInfo(artist)
+
+        return if (artistInfo == "") {
+            null
+        } else {
+            artistInfo
+        }
+    }
+
+    private fun searchArtistInfo(artist: String): String {
+        val cursor = getCursor(artist)
+        var artistInfo: String
+
+        try {
+            artistInfo = if (cursor.moveToFirst()) {
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
+            } else ""
+            cursor.close()
+        } catch (err: IllegalArgumentException) {
+            artistInfo = ""
         }
 
-        private fun searchArtistInfo(db: SQLiteDatabase, artist: String): String {
-            val projection = arrayOf(
-                "id", "artist", "info"
-            )
-            val selection = "artist = ?"
-            val selectionArgs = arrayOf(artist)
-            val sortOrder = "artist DESC"
-            val cursor = db.query(
-                "artists", projection, selection, selectionArgs, null, null, sortOrder
-            )
-            var item: String
-            try {
-                item = if (cursor.moveToFirst()) {
-                    cursor.getString(cursor.getColumnIndexOrThrow("info"))
-                } else ""
-                cursor.close()
-            } catch (err: IllegalArgumentException) {
-                item = ""
-            }
+        return artistInfo
+    }
 
-            return item
-        }
+    private fun getCursor(artist: String): Cursor {
+        val projection = arrayOf(
+            COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO
+        )
+        val selection = SELECTION_FILTER
+        val sortOrder = SELECTION_ORDER
+        val selectionArgs = arrayOf(artist)
+        return this.readableDatabase.query(
+            TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder
+        )
+    }
 
     @Override
     override fun onCreate(db: SQLiteDatabase) {
@@ -64,6 +74,5 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
 
     @Override
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-
     }
 }
