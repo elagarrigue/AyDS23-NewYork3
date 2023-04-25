@@ -9,10 +9,8 @@ private const val NYTIMES_SOURCE = 1
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
-
         fun saveArtist(artist: String, info: String) {
             val db = this.writableDatabase
-
 
             val values = ContentValues().apply {
                 put("artist", artist)
@@ -23,9 +21,8 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             db.insert("artists", null, values)
         }
 
-        fun getInfo( artist: String): String? {
+        fun getInfo(artist: String): String? {
             val db = this.readableDatabase
-
             val item = searchArtistInfo(db, artist)
 
             return if (item == "") {
@@ -45,14 +42,11 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
             val cursor = db.query(
                 "artists", projection, selection, selectionArgs, null, null, sortOrder
             )
-            var item = ""
+            var item: String
             try {
-
-                if (cursor.moveToFirst()) {
-                    item = cursor.getString(cursor.getColumnIndexOrThrow("info"));
-                } else {
-                    item = "";
-                }
+                item = if (cursor.moveToFirst()) {
+                    cursor.getString(cursor.getColumnIndexOrThrow("info"))
+                } else ""
                 cursor.close()
             } catch (err: IllegalArgumentException) {
                 item = ""
@@ -60,7 +54,6 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
 
             return item
         }
-
 
     @Override
     override fun onCreate(db: SQLiteDatabase) {
