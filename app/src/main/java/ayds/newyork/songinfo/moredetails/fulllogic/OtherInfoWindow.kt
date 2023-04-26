@@ -55,12 +55,10 @@ class OtherInfoWindow : AppCompatActivity() {
             var text = getInfoFromDataBase(artistName)
             if (text == null) {
                 val docs = getInfoFromAPI(artistName)
-                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)
+                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.toString()
                 val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
-                if (abstract != null) {
-                    text = getTextFromAbstract(abstract as JsonPrimitive, artistName)
-                    DataBase.saveArtist(dataBase, artistName, text)
-                }
+                text = getTextFromAbstract(abstract, artistName)
+                DataBase.saveArtist(dataBase, artistName, text)
                 if (url != null)
                     initListeners(url.asString)
             }
@@ -68,12 +66,15 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getTextFromAbstract(abstract: JsonPrimitive, artistName: String?): String? {
-        return getFormattedTextFromAbstract(abstract, artistName) ?: "No Results"
+    private fun getTextFromAbstract(abstract: String?, artistName: String?): String? {
+        return if (abstract != null)
+            getFormattedTextFromAbstract(abstract, artistName)
+        else
+            "No Results"
     }
 
-    private fun getFormattedTextFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
-        var text = abstract.asString.replace("\\n", "\n")
+    private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String?{
+        var text = abstract.replace("\\n", "\n")
         val textFormatted = textWithBold(text, artistName)
         text = textToHtml(textFormatted)
         return text
