@@ -55,7 +55,7 @@ class OtherInfoWindow : AppCompatActivity() {
             var text = getInfoFromDataBase(artistName)
             if (text == null) {
                 val docs = getInfoFromAPI(artistName)
-                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.toString()
+                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
                 val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
                 text = getTextFromAbstract(abstract, artistName)
                 DataBase.saveArtist(dataBase, artistName, text)
@@ -89,7 +89,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getInfoFromDataBase(artistName: String?) : String? {
         var text: String? = DataBase.getInfo(dataBase, artistName)
-        if (text != null) //elvis
+        if (text != null)
             text = "[*]$text"
         return text
     }
@@ -99,7 +99,8 @@ class OtherInfoWindow : AppCompatActivity() {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
             val response = jobj[RESPONSE].asJsonObject
-            response[DOCS].asJsonArray
+            val docs = response[DOCS].asJsonArray
+            return if (docs.size()==0) null else docs
         } catch (e: IOException) {
             e.printStackTrace()
             null
