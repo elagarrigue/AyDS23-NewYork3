@@ -114,8 +114,8 @@ class OtherInfoWindow : AppCompatActivity() {
             .replace("'", " ")
             .replace("\n", "<br>")
             .replace(
-                "(?i)$term".toRegex(),
-                "<b>" + term!!.uppercase(Locale.getDefault()) + "</b>"
+                term!!.toRegex(RegexOption.IGNORE_CASE),
+                "<b>" + term.uppercase(Locale.getDefault()) + "</b>"
             )
         return StringBuilder()
             .append("<html><div width=400>")
