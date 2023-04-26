@@ -66,14 +66,14 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getTextFromAbstract(abstract: String?, artistName: String?): String? {
+    private fun getTextFromAbstract(abstract: String?, artistName: String?): String {
         return if (abstract != null)
             getFormattedTextFromAbstract(abstract, artistName)
         else
             "No Results"
     }
 
-    private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String?{
+    private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String {
         var text = abstract.replace("\\n", "\n")
         val textFormatted = textWithBold(text, artistName)
         text = textToHtml(textFormatted)
