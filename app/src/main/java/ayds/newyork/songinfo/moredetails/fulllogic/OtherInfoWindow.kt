@@ -37,18 +37,17 @@ class OtherInfoWindow : AppCompatActivity() {
         initProperties()
         initDataBase()
         updateTitleImageView()
+        getArtistInfo(intent.getStringExtra(ARTIST_NAME_EXTRA))
     }
 
     private fun initProperties() {
         moreDetailsTextView = findViewById(R.id.textMoreDetails)
         titleImageView = findViewById(R.id.imageView)
         openUrlButton = findViewById(R.id.openUrlButton)
-
     }
 
     private fun initDataBase() {
         dataBase = DataBase(this)
-        getArtistInfo(intent.getStringExtra(ARTIST_NAME_EXTRA))
     }
 
     private fun getArtistInfo(artistName: String?) {
