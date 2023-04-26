@@ -43,6 +43,7 @@ class OtherInfoWindow : AppCompatActivity() {
         moreDetailsTextView = findViewById(R.id.textMoreDetails)
         titleImageView = findViewById(R.id.imageView)
         openUrlButton = findViewById(R.id.openUrlButton)
+
     }
 
     private fun initDataBase() {
@@ -72,8 +73,8 @@ class OtherInfoWindow : AppCompatActivity() {
         var text = "No Results"
         if (abstract != null) {
             text = abstract.asString.replace("\\n", "\n")
-            text = textWithBold(text, artistName)
-            text = textToHtml(text)
+            val textFormatted = textWithBold(text, artistName)
+            text = textToHtml(textFormatted)
         }
         return text
     }
