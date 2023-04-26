@@ -69,12 +69,14 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getTextFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
-        var text = "No Results"
-        if (abstract != null) {
-            text = abstract.asString.replace("\\n", "\n")
-            val textFormatted = textWithBold(text, artistName)
-            text = textToHtml(textFormatted)
-        }
+        var text = getTextFormatedFromAbstract(abstract, artistName) ?: "No Results"
+        return text
+    }
+
+    private fun getTextFormatedFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
+        var text = abstract.asString.replace("\\n", "\n")
+        val textFormatted = textWithBold(text, artistName)
+        text = textToHtml(textFormatted)
         return text
     }
 
