@@ -12,7 +12,6 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.*
-import com.google.gson.JsonPrimitive
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -35,7 +34,6 @@ class OtherInfoWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-
         initProperties()
         initDataBase()
         updateTitleImageView()
