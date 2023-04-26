@@ -30,27 +30,27 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
     fun getInfo(artist: String): String? {
         val artistInfo = searchArtistInfo(artist)
 
-        return if (artistInfo == "") {
-            null
-        } else {
-            artistInfo
-        }
+        return artistInfo.takeIf { it.isNotBlank() }
     }
 
     private fun searchArtistInfo(artist: String): String {
         val cursor = getCursor(artist)
-        var artistInfo: String
+        val artistInfo = getArtistInfo(cursor)
 
-        try {
-            artistInfo = if (cursor.moveToFirst()) {
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
-            } else ""
-            cursor.close()
-        } catch (err: IllegalArgumentException) {
-            artistInfo = ""
-        }
+        cursor.close()
 
         return artistInfo
+    }
+
+    private fun getArtistInfo(cursor: Cursor): String {
+        return try {
+            if (cursor.moveToFirst()) {
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
+            } else ""
+        } catch (err: IllegalArgumentException) {
+            err.printStackTrace()
+            ""
+        }
     }
 
     private fun getCursor(artist: String): Cursor {
@@ -68,7 +68,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
     @Override
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
-            "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
+            "create table artists ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer)"
         )
     }
 
