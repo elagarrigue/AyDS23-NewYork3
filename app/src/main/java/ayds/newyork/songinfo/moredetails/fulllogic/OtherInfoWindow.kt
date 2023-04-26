@@ -68,12 +68,11 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getTextFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
-        var text = getTextFormatedFromAbstract(abstract, artistName) ?: "No Results"
-        return text
+    private fun getTextFromAbstract(abstract: JsonPrimitive, artistName: String?): String? {
+        return getFormattedTextFromAbstract(abstract, artistName) ?: "No Results"
     }
 
-    private fun getTextFormatedFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
+    private fun getFormattedTextFromAbstract(abstract : JsonPrimitive, artistName: String?) : String?{
         var text = abstract.asString.replace("\\n", "\n")
         val textFormatted = textWithBold(text, artistName)
         text = textToHtml(textFormatted)
@@ -82,14 +81,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun textWithBold(text: String, artistName: String?): String {
         val textWithSpaces = text.replace("'", " ")
-        val textWithJumplines = textWithSpaces.replace("\n", "<br>")
+        val textWithLineBreaks = textWithSpaces.replace("\n", "<br>")
         val termUpperCase = artistName?.uppercase(Locale.getDefault())
-        return textWithJumplines.replace("(?i)$artistName".toRegex(), "<b>$termUpperCase</b>")
+        return textWithLineBreaks.replace("(?i)$artistName".toRegex(), "<b>$termUpperCase</b>")
     }
 
     private fun getInfoFromDataBase(artistName: String?) : String? {
         var text: String? = DataBase.getInfo(dataBase, artistName)
-        if (text != null)
+        if (text != null) //elvis
             text = "[*]$text"
         return text
     }
@@ -101,6 +100,7 @@ class OtherInfoWindow : AppCompatActivity() {
             val response = jobj[RESPONSE].asJsonObject
             response[DOCS].asJsonArray
         } catch (e: IOException) {
+            e.printStackTrace()
             null
         }
     }
@@ -126,12 +126,12 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun textToHtml(text: String): String {
-        val builder = StringBuilder()
-        builder.append("<html><div width=400>")
-        builder.append("<font face=\"arial\">")
-        builder.append(text)
-        builder.append("</font></div></html>")
-        return builder.toString()
+        return StringBuilder()
+            .append("<html><div width=400>")
+            .append("<font face=\"arial\">")
+            .append(text)
+            .append("</font></div></html>")
+            .toString()
     }
 
     companion object {
