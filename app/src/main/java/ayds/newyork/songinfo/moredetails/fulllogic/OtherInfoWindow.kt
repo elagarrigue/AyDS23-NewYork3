@@ -12,6 +12,7 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -59,32 +60,41 @@ class OtherInfoWindow : AppCompatActivity() {
             if (isInDataBase) {
                 text = "[*]$text"
             } else {
-                val callResponse: Response<String>
-                try {
-                    callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
-                    val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-                    val response = jobj[RESPONSE].asJsonObject
-                    val abstract = response[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
-                    val url = response[DOCS].asJsonArray[0].asJsonObject[WEB_URL]
-                    if (abstract == null) {
-                        text = "No Results"
-                    } else {
-                        text = abstract.asString.replace("\\n", "\n")
-                        text = textToHtml(text, artistName)
-                        DataBase.saveArtist(dataBase, artistName, text)
-                    }
-                    val urlString = url.asString
-                    openUrlButton.setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(urlString)
-                        startActivity(intent)
-                    }
-                } catch (e1: IOException) {
-                    e1.printStackTrace()
+                val docs = getInfoFromDataBase(artistName)
+                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)
+                val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
+                if (abstract == null) {
+                    text = "No Results"
+                } else {
+                    text = abstract.asString.replace("\\n", "\n")
+                    text = textToHtml(text, artistName)
+                    DataBase.saveArtist(dataBase, artistName, text)
+                }
+                if (url != null) {
+                    initListeners(url.asString)
                 }
             }
             updateMoreDetailsText(text)
         }.start()
+    }
+
+    private fun getInfoFromDataBase(artistName: String?): JsonArray? {
+        return try {
+            val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
+            val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
+            val response = jobj[RESPONSE].asJsonObject
+            response[DOCS].asJsonArray
+        } catch (e: IOException) {
+            null
+        }
+    }
+
+    private fun initListeners(urlString: String) {
+        openUrlButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(urlString)
+            startActivity(intent)
+        }
     }
 
     private fun updateTitleImageView() {
@@ -100,9 +110,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun textToHtml(text: String, term: String?): String {
-        val builder = StringBuilder()
-        builder.append("<html><div width=400>")
-        builder.append("<font face=\"arial\">")
         val textWithBold = text
             .replace("'", " ")
             .replace("\n", "<br>")
@@ -110,9 +117,12 @@ class OtherInfoWindow : AppCompatActivity() {
                 "(?i)$term".toRegex(),
                 "<b>" + term!!.uppercase(Locale.getDefault()) + "</b>"
             )
-        builder.append(textWithBold)
-        builder.append("</font></div></html>")
-        return builder.toString()
+        return StringBuilder()
+            .append("<html><div width=400>")
+            .append("<font face=\"arial\">")
+            .append(textWithBold)
+            .append("</font></div></html>")
+            .toString()
     }
 
     companion object {
