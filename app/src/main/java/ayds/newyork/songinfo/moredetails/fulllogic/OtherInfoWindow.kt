@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
-import com.google.gson.*
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
