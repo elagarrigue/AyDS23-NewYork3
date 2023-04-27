@@ -13,7 +13,7 @@ private const val COLUMN_SOURCE = "source"
 private const val COLUMN_INFO = "info"
 private const val NYTIMES_SOURCE = 1
 private const val SELECTION_FILTER = "$COLUMN_ARTIST = ?"
-private const val SELECTION_ORDER = "$COLUMN_ARTIST = desc"
+private const val SELECTION_ORDER = "$COLUMN_ARTIST desc"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
 
