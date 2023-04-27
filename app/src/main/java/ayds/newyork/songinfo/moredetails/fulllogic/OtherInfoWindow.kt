@@ -60,7 +60,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
                 val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
                 text = getTextFromAbstract(abstract, artistName)
-                DataBase.saveArtist(dataBase, artistName, text)
+                if (artistName != null) dataBase.saveArtist(artistName, text)
                 if (url != null)
                     initListeners(url.asString)
             }
@@ -90,7 +90,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getInfoFromDataBase(artistName: String?) : String? {
-        var text: String? = DataBase.getInfo(dataBase, artistName)
+        var text: String? = if (artistName != null) dataBase.getInfo(artistName) else null
         if (text != null)
             text = "[*]$text"
         return text
