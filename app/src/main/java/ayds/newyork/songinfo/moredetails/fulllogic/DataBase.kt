@@ -29,16 +29,13 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
 
     fun getInfo(artist: String): String? {
         val artistInfo = searchArtistInfo(artist)
-
         return artistInfo.takeIf { it.isNotBlank() }
     }
 
     private fun searchArtistInfo(artist: String): String {
         val cursor = getCursor(artist)
         val artistInfo = getDataFromCursor(cursor)
-
         cursor.close()
-
         return artistInfo
     }
 
