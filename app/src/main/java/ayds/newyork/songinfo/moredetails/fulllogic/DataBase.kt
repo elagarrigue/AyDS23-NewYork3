@@ -35,14 +35,14 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, "dictionary.db", nu
 
     private fun searchArtistInfo(artist: String): String {
         val cursor = getCursor(artist)
-        val artistInfo = getArtistInfo(cursor)
+        val artistInfo = getDataFromCursor(cursor)
 
         cursor.close()
 
         return artistInfo
     }
 
-    private fun getArtistInfo(cursor: Cursor): String {
+    private fun getDataFromCursor(cursor: Cursor): String {
         return try {
             if (cursor.moveToFirst()) {
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
