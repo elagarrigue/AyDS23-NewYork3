@@ -15,6 +15,7 @@ private const val DB_NAME = "dictionary.db"
 private const val NYTIMES_SOURCE = 1
 private const val SELECTION_FILTER = "$COLUMN_ARTIST = ?"
 private const val SELECTION_ORDER = "$COLUMN_ARTIST desc"
+private const val CREATE_ARTISTS= "create table artists ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer)"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
@@ -66,7 +67,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
     @Override
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
-            "create table artists ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer)"
+            CREATE_ARTISTS
         )
     }
 
