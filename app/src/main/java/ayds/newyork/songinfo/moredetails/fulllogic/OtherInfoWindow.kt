@@ -24,6 +24,12 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
+private const val PREFIX = "[*]"
+private const val NO_RESULTS = "No Results" //elijan otro nombre para la constante si les parece
+//las siguientes deberian usarse en la funcion textToHtml(), aunque todavia no sé de que manera es mejor
+private const val HTML1 = "<html><div width=400>"
+private const val HTML2 = "<font face=\"arial\">"
+private const val HTML3 = "</font></div></html>"
 
 class OtherInfoWindow : AppCompatActivity() {
 
@@ -32,6 +38,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var openUrlButton: Button
     private lateinit var dataBase: DataBase
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
+    private val artistName: String = "" //falta meterle un valor, tipo mediante un constructor, o el que se obtiene de la ventana
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +79,7 @@ class OtherInfoWindow : AppCompatActivity() {
         return if (abstract != null)
             getFormattedTextFromAbstract(abstract, artistName)
         else
-            "No Results"
+            NO_RESULTS
     }
 
     private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String {
@@ -92,7 +99,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getInfoFromDataBase(artistName: String?) : String? {
         var text: String? = if (artistName != null) dataBase.getInfo(artistName) else null
         if (text != null)
-            text = "[*]$text"
+            text = PREFIX + "$text" //usar un string builder si quieren, leí por ahí que usar + para la concatenacion era de tiempo cuadratico, pero es un detalle menor
         return text
     }
 
@@ -125,7 +132,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun updateMoreDetailsText(text: String?) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(text)
+            moreDetailsTextView.text = Html.fromHtml(text) //ojo que dice Deprecated in Java
         }
     }
 
