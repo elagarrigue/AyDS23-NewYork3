@@ -25,11 +25,10 @@ private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
 private const val PREFIX = "[*]"
-private const val NO_RESULTS = "No Results" //elijan otro nombre para la constante si les parece
-//las siguientes deberian usarse en la funcion textToHtml(), aunque todavia no sé de que manera es mejor
-private const val HTML1 = "<html><div width=400>"
-private const val HTML2 = "<font face=\"arial\">"
-private const val HTML3 = "</font></div></html>"
+private const val NO_RESULTS = "No Results"
+private const val HTML_START = "<html><div width=400>"
+private const val HTML_FONT = "<font face=\"arial\">"
+private const val HTML_END = "</font></div></html>"
 
 class OtherInfoWindow : AppCompatActivity() {
 
@@ -38,7 +37,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var openUrlButton: Button
     private lateinit var dataBase: DataBase
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
-    private val artistName: String = "" //falta meterle un valor, tipo mediante un constructor, o el que se obtiene de la ventana
+    private var artistName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +45,12 @@ class OtherInfoWindow : AppCompatActivity() {
         initProperties()
         initDataBase()
         updateTitleImageView()
-        getArtistInfo(intent.getStringExtra(ARTIST_NAME_EXTRA))
+        initArtistName()
+        getArtistInfo()
+    }
+
+    private fun initArtistName() {
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
     }
 
     private fun initProperties() {
@@ -59,15 +63,15 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    private fun getArtistInfo(artistName: String?) {
+    private fun getArtistInfo() {
         Thread {
-            var text = getInfoFromDataBase(artistName)
+            var text = getInfoFromDataBase()
             if (text == null) {
-                val docs = getInfoFromAPI(artistName)
+                val docs = getInfoFromAPI()
                 val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
                 val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
-                text = getTextFromAbstract(abstract, artistName)
-                if (artistName != null) dataBase.saveArtist(artistName, text)
+                text = getTextFromAbstract(abstract)
+                if (artistName != null) dataBase.saveArtist(artistName!!, text)
                 if (url != null)
                     initListeners(url.asString)
             }
@@ -75,35 +79,35 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getTextFromAbstract(abstract: String?, artistName: String?): String {
+    private fun getTextFromAbstract(abstract: String?): String {
         return if (abstract != null)
-            getFormattedTextFromAbstract(abstract, artistName)
+            getFormattedTextFromAbstract(abstract)
         else
             NO_RESULTS
     }
 
-    private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String {
+    private fun getFormattedTextFromAbstract(abstract : String) : String {
         var text = abstract.replace("\\n", "\n")
-        val textFormatted = textWithBold(text, artistName)
+        val textFormatted = textWithBold(text)
         text = textToHtml(textFormatted)
         return text
     }
 
-    private fun textWithBold(text: String, artistName: String?): String {
+    private fun textWithBold(text: String): String {
         val textWithSpaces = text.replace("'", " ")
         val textWithLineBreaks = textWithSpaces.replace("\n", "<br>")
         val termUpperCase = artistName?.uppercase(Locale.getDefault())
         return textWithLineBreaks.replace("(?i)$artistName".toRegex(), "<b>$termUpperCase</b>")
     }
 
-    private fun getInfoFromDataBase(artistName: String?) : String? {
-        var text: String? = if (artistName != null) dataBase.getInfo(artistName) else null
+    private fun getInfoFromDataBase() : String? {
+        var text: String? = if (artistName != null) dataBase.getInfo(artistName!!) else null
         if (text != null)
-            text = PREFIX + "$text" //usar un string builder si quieren, leí por ahí que usar + para la concatenacion era de tiempo cuadratico, pero es un detalle menor
+            text = PREFIX + "$text"
         return text
     }
 
-    private fun getInfoFromAPI(artistName: String?): JsonArray? {
+    private fun getInfoFromAPI(): JsonArray? {
         return try {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
@@ -118,10 +122,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initListeners(urlString: String) {
         openUrlButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+            openURL(urlString)
         }
+    }
+
+    private fun openURL(urlString: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun updateTitleImageView() {
@@ -132,16 +140,16 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun updateMoreDetailsText(text: String?) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(text) //ojo que dice Deprecated in Java
+            moreDetailsTextView.text = Html.fromHtml(text)
         }
     }
 
     private fun textToHtml(text: String): String {
         return StringBuilder()
-            .append("<html><div width=400>")
-            .append("<font face=\"arial\">")
+            .append(HTML_START)
+            .append(HTML_FONT)
             .append(text)
-            .append("</font></div></html>")
+            .append(HTML_END)
             .toString()
     }
 
