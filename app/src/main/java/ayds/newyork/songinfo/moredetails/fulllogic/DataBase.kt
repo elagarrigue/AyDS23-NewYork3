@@ -19,7 +19,7 @@ private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_I
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtist(artist: String, info: String) {
+    fun saveArtist(artist: String, info: String) {  // TODO: modificar para que reciba un objeto de tipo ArtistInfo
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artist)
             put(COLUMN_INFO, info)
@@ -29,7 +29,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): String? {
+    fun getInfo(artist: String): String? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
         val artistInfo = searchArtistInfo(artist)
         return artistInfo.takeIf { it.isNotBlank() }
     }
