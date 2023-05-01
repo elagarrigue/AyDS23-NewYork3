@@ -12,7 +12,6 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -65,18 +64,31 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getArtistInfo() {
         Thread {
-            var text = getInfoFromDataBase()
-            if (text == null) {
-                val docs = getInfoFromAPI()
-                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
-                val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
-                text = getTextFromAbstract(abstract)
-                if (artistName != null) dataBase.saveArtistInfo(artistName!!, text)
-                if (url != null)
-                    initListeners(url.asString)
+            val artistInfo = searchArtistInfo()
+            if (artistInfo != null) {
+                if (artistInfo.url != null)
+                    initListeners(artistInfo.url)
+                updateMoreDetailsText(artistInfo.abstract)
             }
-            updateMoreDetailsText(text)
         }.start()
+    }
+
+    private fun searchArtistInfo(): ArtistInfo? {
+        var artistInfo = getInfoFromDataBase()
+        when {
+            artistInfo != null -> markArtistInfoAsLocal(artistInfo)
+            else -> {
+                artistInfo = getInfoFromAPI()
+                artistInfo?.let {
+                        dataBase.saveArtistInfo(artistInfo)
+                }
+            }
+        }
+        return artistInfo
+    }
+
+    private fun markArtistInfoAsLocal(artistInfo: ArtistInfo) {
+        artistInfo.isLocallyStored = true
     }
 
     private fun getTextFromAbstract(abstract: String?): String {
@@ -100,20 +112,26 @@ class OtherInfoWindow : AppCompatActivity() {
         return textWithLineBreaks.replace("(?i)$artistName".toRegex(), "<b>$termUpperCase</b>")
     }
 
-    private fun getInfoFromDataBase() : String? {
-        var text: String? = if (artistName != null) dataBase.getInfo(artistName!!) else null
-        if (text != null)
-            text = PREFIX + "$text"
-        return text
+    private fun getInfoFromDataBase() : ArtistInfo? {
+        val artistInfo: ArtistInfo? = if (artistName != null) dataBase.getInfo(artistName!!) else null
+        if (artistInfo != null)
+            artistInfo.abstract = PREFIX + "${artistInfo.abstract}"
+        return artistInfo
     }
 
-    private fun getInfoFromAPI(): JsonArray? {
+    private fun getInfoFromAPI(): ArtistInfo? {
         return try {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
             val response = jobj[RESPONSE].asJsonObject
             val docs = response[DOCS].asJsonArray
-            return if (docs.size()==0) null else docs
+            val abstract = if (docs.size() == 0) null else getTextFromAbstract(docs.get(0).asJsonObject.get(ABSTRACT).asString)
+            val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
+            return artistName?.let {
+                ArtistInfo(
+                    it, abstract, url
+                )
+            }
         } catch (e: IOException) {
             e.printStackTrace()
             null
