@@ -1,13 +1,8 @@
 package ayds.newyork.songinfo.moredetails.fulllogic
 
-sealed class ArtistInfo {
-
-    data class NYTArtistInfo(
-        val artist: String,
-        val abstract: String,
-        val url: String,
-        var isLocallyStored: Boolean = false
-    ): ArtistInfo()
-
-    object EmptyArtistInfo : ArtistInfo()
-}
+data class ArtistInfo(
+    val artist: String,
+    var abstract: String?,
+    val url: String?,
+    var isLocallyStored: Boolean = false
+)
