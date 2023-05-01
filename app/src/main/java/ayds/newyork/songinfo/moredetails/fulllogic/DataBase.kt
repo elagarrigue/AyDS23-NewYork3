@@ -29,7 +29,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): String? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
+    fun getInfo(artist: String): NYTArtistInfo? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
         val artistInfo = searchArtistInfo(artist)
         return artistInfo.takeIf { it.isNotBlank() }
     }
