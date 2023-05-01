@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import ayds.newyork.songinfo.moredetails.fulllogic.ArtistInfo.NYTArtistInfo
 
 private const val TABLE_NAME = "artists"
 private const val COLUMN_ID = "id"
@@ -19,13 +20,12 @@ private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_I
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtist(artist: String, info: String) {  // TODO: modificar para que reciba un objeto de tipo ArtistInfo
+    fun saveArtist(artistInfo: NYTArtistInfo) { // TODO: modificar para que tambien se guarde la url
         val values = ContentValues().apply {
-            put(COLUMN_ARTIST, artist)
-            put(COLUMN_INFO, info)
+            put(COLUMN_ARTIST, artistInfo.artist)
+            put(COLUMN_INFO, artistInfo.abstract)
             put(COLUMN_SOURCE, NYTIMES_SOURCE)
         }
-
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
