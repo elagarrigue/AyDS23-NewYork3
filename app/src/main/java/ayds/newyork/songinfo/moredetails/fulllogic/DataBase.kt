@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.fulllogic.ArtistInfo.NYTArtistInfo
 
 private const val TABLE_NAME = "artists"
 private const val COLUMN_ID = "id"
@@ -20,7 +19,7 @@ private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_I
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtistInfo(artistInfo: NYTArtistInfo) { // TODO: modificar para que tambien se guarde la url
+    fun saveArtistInfo(artistInfo: ArtistInfo) { // TODO: modificar para que tambien se guarde la url
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)
@@ -29,7 +28,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): NYTArtistInfo? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
+    fun getInfo(artist: String): ArtistInfo? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
         val artistInfo = searchArtistInfo(artist)
         return artistInfo.takeIf { it.isNotBlank() }
     }
