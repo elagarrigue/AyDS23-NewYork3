@@ -20,7 +20,7 @@ private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_I
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtist(artistInfo: NYTArtistInfo) { // TODO: modificar para que tambien se guarde la url
+    fun saveArtistInfo(artistInfo: NYTArtistInfo) { // TODO: modificar para que tambien se guarde la url
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)

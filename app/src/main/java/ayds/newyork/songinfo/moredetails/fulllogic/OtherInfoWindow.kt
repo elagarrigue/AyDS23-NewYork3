@@ -71,7 +71,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
                 val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
                 text = getTextFromAbstract(abstract)
-                if (artistName != null) dataBase.saveArtist(artistName!!, text)
+                if (artistName != null) dataBase.saveArtistInfo(artistName!!, text)
                 if (url != null)
                     initListeners(url.asString)
             }
