@@ -9,52 +9,53 @@ import android.database.sqlite.SQLiteOpenHelper
 private const val TABLE_NAME = "artists"
 private const val COLUMN_ID = "id"
 private const val COLUMN_ARTIST = "artist"
-private const val COLUMN_SOURCE = "source"
 private const val COLUMN_INFO = "info"
-private const val DB_NAME = "dictionary.db"
+private const val COLUMN_SOURCE = "source"
+private const val COLUMN_URL = "url"
 private const val NYTIMES_SOURCE = 1
 private const val SELECTION_FILTER = "$COLUMN_ARTIST = ?"
 private const val SELECTION_ORDER = "$COLUMN_ARTIST desc"
-private const val CREATE_ARTISTS= "create table artists ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer)"
+private const val DATABASE_NAME = "dictionary.db"
+private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer, $COLUMN_URL string)"
 
-class DataBase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
+class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtist(artist: String, info: String) {
+    fun saveArtistInfo(artistInfo: ArtistInfo) {
         val values = ContentValues().apply {
-            put(COLUMN_ARTIST, artist)
-            put(COLUMN_INFO, info)
+            put(COLUMN_ARTIST, artistInfo.artist)
+            put(COLUMN_INFO, artistInfo.abstract)
             put(COLUMN_SOURCE, NYTIMES_SOURCE)
+            put(COLUMN_URL, artistInfo.url)
         }
-
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): String? {
-        val artistInfo = searchArtistInfo(artist)
-        return artistInfo.takeIf { it.isNotBlank() }
-    }
-
-    private fun searchArtistInfo(artist: String): String {
+    fun getInfo(artist: String): ArtistInfo? {
         val cursor = getCursor(artist)
         val artistInfo = getDataFromCursor(cursor)
         cursor.close()
         return artistInfo
     }
 
-    private fun getDataFromCursor(cursor: Cursor): String {
-        return try {
+    private fun getDataFromCursor(cursor: Cursor): ArtistInfo? {
+        var artistInfo: ArtistInfo? = null
+        try {
             if (cursor.moveToFirst()) {
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
-            } else ""
+                val artist = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ARTIST))
+                val info = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
+                val url = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL))
+                artistInfo = ArtistInfo(artist, info, url)
+            }
         } catch (err: IllegalArgumentException) {
             err.printStackTrace()
-            ""
         }
+
+        return artistInfo
     }
 
     private fun getCursor(artist: String): Cursor {
         val projection = arrayOf(
-            COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO
+            COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO, COLUMN_URL
         )
         val selection = SELECTION_FILTER
         val sortOrder = SELECTION_ORDER
@@ -66,12 +67,9 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, 1) {
 
     @Override
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            CREATE_ARTISTS
-        )
+        db.execSQL(DATABASE_CREATION_QUERY)
     }
 
     @Override
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { }
 }

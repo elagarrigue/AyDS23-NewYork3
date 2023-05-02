@@ -12,7 +12,6 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -24,6 +23,11 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
+private const val PREFIX = "[*]"
+private const val NO_RESULTS = "No Results"
+private const val HTML_START = "<html><div width=400>"
+private const val HTML_FONT = "<font face=\"arial\">"
+private const val HTML_END = "</font></div></html>"
 
 class OtherInfoWindow : AppCompatActivity() {
 
@@ -32,6 +36,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var openUrlButton: Button
     private lateinit var dataBase: DataBase
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
+    private var artistName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,12 @@ class OtherInfoWindow : AppCompatActivity() {
         initProperties()
         initDataBase()
         updateTitleImageView()
-        getArtistInfo(intent.getStringExtra(ARTIST_NAME_EXTRA))
+        initArtistName()
+        getArtistInfo()
+    }
+
+    private fun initArtistName() {
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
     }
 
     private fun initProperties() {
@@ -52,57 +62,83 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    private fun getArtistInfo(artistName: String?) {
+    private fun getArtistInfo() {
         Thread {
-            var text = getInfoFromDataBase(artistName)
-            if (text == null) {
-                val docs = getInfoFromAPI(artistName)
-                val abstract = docs?.get(0)?.asJsonObject?.get(ABSTRACT)?.asString
-                val url = docs?.get(0)?.asJsonObject?.get(WEB_URL)
-                text = getTextFromAbstract(abstract, artistName)
-                if (artistName != null) dataBase.saveArtist(artistName, text)
-                if (url != null)
-                    initListeners(url.asString)
-            }
-            updateMoreDetailsText(text)
+            val artistInfo = searchArtistInfo()
+            updateArtistInfo(artistInfo)
         }.start()
     }
 
-    private fun getTextFromAbstract(abstract: String?, artistName: String?): String {
-        return if (abstract != null)
-            getFormattedTextFromAbstract(abstract, artistName)
-        else
-            "No Results"
+    private fun updateArtistInfo(artistInfo: ArtistInfo?) {
+        if (artistInfo != null) {
+            if (artistInfo.url != null)
+                initListeners(artistInfo.url)
+            if (artistInfo.abstract != null)
+                updateMoreDetailsText(artistInfo.abstract!!)
+        }
     }
 
-    private fun getFormattedTextFromAbstract(abstract : String, artistName: String?) : String {
+    private fun searchArtistInfo(): ArtistInfo? {
+        var artistInfo = getInfoFromDataBase()
+        when {
+            artistInfo != null -> markArtistInfoAsLocal(artistInfo)
+            else -> {
+                artistInfo = getInfoFromAPI()
+                artistInfo?.let {
+                        dataBase.saveArtistInfo(artistInfo)
+                }
+            }
+        }
+        return artistInfo
+    }
+
+    private fun markArtistInfoAsLocal(artistInfo: ArtistInfo) {
+        artistInfo.isLocallyStored = true
+    }
+
+    private fun getTextFromAbstract(abstract: String?): String {
+        return if (abstract != null)
+            getFormattedTextFromAbstract(abstract)
+        else
+            NO_RESULTS
+    }
+
+    private fun getFormattedTextFromAbstract(abstract : String) : String {
         var text = abstract.replace("\\n", "\n")
-        val textFormatted = textWithBold(text, artistName)
+        val textFormatted = textWithBold(text)
         text = textToHtml(textFormatted)
         return text
     }
 
-    private fun textWithBold(text: String, artistName: String?): String {
+    private fun textWithBold(text: String): String {
         val textWithSpaces = text.replace("'", " ")
         val textWithLineBreaks = textWithSpaces.replace("\n", "<br>")
         val termUpperCase = artistName?.uppercase(Locale.getDefault())
         return textWithLineBreaks.replace("(?i)$artistName".toRegex(), "<b>$termUpperCase</b>")
     }
 
-    private fun getInfoFromDataBase(artistName: String?) : String? {
-        var text: String? = if (artistName != null) dataBase.getInfo(artistName) else null
-        if (text != null)
-            text = "[*]$text"
-        return text
+    private fun getInfoFromDataBase() : ArtistInfo? {
+        val artistInfo: ArtistInfo? = if (artistName != null) dataBase.getInfo(artistName!!) else null
+        artistInfo?.let {
+            artistInfo.abstract = if (artistInfo.abstract != null)
+                PREFIX + "${artistInfo.abstract}" else PREFIX
+        }
+        return artistInfo
     }
 
-    private fun getInfoFromAPI(artistName: String?): JsonArray? {
+    private fun getInfoFromAPI(): ArtistInfo? { // TODO: separar llamada a api de parseo del json. Corregir para que devuelva nulo si la api devuelve nulo
         return try {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
             val response = jobj[RESPONSE].asJsonObject
             val docs = response[DOCS].asJsonArray
-            return if (docs.size()==0) null else docs
+            val abstract = if (docs.size() == 0) null else getTextFromAbstract(docs.get(0).asJsonObject.get(ABSTRACT).asString)
+            val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
+            return artistName?.let {
+                ArtistInfo(
+                    it, abstract, url
+                )
+            }
         } catch (e: IOException) {
             e.printStackTrace()
             null
@@ -111,10 +147,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initListeners(urlString: String) {
         openUrlButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+            openURL(urlString)
         }
+    }
+
+    private fun openURL(urlString: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun updateTitleImageView() {
@@ -123,7 +163,7 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun updateMoreDetailsText(text: String?) {
+    private fun updateMoreDetailsText(text: String) {
         runOnUiThread {
             moreDetailsTextView.text = Html.fromHtml(text)
         }
@@ -131,10 +171,10 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun textToHtml(text: String): String {
         return StringBuilder()
-            .append("<html><div width=400>")
-            .append("<font face=\"arial\">")
+            .append(HTML_START)
+            .append(HTML_FONT)
             .append(text)
-            .append("</font></div></html>")
+            .append(HTML_END)
             .toString()
     }
 
