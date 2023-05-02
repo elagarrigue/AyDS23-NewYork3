@@ -20,7 +20,7 @@ private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_I
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
-    fun saveArtistInfo(artistInfo: ArtistInfo) { // TODO: modificar para que tambien se guarde la url
+    fun saveArtistInfo(artistInfo: ArtistInfo) {
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)
@@ -30,32 +30,32 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): ArtistInfo? {  // TODO: modificar para que retorne un objeto de tipo ArtistInfo
-        val artistInfo = searchArtistInfo(artist)
-        return artistInfo.takeIf { it.isNotBlank() }
-    }
-
-    private fun searchArtistInfo(artist: String): String {
+    fun getInfo(artist: String): ArtistInfo? {
         val cursor = getCursor(artist)
         val artistInfo = getDataFromCursor(cursor)
         cursor.close()
         return artistInfo
     }
 
-    private fun getDataFromCursor(cursor: Cursor): String {
-        return try {
+    private fun getDataFromCursor(cursor: Cursor): ArtistInfo? {
+        var artistInfo: ArtistInfo? = null
+        try {
             if (cursor.moveToFirst()) {
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
-            } else ""
+                val artist = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ARTIST))
+                val info = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
+                val url = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL))
+                artistInfo = ArtistInfo(artist, info, url)
+            }
         } catch (err: IllegalArgumentException) {
             err.printStackTrace()
-            ""
         }
+
+        return artistInfo
     }
 
     private fun getCursor(artist: String): Cursor {
         val projection = arrayOf(
-            COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO
+            COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO, COLUMN_URL
         )
         val selection = SELECTION_FILTER
         val sortOrder = SELECTION_ORDER
