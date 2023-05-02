@@ -65,12 +65,17 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistInfo() {
         Thread {
             val artistInfo = searchArtistInfo()
-            if (artistInfo != null) {
-                if (artistInfo.url != null)
-                    initListeners(artistInfo.url)
-                updateMoreDetailsText(artistInfo.abstract)
-            }
+            updateArtistInfo(artistInfo)
         }.start()
+    }
+
+    private fun updateArtistInfo(artistInfo: ArtistInfo?) {
+        if (artistInfo != null) {
+            if (artistInfo.url != null)
+                initListeners(artistInfo.url)
+            if (artistInfo.abstract != null)
+                updateMoreDetailsText(artistInfo.abstract!!)
+        }
     }
 
     private fun searchArtistInfo(): ArtistInfo? {
@@ -114,12 +119,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getInfoFromDataBase() : ArtistInfo? {
         val artistInfo: ArtistInfo? = if (artistName != null) dataBase.getInfo(artistName!!) else null
-        if (artistInfo != null)
-            artistInfo.abstract = PREFIX + "${artistInfo.abstract}"
+        artistInfo?.let {
+            artistInfo.abstract = if (artistInfo.abstract != null)
+                PREFIX + "${artistInfo.abstract}" else PREFIX
+        }
         return artistInfo
     }
 
-    private fun getInfoFromAPI(): ArtistInfo? {
+    private fun getInfoFromAPI(): ArtistInfo? { // TODO: separar llamada a api de parseo del json. Corregir para que devuelva nulo si la api devuelve nulo
         return try {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
@@ -156,7 +163,7 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun updateMoreDetailsText(text: String?) {
+    private fun updateMoreDetailsText(text: String) {
         runOnUiThread {
             moreDetailsTextView.text = Html.fromHtml(text)
         }
