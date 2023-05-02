@@ -57,11 +57,8 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val projection = arrayOf(
             COLUMN_ID, COLUMN_ARTIST, COLUMN_INFO, COLUMN_URL
         )
-        val selection = SELECTION_FILTER
-        val sortOrder = SELECTION_ORDER
-        val selectionArgs = arrayOf(artist)
         return this.readableDatabase.query(
-            TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder
+            TABLE_NAME, projection, SELECTION_FILTER, arrayOf(artist), null, null, SELECTION_ORDER
         )
     }
 
