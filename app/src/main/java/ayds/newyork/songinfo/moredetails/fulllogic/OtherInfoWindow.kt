@@ -23,7 +23,6 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
-private const val PREFIX = "[*]"
 private const val NO_RESULTS = "No Results"
 private const val HTML_START = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
@@ -35,6 +34,7 @@ private const val LINE_BREAK_ESCAPE_SEQ = "\\n"
 private const val HTML_LINE_BREAK = "<br>"
 private const val HTML_BOLD_TAG_OPEN = "<b>"
 private const val HTML_BOLD_TAG_CLOSE = "</b>"
+private const val PREFIX = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
 
@@ -77,12 +77,16 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun updateArtistInfo(artistInfo: ArtistInfo?) {
-        if (artistInfo != null) {
-            if (artistInfo.url != null)
-                initListeners(artistInfo.url)
-            if (artistInfo.abstract != null)
-                updateMoreDetailsText(artistInfo.abstract!!)
+        if (artistInfo?.url != null)
+            initListeners(artistInfo.url)
+        if (artistInfo?.abstract != null) {
+            updateMoreDetailsText(artistInfo)
         }
+    }
+
+    private fun buildArtistInfoAbstract(artistInfo: ArtistInfo): String? {
+        if (artistInfo.isLocallyStored) artistInfo.abstract = PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
+        return artistInfo.abstract
     }
 
     private fun searchArtistInfo(): ArtistInfo? {
@@ -92,7 +96,7 @@ class OtherInfoWindow : AppCompatActivity() {
             else -> {
                 artistInfo = getInfoFromAPI()
                 artistInfo?.let {
-                        dataBase.saveArtistInfo(artistInfo)
+                    dataBase.saveArtistInfo(artistInfo)
                 }
             }
         }
@@ -103,13 +107,10 @@ class OtherInfoWindow : AppCompatActivity() {
         artistInfo.isLocallyStored = true
     }
 
-    private fun getTextFromAbstract(abstract: String?)=
-        if (abstract != null)
-            getFormattedTextFromAbstract(abstract)
-        else
-            NO_RESULTS
+    private fun getTextFromAbstract(abstract: String?) =
+        if (abstract != null && abstract != "") getFormattedTextFromAbstract(abstract) else NO_RESULTS
 
-    private fun getFormattedTextFromAbstract(abstract : String) : String {
+    private fun getFormattedTextFromAbstract(abstract: String): String {
         val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
         val textFormatted = textWithBold(text)
         return textToHtml(textFormatted)
@@ -119,16 +120,14 @@ class OtherInfoWindow : AppCompatActivity() {
         val textWithSpaces = text.replace(APOSTROPHE, SPACE)
         val textWithLineBreaks = textWithSpaces.replace(LINE_BREAK, HTML_LINE_BREAK)
         val termUpperCase = artistName?.uppercase(Locale.getDefault())
-        return textWithLineBreaks.replace("(?i)$artistName".toRegex(), "$HTML_BOLD_TAG_OPEN$termUpperCase$HTML_BOLD_TAG_CLOSE")
+        return textWithLineBreaks.replace(
+            "(?i)$artistName".toRegex(),
+            "$HTML_BOLD_TAG_OPEN$termUpperCase$HTML_BOLD_TAG_CLOSE"
+        )
     }
 
-    private fun getInfoFromDataBase() : ArtistInfo? {
-        val artistInfo: ArtistInfo? = if (artistName != null) dataBase.getInfo(artistName!!) else null
-        artistInfo?.let {
-            artistInfo.abstract = if (artistInfo.abstract != null)
-                PREFIX + "${artistInfo.abstract}" else PREFIX
-        }
-        return artistInfo
+    private fun getInfoFromDataBase(): ArtistInfo? {
+        return if (artistName != null) dataBase.getInfo(artistName!!) else null
     }
 
     private fun getInfoFromAPI(): ArtistInfo? {
@@ -147,7 +146,9 @@ class OtherInfoWindow : AppCompatActivity() {
             return null
         val response = jobj.get(RESPONSE).asJsonObject
         val docs = response[DOCS].asJsonArray
-        val abstract = if (docs.size() == 0) null else getTextFromAbstract(docs.get(0).asJsonObject.get(ABSTRACT).asString)
+        val abstract = if (docs.size() == 0) getTextFromAbstract(null) else getTextFromAbstract(
+            docs.get(0).asJsonObject.get(ABSTRACT).asString
+        )
         val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
         return artistName?.let {
             ArtistInfo(
@@ -174,9 +175,9 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun updateMoreDetailsText(text: String) {
+    private fun updateMoreDetailsText(artistInfo: ArtistInfo) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(text)
+            moreDetailsTextView.text = Html.fromHtml(buildArtistInfoAbstract(artistInfo))
         }
     }
 
@@ -191,7 +192,8 @@ class OtherInfoWindow : AppCompatActivity() {
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
-        const val TITLE_IMAGE_URL =  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+        const val TITLE_IMAGE_URL =
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
         private const val NEW_YORK_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
         private val newYorkTimesRetrofit = Retrofit.Builder()
             .baseUrl(NEW_YORK_TIMES_URL)
