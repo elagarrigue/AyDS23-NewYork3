@@ -131,22 +131,28 @@ class OtherInfoWindow : AppCompatActivity() {
         return artistInfo
     }
 
-    private fun getInfoFromAPI(): ArtistInfo? { // TODO: separar llamada a api de parseo del json. Corregir para que devuelva nulo si la api devuelve nulo
+    private fun getInfoFromAPI(): ArtistInfo? {
         return try {
             val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-            val response = jobj[RESPONSE].asJsonObject
-            val docs = response[DOCS].asJsonArray
-            val abstract = if (docs.size() == 0) null else getTextFromAbstract(docs.get(0).asJsonObject.get(ABSTRACT).asString)
-            val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
-            return artistName?.let {
-                ArtistInfo(
-                    it, abstract, url
-                )
-            }
+            return jsonToArtistInfo(jobj)
         } catch (e: IOException) {
             e.printStackTrace()
             null
+        }
+    }
+
+    private fun jsonToArtistInfo(jobj: JsonObject?): ArtistInfo? {
+        if (jobj == null)
+            return null
+        val response = jobj.get(RESPONSE).asJsonObject
+        val docs = response[DOCS].asJsonArray
+        val abstract = if (docs.size() == 0) null else getTextFromAbstract(docs.get(0).asJsonObject.get(ABSTRACT).asString)
+        val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
+        return artistName?.let {
+            ArtistInfo(
+                it, abstract, url
+            )
         }
     }
 
