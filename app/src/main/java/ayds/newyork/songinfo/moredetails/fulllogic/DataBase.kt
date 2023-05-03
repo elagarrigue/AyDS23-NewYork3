@@ -38,17 +38,13 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     private fun getDataFromCursor(cursor: Cursor): ArtistInfo? {
-
         return try {
             if (cursor.moveToFirst()) {
                 val artist = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ARTIST))
                 val info = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INFO))
                 val url = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL))
                 ArtistInfo(artist, info, url)
-            } else{
-                null
-            }
-
+            } else null
         } catch (err: IllegalArgumentException) {
             err.printStackTrace()
             null
