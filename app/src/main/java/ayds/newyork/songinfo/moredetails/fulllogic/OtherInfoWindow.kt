@@ -96,18 +96,16 @@ class OtherInfoWindow : AppCompatActivity() {
         artistInfo.isLocallyStored = true
     }
 
-    private fun getTextFromAbstract(abstract: String?): String {
-        return if (abstract != null)
+    private fun getTextFromAbstract(abstract: String?)=
+        if (abstract != null)
             getFormattedTextFromAbstract(abstract)
         else
             NO_RESULTS
-    }
 
     private fun getFormattedTextFromAbstract(abstract : String) : String {
         var text = abstract.replace("\\n", "\n")
         val textFormatted = textWithBold(text)
-        text = textToHtml(textFormatted)
-        return text
+        return textToHtml(textFormatted)
     }
 
     private fun textWithBold(text: String): String {
