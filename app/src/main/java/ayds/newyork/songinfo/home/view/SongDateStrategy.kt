@@ -3,7 +3,6 @@ package ayds.newyork.songinfo.home.view
 interface SongDateStrategy {
 
     fun getSongDate(releaseDate: String): String
-
 }
 
 internal class DaySongDateStrategy: SongDateStrategy {
@@ -56,7 +55,6 @@ internal class YearSongDateStrategy: SongDateStrategy {
     private fun isLeap(year: Int): Boolean {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
-
 }
 
 internal class EmptySongDateStrategy: SongDateStrategy {
