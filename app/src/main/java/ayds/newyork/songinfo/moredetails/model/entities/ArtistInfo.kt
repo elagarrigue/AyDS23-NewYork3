@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
+package ayds.newyork.songinfo.moredetails.model.entities
 
 data class ArtistInfo(
     val artist: String,

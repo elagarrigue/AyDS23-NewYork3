@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
+package ayds.newyork.songinfo.moredetails.view
 
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.repository.external.NYTimesAPI
+import ayds.newyork.songinfo.moredetails.model.repository.local.DataBase
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
@@ -199,6 +202,7 @@ class OtherInfoWindow : AppCompatActivity() {
             .baseUrl(NEW_YORK_TIMES_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(NYTimesAPI::class.java)
+        val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(
+            NYTimesAPI::class.java)
     }
 }
