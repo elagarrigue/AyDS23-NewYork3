@@ -1,11 +1,11 @@
-package ayds.newyork.songinfo.moredetails.model.repository.local
+package ayds.newyork.songinfo.moredetails.model.data.repository.local
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 
 private const val TABLE_NAME = "artists"
 private const val COLUMN_ID = "id"

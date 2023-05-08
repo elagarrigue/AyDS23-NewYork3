@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.view
+package ayds.newyork.songinfo.moredetails.presentation.view
 
 import android.content.Intent
 import android.net.Uri
@@ -9,9 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.repository.external.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.model.repository.local.DataBase
+import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.data.repository.external.nytimes.NYTimesAPI
+import ayds.newyork.songinfo.moredetails.model.data.repository.local.DataBase
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import com.google.gson.Gson
