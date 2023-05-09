@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.data.repository.local
+package ayds.newyork.songinfo.moredetails.model.data.local.nytimes
 
 import android.content.ContentValues
 import android.content.Context
