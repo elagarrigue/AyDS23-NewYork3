@@ -4,16 +4,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.home.view.HomeUiEvent
+import ayds.newyork.songinfo.home.view.HomeUiState
 import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.model.data.repository.external.nytimes.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.model.data.repository.local.DataBase
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
+import ayds.observer.Observable
+import ayds.observer.Subject
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Response
@@ -47,6 +52,29 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var dataBase: DataBase
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
+
+    //antes <HomeUiEvent> en homeView
+    private val onActionSubject = Subject<OtherInfoUiEvent>()
+    val uiEventObservable: Observable<OtherInfoUiEvent> = onActionSubject
+    var uiState: OtherInfoUiState = OtherInfoUiState()
+
+    private fun initListeners(urlString: String) {
+        openUrlButton.setOnClickListener {
+            notifyOpenSongAction()
+            openURL(urlString)
+        }
+    }
+
+    private fun notifyOpenSongAction(){
+        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl) //anteriormente HomeUiEvent.OpenSongUrl
+        Log.e("TAG", "probandooooooo")
+    }
+
+    private fun openURL(urlString: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,18 +186,6 @@ class OtherInfoWindow : AppCompatActivity() {
                 it, abstract, url
             )
         }
-    }
-
-    private fun initListeners(urlString: String) {
-        openUrlButton.setOnClickListener {
-            openURL(urlString)
-        }
-    }
-
-    private fun openURL(urlString: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
     }
 
     private fun updateTitleImageView() {
