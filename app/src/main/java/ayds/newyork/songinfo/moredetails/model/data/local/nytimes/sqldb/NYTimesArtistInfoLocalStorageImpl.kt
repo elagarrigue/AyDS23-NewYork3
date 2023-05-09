@@ -5,12 +5,17 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 
-class NYTimesArtistInfoLocalStorageImpl(
+private const val DATABASE_VERSION = 1
+private const val DATABASE_NAME = "dictionary.db" //TODO: cambiar nombre a "info.db" o algo por el estilo
+
+internal class NYTimesArtistInfoLocalStorageImpl(
     context: Context,
     private val cursorToArtistInfoMapper: CursorToArtistInfoMapper,
-) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
+    NYTimesArtistInfoLocalStorage {
 
     private val projection = arrayOf(
         COLUMN_ID,
@@ -19,7 +24,7 @@ class NYTimesArtistInfoLocalStorageImpl(
         COLUMN_URL
     )
 
-    fun saveArtistInfo(artistInfo: ArtistInfo) {
+    override fun insertArtistInfo(artistName: String, artistInfo: ArtistInfo) {
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)
@@ -29,7 +34,7 @@ class NYTimesArtistInfoLocalStorageImpl(
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-    fun getInfo(artist: String): ArtistInfo? {
+    override fun getArtistInfo(artist: String): ArtistInfo? {
         val cursor = getCursor(artist)
         val artistInfo = cursorToArtistInfoMapper.map(cursor)
         cursor.close()
@@ -54,6 +59,5 @@ class NYTimesArtistInfoLocalStorageImpl(
     }
 
     @Override
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 }

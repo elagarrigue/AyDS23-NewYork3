@@ -4,11 +4,7 @@ import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 
 interface NYTimesArtistInfoLocalStorage {
 
-    fun updateInfoByName(query: String, artistId: String)
+    fun insertArtistInfo(artistName: String, artistInfo: ArtistInfo)
 
-    fun insertInfo(query: String, info: ArtistInfo)
-
-    fun getInfoByName(name: String): ArtistInfo?
-
-    fun getInfoById(id: String): ArtistInfo?
+    fun getArtistInfo(artist: String): ArtistInfo?
 }

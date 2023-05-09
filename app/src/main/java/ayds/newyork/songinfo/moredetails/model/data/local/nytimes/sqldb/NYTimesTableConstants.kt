@@ -9,7 +9,6 @@ const val COLUMN_URL = "url"
 const val NYTIMES_SOURCE = 1
 const val SELECTION_FILTER = "$COLUMN_ARTIST = ?"
 const val SELECTION_ORDER = "$COLUMN_ARTIST desc"
-const val DATABASE_NAME = "dictionary.db"
 const val DATABASE_CREATION_QUERY: String =
     "create table $TABLE_NAME (" +
             "$COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, " +
