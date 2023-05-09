@@ -18,7 +18,7 @@ private const val PREFIX = "[*]"
 interface ArtistAbstractHelper {
 }
 
-internal class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
+class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
     private fun textToHtml(text: String): String {
         return StringBuilder()
             .append(HTML_START)
@@ -28,7 +28,7 @@ internal class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
             .toString()
     }
 
-    private fun textWithBold(text: String): String {
+    private fun textWithBold(artistName: String, text: String): String {
         val textWithSpaces = text.replace(APOSTROPHE, SPACE)
         val textWithLineBreaks = textWithSpaces.replace(LINE_BREAK, HTML_LINE_BREAK)
         val termUpperCase = artistName?.uppercase(Locale.getDefault())
@@ -38,13 +38,13 @@ internal class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
         )
     }
 
-    private fun getFormattedTextFromAbstract(abstract: String): String {
+    fun getFormattedTextFromAbstract(artistName: String, abstract: String): String {
         val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
-        val textFormatted = textWithBold(text)
+        val textFormatted = textWithBold(artistName, text)
         return textToHtml(textFormatted)
     }
 
-    private fun buildArtistInfoAbstract(artistInfo: ArtistInfo): String? {
+    fun buildArtistInfoAbstract(artistInfo: ArtistInfo): String? {
         if (artistInfo.isLocallyStored) artistInfo.abstract = PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
         return artistInfo.abstract
     }

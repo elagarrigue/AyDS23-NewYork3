@@ -17,6 +17,8 @@ import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtist
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
+import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
+import ayds.newyork.songinfo.moredetails.presentation.presenter.PresenterImpl
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
@@ -48,10 +50,13 @@ class MoreDetailsView : AppCompatActivity() {
     val uiEventObservable: Observable<OtherInfoUiEvent> = onActionSubject
     var uiState: OtherInfoUiState = OtherInfoUiState()
 
-    private fun initListeners(urlString: String) {
+    private val artistAbstractHelperImpl = ArtistAbstractHelperImpl()
+
+    private lateinit var presenter: Presenter
+
+    private fun initListeners() {
         openUrlButton.setOnClickListener {
             notifyOpenSongAction()
-            openURL(urlString)
         }
     }
 
@@ -59,7 +64,7 @@ class MoreDetailsView : AppCompatActivity() {
         onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl)
     }
 
-    private fun openURL(urlString: String) {
+    fun openURL(urlString: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlString)
         startActivity(intent)
@@ -68,11 +73,21 @@ class MoreDetailsView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+
+        // Provisorio. se encargaria el inyector
+        presenter = PresenterImpl()
+        presenter.setOtherInfoWindow(this)
+
         initModule()
+        initListeners()
         initProperties()
         updateTitleImageView()
         initArtistName()
-        getArtistInfo()
+        notifyGetInfo()
+    }
+
+    private fun notifyGetInfo(){
+        onActionSubject.notify(OtherInfoUiEvent.GetInfo)
     }
 
     private fun initModule(){
@@ -81,6 +96,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     private fun initArtistName() {
         artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
+        uiState = uiState.copy(searchTerm = artistName.toString())
     }
 
     private fun initProperties() {
@@ -89,27 +105,11 @@ class MoreDetailsView : AppCompatActivity() {
         openUrlButton = findViewById(R.id.openUrlButton)
     }
 
-    private fun initDataBase() {
-        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(this, CursorToArtistInfoMapperImpl()) //TODO: inyeccion de dependencias
-    }
-
-    private fun getArtistInfo() {
-        Thread {
-            val artistInfo = searchArtistInfo()
-            updateArtistInfo(artistInfo)
-        }.start()
-    }
-
-    private fun updateArtistInfo(artistInfo: ArtistInfo?) {
-        if (artistInfo?.url != null)
-            initListeners(artistInfo.url)
-        if (artistInfo?.abstract != null) {
-            updateMoreDetailsText(artistInfo)
-        }
-    }
-
     private fun getTextFromAbstract(abstract: String?) =
-        if (abstract != null && abstract != "") getFormattedTextFromAbstract(abstract) else NO_RESULTS
+        if (abstract != null && abstract != "") artistName?.let {
+            artistAbstractHelperImpl.getFormattedTextFromAbstract(
+                it, abstract)
+        } else NO_RESULTS
 
     private fun getInfoFromDataBase(): ArtistInfo? {
         return if (artistName != null) NYTimesArtistInfoLocalStorageImpl.getArtistInfo(artistName!!) else null
@@ -148,9 +148,9 @@ class MoreDetailsView : AppCompatActivity() {
         }
     }
 
-    private fun updateMoreDetailsText(artistInfo: ArtistInfo) {
+    fun updateMoreDetailsText(artistInfo: ArtistInfo) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(buildArtistInfoAbstract(artistInfo))
+            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelperImpl.buildArtistInfoAbstract(artistInfo))
         }
     }
 

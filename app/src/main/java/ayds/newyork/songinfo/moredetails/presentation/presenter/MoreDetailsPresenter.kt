@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import android.util.Log
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.observer.Observer
 
@@ -20,11 +21,18 @@ internal class PresenterImpl: Presenter{
     private val observer: Observer<OtherInfoUiEvent> =
         Observer { value ->
             when (value) {
-                OtherInfoUiEvent.OpenInfoUrl -> prueba()
+                OtherInfoUiEvent.OpenInfoUrl -> openUrl()
+                OtherInfoUiEvent.GetInfo -> getInfo()
             }
         }
 
-    private fun prueba(){
-        Log.e("TAG","PROBANDOOooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    private fun openUrl(){
+        moreDetailsView.openURL(moreDetailsView.uiState.url)
+    }
+
+    private fun getInfo(){
+        // searchArtistInfo() estaba en la vista
+        val artistInfo = ArtistInfo("artista","informacion","https://www.google.com.ar",true)
+        moreDetailsView.updateMoreDetailsText(artistInfo)
     }
 }
