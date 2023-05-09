@@ -11,8 +11,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.data.external.nytimes.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.DataBase
+import ayds.newyork.songinfo.moredetails.model.data.external.nytimes.artistinfo.NYTimesAPI
+import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.utils.UtilsInjector
@@ -49,7 +49,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
     private lateinit var openUrlButton: Button
-    private lateinit var dataBase: DataBase
+    private lateinit var NYTimesArtistInfoLocalStorageImpl: NYTimesArtistInfoLocalStorageImpl
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
 
@@ -97,7 +97,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun initDataBase() {
-        dataBase = DataBase(this)
+        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(this)
     }
 
     private fun getArtistInfo() {
@@ -127,7 +127,7 @@ class OtherInfoWindow : AppCompatActivity() {
             else -> {
                 artistInfo = getInfoFromAPI()
                 artistInfo?.let {
-                    dataBase.saveArtistInfo(artistInfo)
+                    NYTimesArtistInfoLocalStorageImpl.saveArtistInfo(artistInfo)
                 }
             }
         }
@@ -158,7 +158,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getInfoFromDataBase(): ArtistInfo? {
-        return if (artistName != null) dataBase.getInfo(artistName!!) else null
+        return if (artistName != null) NYTimesArtistInfoLocalStorageImpl.getInfo(artistName!!) else null
     }
 
     private fun getInfoFromAPI(): ArtistInfo? {

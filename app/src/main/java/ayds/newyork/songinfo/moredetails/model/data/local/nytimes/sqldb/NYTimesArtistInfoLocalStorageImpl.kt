@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.data.local.nytimes
+package ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb
 
 import android.content.ContentValues
 import android.content.Context
@@ -19,7 +19,7 @@ private const val SELECTION_ORDER = "$COLUMN_ARTIST desc"
 private const val DATABASE_NAME = "dictionary.db"
 private const val DATABASE_CREATION_QUERY = "create table $TABLE_NAME ($COLUMN_ID integer PRIMARY KEY AUTOINCREMENT, $COLUMN_ARTIST string, $COLUMN_INFO string, $COLUMN_SOURCE integer, $COLUMN_URL string)"
 
-class DataBase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+class NYTimesArtistInfoLocalStorageImpl(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     fun saveArtistInfo(artistInfo: ArtistInfo) {
         val values = ContentValues().apply {
