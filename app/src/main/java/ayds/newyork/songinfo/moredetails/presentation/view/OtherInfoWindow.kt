@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.moredetails.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.model.data.external.nytimes.artistinfo.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
@@ -66,8 +67,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun notifyOpenSongAction(){
-        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl) //anteriormente HomeUiEvent.OpenSongUrl
-        Log.e("TAG", "probandooooooo")
+        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl)
     }
 
     private fun openURL(urlString: String) {
@@ -79,11 +79,15 @@ class OtherInfoWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+        initModule()
         initProperties()
-        initDataBase()
         updateTitleImageView()
         initArtistName()
         getArtistInfo()
+    }
+
+    private fun initModule(){
+        MoreDetailsInjector.init(this)
     }
 
     private fun initArtistName() {
@@ -94,10 +98,6 @@ class OtherInfoWindow : AppCompatActivity() {
         moreDetailsTextView = findViewById(R.id.textMoreDetails)
         titleImageView = findViewById(R.id.imageView)
         openUrlButton = findViewById(R.id.openUrlButton)
-    }
-
-    private fun initDataBase() {
-        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(this)
     }
 
     private fun getArtistInfo() {
