@@ -1,7 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import android.util.Log
-import ayds.newyork.songinfo.moredetails.presentation.view.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.view.OtherInfoWindow
 import ayds.observer.Observer
 

@@ -10,11 +10,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.home.view.HomeUiEvent
-import ayds.newyork.songinfo.home.view.HomeUiState
 import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.model.data.repository.external.nytimes.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.model.data.repository.local.DataBase
+import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
+import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable

@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.presentation.view
+package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 data class OtherInfoUiState (
     val info: String = "",
