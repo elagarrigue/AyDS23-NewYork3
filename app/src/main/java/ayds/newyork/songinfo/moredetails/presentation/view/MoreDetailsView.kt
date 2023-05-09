@@ -79,8 +79,8 @@ class MoreDetailsView : AppCompatActivity() {
         presenter.setOtherInfoWindow(this)
 
         initModule()
-        initListeners()
         initProperties()
+        initListeners()
         updateTitleImageView()
         initArtistName()
         notifyGetInfo()
@@ -152,6 +152,11 @@ class MoreDetailsView : AppCompatActivity() {
         runOnUiThread {
             moreDetailsTextView.text = Html.fromHtml(artistAbstractHelperImpl.buildArtistInfoAbstract(artistInfo))
         }
+    }
+
+    fun updateState(artistInfo: ArtistInfo) {
+        uiState = uiState.copy(info = artistInfo.abstract.toString())
+        uiState = uiState.copy(url = artistInfo.url.toString())
     }
 
     companion object {

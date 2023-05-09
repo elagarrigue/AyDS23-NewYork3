@@ -33,6 +33,7 @@ internal class PresenterImpl: Presenter{
     private fun getInfo(){
         // searchArtistInfo() estaba en la vista
         val artistInfo = ArtistInfo("artista","informacion","https://www.google.com.ar",true)
+        moreDetailsView.updateState(artistInfo)
         moreDetailsView.updateMoreDetailsText(artistInfo)
     }
 }

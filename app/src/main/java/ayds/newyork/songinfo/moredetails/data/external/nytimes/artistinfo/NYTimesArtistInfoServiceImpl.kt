@@ -6,7 +6,7 @@ import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 
 class NYTimesArtistInfoServiceImpl: NYTimesArtistInfoService {
 
-    override fun getArtistInfo(artist: String): ArtistInfo?{
-
+    override fun getArtistInfo(artist: String): ArtistInfo? {
+        TODO("Not yet implemented")
     }
 }
