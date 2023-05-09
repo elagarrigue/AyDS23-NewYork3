@@ -56,8 +56,7 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun notifyOpenSongAction(){
-        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl) //anteriormente HomeUiEvent.OpenSongUrl
-        Log.e("TAG", "probandooooooo")
+        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl)
     }
 
     private fun openURL(urlString: String) {
@@ -69,11 +68,15 @@ class MoreDetailsView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+        initModule()
         initProperties()
-        initDataBase()
         updateTitleImageView()
         initArtistName()
         getArtistInfo()
+    }
+
+    private fun initModule(){
+        MoreDetailsInjector.init(this)
     }
 
     private fun initArtistName() {
