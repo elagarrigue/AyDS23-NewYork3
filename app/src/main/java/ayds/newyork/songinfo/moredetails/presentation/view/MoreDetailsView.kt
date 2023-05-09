@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.moredetails.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtistInfoMapperImpl
@@ -43,7 +44,6 @@ class MoreDetailsView : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
 
-    //antes <HomeUiEvent> en homeView
     private val onActionSubject = Subject<OtherInfoUiEvent>()
     val uiEventObservable: Observable<OtherInfoUiEvent> = onActionSubject
     var uiState: OtherInfoUiState = OtherInfoUiState()
@@ -106,14 +106,6 @@ class MoreDetailsView : AppCompatActivity() {
         if (artistInfo?.abstract != null) {
             updateMoreDetailsText(artistInfo)
         }
-    }
-
-
-
-
-
-    private fun markArtistInfoAsLocal(artistInfo: ArtistInfo) {
-        artistInfo.isLocallyStored = true
     }
 
     private fun getTextFromAbstract(abstract: String?) =
