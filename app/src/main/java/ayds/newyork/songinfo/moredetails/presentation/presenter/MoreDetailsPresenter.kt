@@ -1,20 +1,20 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import android.util.Log
-import ayds.newyork.songinfo.moredetails.presentation.view.OtherInfoWindow
+import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.observer.Observer
 
 interface Presenter {
-    fun setOtherInfoWindow(otherInfoWindow: OtherInfoWindow)
+    fun setOtherInfoWindow(moreDetailsView: MoreDetailsView)
 }
 
 internal class PresenterImpl: Presenter{
 
-    private lateinit var otherInfoWindow: OtherInfoWindow
+    private lateinit var moreDetailsView: MoreDetailsView
 
-    override fun setOtherInfoWindow(otherInfoWindow: OtherInfoWindow) {
-        this.otherInfoWindow = otherInfoWindow
-        otherInfoWindow.uiEventObservable.subscribe(observer)
+    override fun setOtherInfoWindow(moreDetailsView: MoreDetailsView) {
+        this.moreDetailsView = moreDetailsView
+        moreDetailsView.uiEventObservable.subscribe(observer)
     }
 
     private val observer: Observer<OtherInfoUiEvent> =

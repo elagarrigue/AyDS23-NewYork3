@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.domain.entities
+package ayds.newyork.songinfo.moredetails.domain.entities
 
 data class ArtistInfo(
     val artist: String,

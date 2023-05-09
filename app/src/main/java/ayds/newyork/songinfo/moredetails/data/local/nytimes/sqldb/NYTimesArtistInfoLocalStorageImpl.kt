@@ -1,12 +1,12 @@
-package ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb
+package ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.NYTimesArtistInfoLocalStorage
-import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 
 private const val DATABASE_VERSION = 1
 private const val DATABASE_NAME = "dictionary.db" //TODO: cambiar nombre a "info.db" o algo por el estilo
@@ -24,7 +24,7 @@ internal class NYTimesArtistInfoLocalStorageImpl(
         COLUMN_URL
     )
 
-    override fun insertArtistInfo(artistName: String, artistInfo: ArtistInfo) {
+    override fun insertArtistInfo(artistInfo: ArtistInfo) {
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)

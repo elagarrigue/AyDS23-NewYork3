@@ -1,7 +1,7 @@
-package ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb
+package ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb
 
 import android.database.Cursor
-import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 
 interface CursorToArtistInfoMapper {
     fun map(cursor: Cursor): ArtistInfo?

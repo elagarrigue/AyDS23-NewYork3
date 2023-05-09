@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.data.external.nytimes.artistinfo;
+package ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo;
 
 
 import retrofit2.Call;

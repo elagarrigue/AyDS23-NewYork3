@@ -10,9 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.moredetails.model.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.data.external.nytimes.artistinfo.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtistInfoMapperImpl
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.utils.UtilsInjector
@@ -32,19 +33,8 @@ private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
 private const val NO_RESULTS = "No Results"
-private const val HTML_START = "<html><div width=400>"
-private const val HTML_FONT = "<font face=\"arial\">"
-private const val HTML_END = "</font></div></html>"
-private const val APOSTROPHE = "'"
-private const val SPACE = " "
-private const val LINE_BREAK = "\n"
-private const val LINE_BREAK_ESCAPE_SEQ = "\\n"
-private const val HTML_LINE_BREAK = "<br>"
-private const val HTML_BOLD_TAG_OPEN = "<b>"
-private const val HTML_BOLD_TAG_CLOSE = "</b>"
-private const val PREFIX = "[*]"
 
-class OtherInfoWindow : AppCompatActivity() {
+class MoreDetailsView : AppCompatActivity() {
 
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
@@ -97,7 +87,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun initDataBase() {
-        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(this)
+        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(this, CursorToArtistInfoMapperImpl()) //TODO: inyeccion de dependencias
     }
 
     private fun getArtistInfo() {
@@ -115,24 +105,9 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun buildArtistInfoAbstract(artistInfo: ArtistInfo): String? {
-        if (artistInfo.isLocallyStored) artistInfo.abstract = PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
-        return artistInfo.abstract
-    }
 
-    private fun searchArtistInfo(): ArtistInfo? {
-        var artistInfo = getInfoFromDataBase()
-        when {
-            artistInfo != null -> markArtistInfoAsLocal(artistInfo)
-            else -> {
-                artistInfo = getInfoFromAPI()
-                artistInfo?.let {
-                    NYTimesArtistInfoLocalStorageImpl.saveArtistInfo(artistInfo)
-                }
-            }
-        }
-        return artistInfo
-    }
+
+
 
     private fun markArtistInfoAsLocal(artistInfo: ArtistInfo) {
         artistInfo.isLocallyStored = true
@@ -141,24 +116,8 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getTextFromAbstract(abstract: String?) =
         if (abstract != null && abstract != "") getFormattedTextFromAbstract(abstract) else NO_RESULTS
 
-    private fun getFormattedTextFromAbstract(abstract: String): String {
-        val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
-        val textFormatted = textWithBold(text)
-        return textToHtml(textFormatted)
-    }
-
-    private fun textWithBold(text: String): String {
-        val textWithSpaces = text.replace(APOSTROPHE, SPACE)
-        val textWithLineBreaks = textWithSpaces.replace(LINE_BREAK, HTML_LINE_BREAK)
-        val termUpperCase = artistName?.uppercase(Locale.getDefault())
-        return textWithLineBreaks.replace(
-            "(?i)$artistName".toRegex(),
-            "$HTML_BOLD_TAG_OPEN$termUpperCase$HTML_BOLD_TAG_CLOSE"
-        )
-    }
-
     private fun getInfoFromDataBase(): ArtistInfo? {
-        return if (artistName != null) NYTimesArtistInfoLocalStorageImpl.getInfo(artistName!!) else null
+        return if (artistName != null) NYTimesArtistInfoLocalStorageImpl.getArtistInfo(artistName!!) else null
     }
 
     private fun getInfoFromAPI(): ArtistInfo? {
@@ -198,15 +157,6 @@ class OtherInfoWindow : AppCompatActivity() {
         runOnUiThread {
             moreDetailsTextView.text = Html.fromHtml(buildArtistInfoAbstract(artistInfo))
         }
-    }
-
-    private fun textToHtml(text: String): String {
-        return StringBuilder()
-            .append(HTML_START)
-            .append(HTML_FONT)
-            .append(text)
-            .append(HTML_END)
-            .toString()
     }
 
     companion object {

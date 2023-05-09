@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.data.local.nytimes.sqldb
+package ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb
 
 const val TABLE_NAME = "artists"
 const val COLUMN_ID = "id"
