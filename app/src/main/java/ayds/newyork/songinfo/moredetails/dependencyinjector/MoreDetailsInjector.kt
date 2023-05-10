@@ -21,6 +21,8 @@ import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistI
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.*
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
+import ayds.newyork.songinfo.moredetails.presentation.presenter.PresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
 import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelperImpl
 import retrofit2.Retrofit
@@ -28,9 +30,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object MoreDetailsInjector {
 
-    private lateinit var otherInfoWindow: MoreDetailsView
-    private lateinit var NYTimesArtistInfoLocalStorageImpl: NYTimesArtistInfoLocalStorage
-    private var cursorToArtistMapper: CursorToArtistInfoMapper = CursorToArtistInfoMapperImpl()
     private const val NEW_YORK_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
     private val newYorkTimesRetrofit = Retrofit.Builder()
         .baseUrl(NEW_YORK_TIMES_URL)
@@ -41,6 +40,7 @@ object MoreDetailsInjector {
     private val newYorkTimesToArtistInfoResolver: NYTimesToArtistInfoResolver = JsonToArtistInfoResolver()
 
     private lateinit var moreDetailsModel: ArtistRepository
+    private lateinit var moreDetailsPresenter: Presenter
 
     val artistAbstractHelper: ArtistAbstractHelper = ArtistAbstractHelperImpl()
     val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceImpl(
@@ -57,11 +57,13 @@ object MoreDetailsInjector {
         val newYorkTimesArtistInfoLocalStorage: NYTimesArtistInfoLocalStorage = NYTimesArtistInfoLocalStorageImpl(
             moreDetailsView as Context, CursorToArtistInfoMapperImpl()
         )
-        val moreDetailsModel: ArtistRepository =
-            ArtistRepositoryImpl(newYorkTimesArtistInfoLocalStorage, newYorkTimesArtistInfoService)
+        moreDetailsModel = ArtistRepositoryImpl(newYorkTimesArtistInfoLocalStorage, newYorkTimesArtistInfoService)
     }
 
     fun initMoreDetailsPresenter(moreDetailsView: MoreDetailsView) {
-
+        // TODO observers
+        moreDetailsPresenter = PresenterImpl()
     }
+
+    fun getPresenter(): Presenter = moreDetailsPresenter
 }

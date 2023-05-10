@@ -78,7 +78,8 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun initModule(){
-        MoreDetailsInjector.init(this)
+        MoreDetailsInjector.initMoreDetailsView(this)
+        presenter = MoreDetailsInjector.getPresenter()
     }
 
     private fun initArtistName() {
