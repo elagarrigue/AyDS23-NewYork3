@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import java.util.*
 
 private const val HTML_START = "<html><div width=400>"
@@ -14,18 +14,18 @@ private const val HTML_BOLD_TAG_CLOSE = "</b>"
 private const val APOSTROPHE = "'"
 private const val SPACE = " "
 private const val PREFIX = "[*]"
+private const val NO_RESULTS = "No Results"
 
 interface ArtistAbstractHelper {
+    fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String
 }
 
 class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
-    private fun textToHtml(text: String): String {
-        return StringBuilder()
-            .append(HTML_START)
-            .append(HTML_FONT)
-            .append(text)
-            .append(HTML_END)
-            .toString()
+
+    fun getFormattedTextFromAbstract(artistName: String, abstract: String): String {
+        val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
+        val textFormatted = textWithBold(artistName, text)
+        return textToHtml(textFormatted)
     }
 
     private fun textWithBold(artistName: String, text: String): String {
@@ -38,14 +38,19 @@ class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
         )
     }
 
-    fun getFormattedTextFromAbstract(artistName: String, abstract: String): String {
-        val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
-        val textFormatted = textWithBold(artistName, text)
-        return textToHtml(textFormatted)
+    private fun textToHtml(text: String): String {
+        return StringBuilder()
+            .append(HTML_START)
+            .append(HTML_FONT)
+            .append(text)
+            .append(HTML_END)
+            .toString()
     }
 
-    fun buildArtistInfoAbstract(artistInfo: ArtistInfo): String? {
-        if (artistInfo.isLocallyStored) artistInfo.abstract = PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
-        return artistInfo.abstract
+    override fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
+        return if (artistInfo.isLocallyStored)
+            PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
+        else
+            artistInfo.abstract ?: NO_RESULTS
     }
 }

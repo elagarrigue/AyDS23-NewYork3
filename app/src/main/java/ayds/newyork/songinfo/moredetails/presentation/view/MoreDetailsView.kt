@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
@@ -20,7 +20,6 @@ import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-private const val NO_RESULTS = "No Results"
 
 class MoreDetailsView : AppCompatActivity() {
 
@@ -95,13 +94,13 @@ class MoreDetailsView : AppCompatActivity() {
         }
     }
 
-    fun updateMoreDetailsText(artistInfo: ArtistInfo) {
+    fun updateMoreDetailsText(artistInfo: NYTArtistInfo) {
         runOnUiThread {
             moreDetailsTextView.text = Html.fromHtml(artistAbstractHelper.buildArtistInfoAbstract(artistInfo))
         }
     }
 
-    fun updateState(artistInfo: ArtistInfo) {
+    fun updateState(artistInfo: NYTArtistInfo) {
         uiState = uiState.copy(info = artistInfo.abstract.toString())
         uiState = uiState.copy(url = artistInfo.url.toString())
     }
