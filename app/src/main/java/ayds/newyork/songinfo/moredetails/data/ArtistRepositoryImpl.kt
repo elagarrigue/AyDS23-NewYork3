@@ -8,7 +8,7 @@ import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 class ArtistRepositoryImpl(
 
     private val artistLocalStorage: NYTimesArtistInfoLocalStorage,
-    private val nytimesApi: NYTimesArtistInfoService
+    private val newYorkTimesApi: NYTimesArtistInfoService
 
 ) : ArtistRepository {
     override fun searchArtistInfo(artist: String): ArtistInfo? {
@@ -16,7 +16,7 @@ class ArtistRepositoryImpl(
         when {
             artistInfo != null -> markArtistInfoAsLocal(artistInfo)
             else -> {
-                artistInfo = nytimesApi.getArtistInfo(artist)
+                artistInfo = newYorkTimesApi.getArtistInfo(artist)
                 artistInfo?.let {
                     artistLocalStorage.insertArtistInfo(artistInfo)
                 }

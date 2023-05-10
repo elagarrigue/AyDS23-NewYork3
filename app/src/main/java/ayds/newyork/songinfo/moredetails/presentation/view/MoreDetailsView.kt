@@ -92,12 +92,6 @@ class MoreDetailsView : AppCompatActivity() {
         openUrlButton = findViewById(R.id.openUrlButton)
     }
 
-    private fun getTextFromAbstract(abstract: String?) =
-        if (abstract != null && abstract != "") artistName?.let {
-            artistAbstractHelperImpl.getFormattedTextFromAbstract(
-                it, abstract)
-        } else NO_RESULTS
-
     private fun updateTitleImageView() {
         runOnUiThread {
             imageLoader.loadImageIntoView(TITLE_IMAGE_URL, titleImageView)
