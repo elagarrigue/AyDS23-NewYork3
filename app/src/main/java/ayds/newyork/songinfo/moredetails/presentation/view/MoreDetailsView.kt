@@ -1,7 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,6 +25,10 @@ class MoreDetailsView : AppCompatActivity() {
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
     private lateinit var presenter: Presenter
+    private val observer: Observer<MoreDetailsUIState> =
+        Observer {
+                value -> updateMoreDetailsView(value)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,11 +76,6 @@ class MoreDetailsView : AppCompatActivity() {
             moreDetailsTextView.text = HtmlCompat.fromHtml(artistInfo, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
-
-    private val observer: Observer<MoreDetailsUIState> =
-        Observer {
-                value -> updateMoreDetailsView(value)
-        }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
         updateMoreDetailsText(uiState.info)

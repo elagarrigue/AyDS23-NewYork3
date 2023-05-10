@@ -3,7 +3,7 @@ package ayds.newyork.songinfo.moredetails.presentation.presenter
 data class MoreDetailsUIState(
     val info: String = "",
     val url: String = "",
-    val searchTerm: String = "",
+    val actionsEnabled: Boolean = false
 ) {
 
     companion object {

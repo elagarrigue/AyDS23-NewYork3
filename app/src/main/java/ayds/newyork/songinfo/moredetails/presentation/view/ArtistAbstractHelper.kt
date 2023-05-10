@@ -21,7 +21,6 @@ private const val EMPTY_STRING = ""
 
 interface ArtistAbstractHelper {
     fun getInfo(artistInfo: ArtistInfo): String
-    fun getUrl(url: ArtistInfo): String
 }
 
 class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
@@ -30,12 +29,6 @@ class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
         return when (artistInfo) {
             is NYTArtistInfo -> buildArtistInfoAbstract(artistInfo)
             else -> NO_RESULTS
-        }
-    }
-    override fun getUrl(artistInfo: ArtistInfo): String {
-        return when (artistInfo) {
-            is NYTArtistInfo -> artistInfo.url
-            else -> ""
         }
     }
     private fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
@@ -58,7 +51,7 @@ class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
     private fun textWithBold(artistName: String, text: String): String {
         val textWithSpaces = text.replace(APOSTROPHE, SPACE)
         val textWithLineBreaks = textWithSpaces.replace(LINE_BREAK, HTML_LINE_BREAK)
-        val termUpperCase = artistName?.uppercase(Locale.getDefault())
+        val termUpperCase = artistName.uppercase(Locale.getDefault())
         return textWithLineBreaks.replace(
             "(?i)$artistName".toRegex(),
             "$HTML_BOLD_TAG_OPEN$termUpperCase$HTML_BOLD_TAG_CLOSE"

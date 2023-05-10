@@ -1,6 +1,8 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
 import ayds.observer.Observable
@@ -32,6 +34,24 @@ internal class MoreDetailsPresenterImpl(
         uiEventObservable.notify(uiState)
     }
 
-    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUIState? =
-        artistName?.let { MoreDetailsUIState(artistAbstractHelper.getInfo(artistInfo), artistAbstractHelper.getUrl(artistInfo), it) }
+    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUIState? {
+        return when (artistInfo) {
+            is NYTArtistInfo -> createArtistInfoUiState(artistName, artistInfo)
+            EmptyArtistInfo -> createEmptyUiState()
+        }
+    }
+
+    private fun createArtistInfoUiState(artistName: String?, artistInfo: NYTArtistInfo): MoreDetailsUIState? {
+        return artistName?.let {
+            MoreDetailsUIState(
+                artistAbstractHelper.getInfo(artistInfo),
+                artistInfo.url,
+                true
+            )
+        }
+    }
+
+    private fun createEmptyUiState(): MoreDetailsUIState {
+        return MoreDetailsUIState("", "", false)
+    }
 }
