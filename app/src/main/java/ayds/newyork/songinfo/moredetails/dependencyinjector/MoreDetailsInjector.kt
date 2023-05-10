@@ -1,11 +1,16 @@
 package ayds.newyork.songinfo.moredetails.dependencyinjector
 
+import android.content.Context
+import ayds.newyork.songinfo.home.model.HomeModelImpl
+import ayds.newyork.songinfo.home.model.HomeModelInjector
+import ayds.newyork.songinfo.home.model.repository.SongRepository
+import ayds.newyork.songinfo.home.model.repository.SongRepositoryImpl
+import ayds.newyork.songinfo.home.model.repository.external.spotify.SpotifyInjector
 import ayds.newyork.songinfo.home.model.repository.external.spotify.SpotifyTrackService
-import ayds.newyork.songinfo.home.model.repository.external.spotify.auth.SpotifyAuthInjector
-import ayds.newyork.songinfo.home.model.repository.external.spotify.tracks.JsonToSongResolver
-import ayds.newyork.songinfo.home.model.repository.external.spotify.tracks.SpotifyToSongResolver
-import ayds.newyork.songinfo.home.model.repository.external.spotify.tracks.SpotifyTrackInjector
-import ayds.newyork.songinfo.home.model.repository.external.spotify.tracks.SpotifyTrackServiceImpl
+import ayds.newyork.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
+import ayds.newyork.songinfo.home.model.repository.local.spotify.sqldb.CursorToSpotifySongMapperImpl
+import ayds.newyork.songinfo.home.model.repository.local.spotify.sqldb.SpotifyLocalStorageImpl
+import ayds.newyork.songinfo.moredetails.data.ArtistRepositoryImpl
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.NYTimesArtistInfoService
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.JsonToArtistInfoResolver
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
@@ -15,6 +20,9 @@ import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLoc
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.*
+import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
+import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelperImpl
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
@@ -32,18 +40,28 @@ object MoreDetailsInjector {
     private val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(NYTimesAPI::class.java)
     private val newYorkTimesToArtistInfoResolver: NYTimesToArtistInfoResolver = JsonToArtistInfoResolver()
 
+    private lateinit var moreDetailsModel: ArtistRepository
+
+    val artistAbstractHelper: ArtistAbstractHelper = ArtistAbstractHelperImpl()
     val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceImpl(
         newYorkTimesAPI,
         newYorkTimesToArtistInfoResolver
     )
 
-    fun init(otherInfoWindow: MoreDetailsView) {
-        MoreDetailsInjector.otherInfoWindow = otherInfoWindow
-        initializeNYTimesLocalStorage()
+    fun initMoreDetailsView(moreDetailsView: MoreDetailsView) {
+        initMoreDetailsModel(moreDetailsView)
+        initMoreDetailsPresenter(moreDetailsView)
     }
 
-    private fun initializeNYTimesLocalStorage() {
-        NYTimesArtistInfoLocalStorageImpl = NYTimesArtistInfoLocalStorageImpl(otherInfoWindow, cursorToArtistMapper)
+    fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
+        val newYorkTimesArtistInfoLocalStorage: NYTimesArtistInfoLocalStorage = NYTimesArtistInfoLocalStorageImpl(
+            moreDetailsView as Context, CursorToArtistInfoMapperImpl()
+        )
+        val moreDetailsModel: ArtistRepository =
+            ArtistRepositoryImpl(newYorkTimesArtistInfoLocalStorage, newYorkTimesArtistInfoService)
     }
 
+    fun initMoreDetailsPresenter(moreDetailsView: MoreDetailsView) {
+
+    }
 }
