@@ -43,7 +43,7 @@ object MoreDetailsInjector {
     private lateinit var moreDetailsPresenter: Presenter
 
     val artistAbstractHelper: ArtistAbstractHelper = ArtistAbstractHelperImpl()
-    val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceImpl(
+    private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceImpl(
         newYorkTimesAPI,
         newYorkTimesToArtistInfoResolver
     )
