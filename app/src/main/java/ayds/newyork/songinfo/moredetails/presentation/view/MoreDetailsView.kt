@@ -80,8 +80,12 @@ class MoreDetailsView : AppCompatActivity() {
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
         updateMoreDetailsText(uiState.info)
         updateUrl(uiState.url)
+        enableActions(uiState.actionsEnabled)
+    }
+
+    private fun enableActions(enable: Boolean) {
         runOnUiThread {
-            openUrlButton.isEnabled = !uiState.url.isNullOrEmpty()
+            openUrlButton.isEnabled = enable
         }
     }
 
