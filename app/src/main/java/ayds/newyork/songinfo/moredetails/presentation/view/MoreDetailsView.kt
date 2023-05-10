@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,8 +12,6 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtistInfoMapperImpl
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
@@ -23,18 +20,9 @@ import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.io.IOException
-import java.util.Locale
 
-private const val RESPONSE = "response"
-private const val DOCS = "docs"
-private const val ABSTRACT = "abstract"
-private const val WEB_URL = "web_url"
 private const val NO_RESULTS = "No Results"
 
 class MoreDetailsView : AppCompatActivity() {
@@ -42,7 +30,6 @@ class MoreDetailsView : AppCompatActivity() {
     private lateinit var moreDetailsTextView: TextView
     private lateinit var titleImageView: ImageView
     private lateinit var openUrlButton: Button
-    private lateinit var NYTimesArtistInfoLocalStorageImpl: NYTimesArtistInfoLocalStorageImpl
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
 
@@ -110,37 +97,6 @@ class MoreDetailsView : AppCompatActivity() {
             artistAbstractHelperImpl.getFormattedTextFromAbstract(
                 it, abstract)
         } else NO_RESULTS
-
-    private fun getInfoFromDataBase(): ArtistInfo? {
-        return if (artistName != null) NYTimesArtistInfoLocalStorageImpl.getArtistInfo(artistName!!) else null
-    }
-
-    private fun getInfoFromAPI(): ArtistInfo? {
-        return try {
-            val callResponse: Response<String> = newYorkTimesAPI.getArtistInfo(artistName).execute()
-            val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-            return jsonToArtistInfo(jobj)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    private fun jsonToArtistInfo(jobj: JsonObject?): ArtistInfo? {
-        if (jobj == null)
-            return null
-        val response = jobj.get(RESPONSE).asJsonObject
-        val docs = response[DOCS].asJsonArray
-        val abstract = if (docs.size() == 0) getTextFromAbstract(null) else getTextFromAbstract(
-            docs.get(0).asJsonObject.get(ABSTRACT).asString
-        )
-        val url = if (docs.size() == 0) null else docs.get(0).asJsonObject.get(WEB_URL).asString
-        return artistName?.let {
-            ArtistInfo(
-                it, abstract, url
-            )
-        }
-    }
 
     private fun updateTitleImageView() {
         runOnUiThread {
