@@ -46,7 +46,7 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun subscribeUiState() {
-        presenter.uiEventObservable.subscribe(observer)
+        presenter.uiStateObservable.subscribe(observer)
     }
 
     private fun initModule(){
@@ -78,7 +78,7 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
-        updateMoreDetailsText(uiState.info)
+        updateMoreDetailsText(uiState.abstract)
         updateUrl(uiState.url)
         enableActions(uiState.actionsEnabled)
     }

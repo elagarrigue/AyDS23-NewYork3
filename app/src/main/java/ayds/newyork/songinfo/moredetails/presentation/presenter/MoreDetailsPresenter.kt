@@ -10,7 +10,7 @@ import ayds.observer.Subject
 
 interface Presenter {
 
-    val uiEventObservable: Observable<MoreDetailsUIState>
+    val uiStateObservable: Observable<MoreDetailsUIState>
     fun getArtistInfo(artistName: String)
 }
 
@@ -20,40 +20,41 @@ internal class MoreDetailsPresenterImpl(
 ): Presenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()
-    override val uiEventObservable = onActionSubject
+    override val uiStateObservable = onActionSubject
+    private var uiState = MoreDetailsUIState()
 
     override fun getArtistInfo(artistName: String) {
         Thread {
             val artistInfo = artistInfoRepository.searchArtistInfo(artistName)
-            val uiState = createUiState(artistInfo)
+            updateUiState(artistInfo)
             notifyUpdate(uiState)
         }.start()
     }
 
     private fun notifyUpdate(uiState: MoreDetailsUIState){
-        uiEventObservable.notify(uiState)
+        uiStateObservable.notify(uiState)
     }
 
-    private fun createUiState(artistInfo: ArtistInfo): MoreDetailsUIState {
-        return when (artistInfo) {
-            is NYTArtistInfo -> createArtistInfoUiState(artistInfo)
-            EmptyArtistInfo -> createEmptyUiState()
+    private fun updateUiState(artistInfo: ArtistInfo) {
+        when (artistInfo) {
+            is NYTArtistInfo -> updateArtistInfoUiState(artistInfo)
+            EmptyArtistInfo -> updateEmptyUiState()
         }
     }
 
-    private fun createArtistInfoUiState(artistInfo: NYTArtistInfo): MoreDetailsUIState {
-        return MoreDetailsUIState(
-                artistAbstractHelper.getInfo(artistInfo),
-                artistInfo.url,
-                true
-            )
+    private fun updateArtistInfoUiState(artistInfo: NYTArtistInfo) {
+        uiState = uiState.copy(
+            abstract = artistAbstractHelper.getInfo(artistInfo),
+            url = artistInfo.url,
+            actionsEnabled = true
+        )
     }
 
-    private fun createEmptyUiState(): MoreDetailsUIState {
-        return MoreDetailsUIState(
-                artistAbstractHelper.getInfo(EmptyArtistInfo),
-                "",
-                false
-            )
+    private fun updateEmptyUiState() {
+        uiState = uiState.copy(
+            abstract = artistAbstractHelper.getInfo(EmptyArtistInfo),
+            url = "",
+            actionsEnabled = false
+        )
     }
 }
