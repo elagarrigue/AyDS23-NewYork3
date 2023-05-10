@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -81,6 +82,9 @@ class MoreDetailsView : AppCompatActivity() {
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
         updateMoreDetailsText(uiState.info)
         updateUrl(uiState.url)
+        runOnUiThread {
+            openUrlButton.isEnabled = !uiState.url.isNullOrEmpty()
+        }
     }
 
     private fun updateUrl(url: String) {
