@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
 import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
@@ -20,8 +19,6 @@ import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val NO_RESULTS = "No Results"
 
@@ -37,8 +34,7 @@ class MoreDetailsView : AppCompatActivity() {
     val uiEventObservable: Observable<OtherInfoUiEvent> = onActionSubject
     var uiState: OtherInfoUiState = OtherInfoUiState()
 
-    private val artistAbstractHelperImpl = ArtistAbstractHelperImpl()
-
+    private val artistAbstractHelper = MoreDetailsInjector.artistAbstractHelper
     private lateinit var presenter: Presenter
 
     private fun initListeners() {
@@ -101,7 +97,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     fun updateMoreDetailsText(artistInfo: ArtistInfo) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelperImpl.buildArtistInfoAbstract(artistInfo))
+            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelper.buildArtistInfoAbstract(artistInfo))
         }
     }
 
