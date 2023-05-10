@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails
+package ayds.newyork.songinfo.moredetails.dependencyinjector
 
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
@@ -12,7 +12,7 @@ object MoreDetailsInjector {
     private var cursorToArtistMapper: CursorToArtistInfoMapper = CursorToArtistInfoMapperImpl()
 
     fun init(otherInfoWindow: MoreDetailsView) {
-        this.otherInfoWindow = otherInfoWindow
+        MoreDetailsInjector.otherInfoWindow = otherInfoWindow
         initializeNYTimesLocalStorage()
     }
 

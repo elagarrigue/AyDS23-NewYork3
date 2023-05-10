@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.moredetails.MoreDetailsInjector
+import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
