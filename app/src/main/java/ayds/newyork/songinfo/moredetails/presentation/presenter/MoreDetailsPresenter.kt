@@ -1,39 +1,41 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
-import android.util.Log
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
-import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
-import ayds.observer.Observer
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
+import ayds.observer.Observable
+import ayds.observer.Subject
 
 interface Presenter {
-    fun setOtherInfoWindow(moreDetailsView: MoreDetailsView)
+    fun setArtistAbstractHelper(artistAbstractHelper: ArtistAbstractHelper)
+    val uiEventObservable: Observable<MoreDetailsUiState>
+    fun getInfo(artistName: String?)
+
 }
 
-internal class PresenterImpl: Presenter{
+internal class MoreDetailsPresenterImpl(
+    private var artistInfoRepository: ArtistRepository
+): Presenter {
 
-    private lateinit var moreDetailsView: MoreDetailsView
+    private val onActionSubject = Subject<MoreDetailsUiState>()
+    override val uiEventObservable= onActionSubject
+    private lateinit var artistAbstractHelper: ArtistAbstractHelper
 
-    override fun setOtherInfoWindow(moreDetailsView: MoreDetailsView) {
-        this.moreDetailsView = moreDetailsView
-        moreDetailsView.uiEventObservable.subscribe(observer)
+    override fun getInfo(artistName: String?) {
+        // var artistInfo = artistName?.let { artistInfoRepository.searchArtistInfo(it) }
+        var artistInfo = ArtistInfo.NYTArtistInfo("artista", "informacion", "http://www.facebook.com", true)
+        val uiState = artistInfo?.let { createUiState(artistName, it) }
+        uiState?.let { notifyUpdate(it) }
     }
 
-    private val observer: Observer<OtherInfoUiEvent> =
-        Observer { value ->
-            when (value) {
-                OtherInfoUiEvent.OpenInfoUrl -> openUrl()
-                OtherInfoUiEvent.GetInfo -> getInfo()
-            }
-        }
-
-    private fun openUrl(){
-        moreDetailsView.openURL(moreDetailsView.uiState.url)
+    private fun notifyUpdate(uiState: MoreDetailsUiState){
+        uiEventObservable.notify(uiState)
     }
 
-    private fun getInfo(){
-        // searchArtistInfo() estaba en la vista
-        val artistInfo = NYTArtistInfo("artista","informacion","https://www.google.com.ar",true)
-        moreDetailsView.updateState(artistInfo)
-        moreDetailsView.updateMoreDetailsText(artistInfo)
+    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUiState? =
+        artistName?.let { MoreDetailsUiState(artistAbstractHelper.getInfo(artistInfo), artistAbstractHelper.getUrl(artistInfo), it) }
+
+    override fun setArtistAbstractHelper(artistAbstractHelper: ArtistAbstractHelper){
+        this.artistAbstractHelper =  artistAbstractHelper
     }
 }

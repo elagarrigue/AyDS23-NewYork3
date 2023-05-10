@@ -20,18 +20,24 @@ private const val NO_ABSTRACT = "No Abstract"
 private const val EMPTY_STRING = ""
 
 interface ArtistAbstractHelper {
-    fun getArtistInfoAbstract(artistInfo: ArtistInfo): String
+    fun getInfo(artistInfo: ArtistInfo): String
+    fun getUrl(url: ArtistInfo): String
 }
 
 class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
 
-    override fun getArtistInfoAbstract(artistInfo: ArtistInfo): String {
+    override fun getInfo(artistInfo: ArtistInfo): String {
         return when (artistInfo) {
             is NYTArtistInfo -> buildArtistInfoAbstract(artistInfo)
             else -> NO_RESULTS
         }
     }
-
+    override fun getUrl(artistInfo: ArtistInfo): String {
+        return when (artistInfo) {
+            is NYTArtistInfo -> artistInfo.url
+            else -> ""
+        }
+    }
     private fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
         val abstract = getAbstract(artistInfo)
         val formattedAbstract = getFormattedAbstract(artistInfo.artist, abstract)

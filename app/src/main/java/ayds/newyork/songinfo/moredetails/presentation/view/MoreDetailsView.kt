@@ -1,25 +1,21 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
-import android.content.Intent
-import android.net.Uri
+
 import android.os.Bundle
+import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
-import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
-import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
-import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
-import ayds.newyork.songinfo.moredetails.presentation.presenter.PresenterImpl
+import ayds.newyork.songinfo.moredetails.presentation.presenter.*
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUiState.Companion.TITLE_IMAGE_URL
 import ayds.newyork.songinfo.utils.UtilsInjector
+import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
-import ayds.observer.Observable
-import ayds.observer.Subject
+import ayds.observer.*
 
 
 class MoreDetailsView : AppCompatActivity() {
@@ -29,58 +25,39 @@ class MoreDetailsView : AppCompatActivity() {
     private lateinit var openUrlButton: Button
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private var artistName: String? = null
-
-    private val onActionSubject = Subject<OtherInfoUiEvent>()
-    val uiEventObservable: Observable<OtherInfoUiEvent> = onActionSubject
-    var uiState: OtherInfoUiState = OtherInfoUiState()
-
-    private val artistAbstractHelper = MoreDetailsInjector.artistAbstractHelper
     private lateinit var presenter: Presenter
 
-    private fun initListeners() {
-        openUrlButton.setOnClickListener {
-            notifyOpenSongAction()
-        }
-    }
-
-    private fun notifyOpenSongAction(){
-        onActionSubject.notify(OtherInfoUiEvent.OpenInfoUrl)
-    }
-
-    fun openURL(urlString: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
+    fun setPresenter(moreDetailsPresenter: Presenter){
+        this.presenter = moreDetailsPresenter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-
-        // Provisorio. se encargaria el inyector
-        presenter = PresenterImpl()
-        presenter.setOtherInfoWindow(this)
-
         initModule()
         initProperties()
-        initListeners()
         updateTitleImageView()
         initArtistName()
-        notifyGetInfo()
+        subscribeUiState()
+        getInfo()
     }
 
-    private fun notifyGetInfo(){
-        onActionSubject.notify(OtherInfoUiEvent.GetInfo)
+    private fun getInfo() {
+        presenter.getInfo(artistName)
+    }
+
+    private fun subscribeUiState() {
+        presenter.uiEventObservable.subscribe(observer)
     }
 
     private fun initModule(){
-        MoreDetailsInjector.initMoreDetailsView(this)
+        MoreDetailsInjector.init(this)
         presenter = MoreDetailsInjector.getPresenter()
     }
 
     private fun initArtistName() {
-        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
-        uiState = uiState.copy(searchTerm = artistName.toString())
+        val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
+        this.artistName = artistName.toString()
     }
 
     private fun initProperties() {
@@ -95,16 +72,27 @@ class MoreDetailsView : AppCompatActivity() {
         }
     }
 
-    fun updateMoreDetailsText(artistInfo: ArtistInfo) {
+    private fun updateMoreDetailsText(artistInfo: String?) {
         runOnUiThread {
-            moreDetailsTextView.text = HtmlCompat.fromHtml(artistAbstractHelper.getArtistInfoAbstract(artistInfo), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            moreDetailsTextView.text = Html.fromHtml(artistInfo)
         }
     }
 
-    fun updateState(artistInfo: NYTArtistInfo) {
-        uiState = uiState.copy(info = artistInfo.abstract)
-        uiState = uiState.copy(url = artistInfo.url)
+    private val observer: Observer<MoreDetailsUiState> =
+        Observer {
+                value -> updateMoreDetailsView(value)
+
+            }
+
+    private fun updateMoreDetailsView(uiState: MoreDetailsUiState) {
+        updateMoreDetailsText(uiState.info)
+        updateUrl(uiState.url)
     }
+
+    private fun updateUrl(url: String) {
+        openUrlButton.setOnClickListener { navigationUtils.openExternalUrl(this, url) }
+    }
+
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
