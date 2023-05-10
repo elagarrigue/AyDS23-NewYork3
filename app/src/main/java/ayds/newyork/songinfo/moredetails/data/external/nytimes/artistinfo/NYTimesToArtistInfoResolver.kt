@@ -29,11 +29,11 @@ internal class JsonToArtistInfoResolver : NYTimesToArtistInfoResolver {
         }
     }
 
-    private fun String?.getFirstItem(): JsonObject {
+    private fun String?.getFirstItem(): JsonObject? {
         val jobj = Gson().fromJson(this, JsonObject::class.java)
         val response = jobj.get(RESPONSE).asJsonObject
         val docs = response[DOCS].asJsonArray
-        return docs[0].asJsonObject
+        return if (docs.size() == 0) null else docs[0].asJsonObject
     }
 
     private fun JsonObject.getAbstract(): String = get(ABSTRACT).asString

@@ -23,7 +23,7 @@ class MoreDetailsView : AppCompatActivity() {
     private lateinit var titleImageView: ImageView
     private lateinit var openUrlButton: Button
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
-    private var artistName: String? = null
+    private lateinit var artistName: String
     private lateinit var presenter: Presenter
     private val observer: Observer<MoreDetailsUIState> =
         Observer {
@@ -56,7 +56,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     private fun initArtistName() {
         val artistName = intent.getStringExtra(ARTIST_NAME_EXTRA)
-        this.artistName = artistName.toString()
+        this.artistName = artistName ?: ""
     }
 
     private fun initProperties() {

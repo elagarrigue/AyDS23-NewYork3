@@ -11,7 +11,7 @@ import ayds.observer.Subject
 interface Presenter {
 
     val uiEventObservable: Observable<MoreDetailsUIState>
-    fun getArtistInfo(artistName: String?)
+    fun getArtistInfo(artistName: String)
 }
 
 internal class MoreDetailsPresenterImpl(
@@ -22,11 +22,11 @@ internal class MoreDetailsPresenterImpl(
     private val onActionSubject = Subject<MoreDetailsUIState>()
     override val uiEventObservable = onActionSubject
 
-    override fun getArtistInfo(artistName: String?) {
+    override fun getArtistInfo(artistName: String) {
         Thread {
-            val artistInfo = artistName?.let { artistInfoRepository.searchArtistInfo(it) }
-            val uiState = artistInfo?.let { createUiState(artistName, it) }
-            uiState?.let { notifyUpdate(it) }
+            val artistInfo = artistInfoRepository.searchArtistInfo(artistName)
+            val uiState = createUiState(artistInfo)
+            notifyUpdate(uiState)
         }.start()
     }
 
@@ -34,24 +34,26 @@ internal class MoreDetailsPresenterImpl(
         uiEventObservable.notify(uiState)
     }
 
-    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUIState? {
+    private fun createUiState(artistInfo: ArtistInfo): MoreDetailsUIState {
         return when (artistInfo) {
-            is NYTArtistInfo -> createArtistInfoUiState(artistName, artistInfo)
+            is NYTArtistInfo -> createArtistInfoUiState(artistInfo)
             EmptyArtistInfo -> createEmptyUiState()
         }
     }
 
-    private fun createArtistInfoUiState(artistName: String?, artistInfo: NYTArtistInfo): MoreDetailsUIState? {
-        return artistName?.let {
-            MoreDetailsUIState(
+    private fun createArtistInfoUiState(artistInfo: NYTArtistInfo): MoreDetailsUIState {
+        return MoreDetailsUIState(
                 artistAbstractHelper.getInfo(artistInfo),
                 artistInfo.url,
                 true
             )
-        }
     }
 
     private fun createEmptyUiState(): MoreDetailsUIState {
-        return MoreDetailsUIState("", "", false)
+        return MoreDetailsUIState(
+                artistAbstractHelper.getInfo(EmptyArtistInfo),
+                "",
+                false
+            )
     }
 }

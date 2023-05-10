@@ -7,10 +7,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 
 private const val DATABASE_VERSION = 1
-private const val DATABASE_NAME = "dictionary.db" //TODO: cambiar nombre a "info.db" o algo por el estilo
+private const val DATABASE_NAME = "artistInfo.db"
 
 internal class NYTimesArtistInfoLocalStorageImpl(
     context: Context,
@@ -36,7 +35,7 @@ internal class NYTimesArtistInfoLocalStorageImpl(
     }
 
 
-    override fun getArtistInfo(artist: String): ArtistInfo.NYTArtistInfo? {
+    override fun getArtistInfo(artist: String): NYTArtistInfo? {
         val cursor = getCursor(artist)
         val artistInfo = cursorToArtistInfoMapper.map(cursor)
         cursor.close()
