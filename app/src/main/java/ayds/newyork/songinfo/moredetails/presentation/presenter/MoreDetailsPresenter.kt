@@ -7,35 +7,31 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 
 interface Presenter {
-    fun setArtistAbstractHelper(artistAbstractHelper: ArtistAbstractHelper)
-    val uiEventObservable: Observable<MoreDetailsUiState>
-    fun getInfo(artistName: String?)
 
+    val uiEventObservable: Observable<MoreDetailsUIState>
+    fun getArtistInfo(artistName: String?)
 }
 
 internal class MoreDetailsPresenterImpl(
-    private var artistInfoRepository: ArtistRepository
+    private var artistInfoRepository: ArtistRepository,
+    private val artistAbstractHelper: ArtistAbstractHelper
 ): Presenter {
 
-    private val onActionSubject = Subject<MoreDetailsUiState>()
-    override val uiEventObservable= onActionSubject
-    private lateinit var artistAbstractHelper: ArtistAbstractHelper
+    private val onActionSubject = Subject<MoreDetailsUIState>()
+    override val uiEventObservable = onActionSubject
 
-    override fun getInfo(artistName: String?) {
-        // var artistInfo = artistName?.let { artistInfoRepository.searchArtistInfo(it) }
-        var artistInfo = ArtistInfo.NYTArtistInfo("artista", "informacion", "http://www.facebook.com", true)
-        val uiState = artistInfo?.let { createUiState(artistName, it) }
-        uiState?.let { notifyUpdate(it) }
+    override fun getArtistInfo(artistName: String?) {
+        Thread {
+            val artistInfo = artistName?.let { artistInfoRepository.searchArtistInfo(it) }
+            val uiState = artistInfo?.let { createUiState(artistName, it) }
+            uiState?.let { notifyUpdate(it) }
+        }.start()
     }
 
-    private fun notifyUpdate(uiState: MoreDetailsUiState){
+    private fun notifyUpdate(uiState: MoreDetailsUIState){
         uiEventObservable.notify(uiState)
     }
 
-    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUiState? =
-        artistName?.let { MoreDetailsUiState(artistAbstractHelper.getInfo(artistInfo), artistAbstractHelper.getUrl(artistInfo), it) }
-
-    override fun setArtistAbstractHelper(artistAbstractHelper: ArtistAbstractHelper){
-        this.artistAbstractHelper =  artistAbstractHelper
-    }
+    private fun createUiState(artistName: String?, artistInfo: ArtistInfo): MoreDetailsUIState? =
+        artistName?.let { MoreDetailsUIState(artistAbstractHelper.getInfo(artistInfo), artistAbstractHelper.getUrl(artistInfo), it) }
 }

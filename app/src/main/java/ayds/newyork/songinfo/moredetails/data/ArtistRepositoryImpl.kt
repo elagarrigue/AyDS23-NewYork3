@@ -11,7 +11,7 @@ class ArtistRepositoryImpl(
     private val artistLocalStorage: NYTimesArtistInfoLocalStorage,
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService
 ) : ArtistRepository {
-    override fun searchArtistInfo(artist: String): ArtistInfo? {
+    override fun searchArtistInfo(artist: String): ArtistInfo {
         var artistInfo = artistLocalStorage.getArtistInfo(artist)
         when {
             artistInfo != null -> markArtistInfoAsLocal(artistInfo)
@@ -22,6 +22,7 @@ class ArtistRepositoryImpl(
                         artistLocalStorage.insertArtistInfo(it)
                     }
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     artistInfo = null
                 }
             }

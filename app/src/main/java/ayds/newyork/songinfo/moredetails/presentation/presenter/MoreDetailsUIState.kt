@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
-data class MoreDetailsUiState(
+data class MoreDetailsUIState(
     val info: String = "",
     val url: String = "",
     val searchTerm: String = "",

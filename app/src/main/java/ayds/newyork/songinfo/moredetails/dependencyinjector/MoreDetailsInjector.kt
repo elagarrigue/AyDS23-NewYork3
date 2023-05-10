@@ -14,7 +14,6 @@ import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.*
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
-import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
 import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelperImpl
 
 import retrofit2.Retrofit
@@ -33,7 +32,6 @@ object MoreDetailsInjector {
 
     private lateinit var moreDetailsModel: ArtistRepository
     private lateinit var moreDetailsPresenter: Presenter
-    private val artistAbstractHelper = ArtistAbstractHelperImpl()
 
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceImpl(
         newYorkTimesAPI,
@@ -42,18 +40,15 @@ object MoreDetailsInjector {
 
     fun init(moreDetailsView: MoreDetailsView) {
         initMoreDetailsModel(moreDetailsView)
-        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel)
-        moreDetailsPresenter.setArtistAbstractHelper(artistAbstractHelper)
+        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel, ArtistAbstractHelperImpl())
     }
 
-    fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
+    private fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
         val newYorkTimesArtistInfoLocalStorage: NYTimesArtistInfoLocalStorage = NYTimesArtistInfoLocalStorageImpl(
             moreDetailsView as Context, CursorToArtistInfoMapperImpl()
         )
         moreDetailsModel = ArtistRepositoryImpl(newYorkTimesArtistInfoLocalStorage, newYorkTimesArtistInfoService)
     }
-
-
 
     fun getPresenter(): Presenter = moreDetailsPresenter
 }
