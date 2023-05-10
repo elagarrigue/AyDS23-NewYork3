@@ -3,11 +3,11 @@ package ayds.newyork.songinfo.moredetails.presentation.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
@@ -97,7 +97,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     fun updateMoreDetailsText(artistInfo: ArtistInfo) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelper.getArtistInfoAbstract(artistInfo))
+            moreDetailsTextView.text = HtmlCompat.fromHtml(artistAbstractHelper.getArtistInfoAbstract(artistInfo), HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
