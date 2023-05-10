@@ -1,6 +1,5 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
-
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
