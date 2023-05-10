@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 
 private const val DATABASE_VERSION = 1
@@ -24,7 +25,7 @@ internal class NYTimesArtistInfoLocalStorageImpl(
         COLUMN_URL
     )
 
-    override fun insertArtistInfo(artistInfo: ArtistInfo) {
+    override fun insertArtistInfo(artistInfo: NYTArtistInfo) {
         val values = ContentValues().apply {
             put(COLUMN_ARTIST, artistInfo.artist)
             put(COLUMN_INFO, artistInfo.abstract)
@@ -33,6 +34,7 @@ internal class NYTimesArtistInfoLocalStorageImpl(
         }
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
+
 
     override fun getArtistInfo(artist: String): ArtistInfo? {
         val cursor = getCursor(artist)
