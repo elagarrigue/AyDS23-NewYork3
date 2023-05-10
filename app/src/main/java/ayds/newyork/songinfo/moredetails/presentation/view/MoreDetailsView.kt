@@ -102,8 +102,8 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     fun updateState(artistInfo: NYTArtistInfo) {
-        uiState = uiState.copy(info = artistInfo.abstract.toString())
-        uiState = uiState.copy(url = artistInfo.url.toString())
+        uiState = uiState.copy(info = artistInfo.abstract)
+        uiState = uiState.copy(url = artistInfo.url)
     }
 
     companion object {
