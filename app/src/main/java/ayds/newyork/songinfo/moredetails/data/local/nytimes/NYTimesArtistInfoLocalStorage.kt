@@ -1,10 +1,10 @@
 package ayds.newyork.songinfo.moredetails.data.local.nytimes
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 
 interface NYTimesArtistInfoLocalStorage {
 
-    fun insertArtistInfo(artistInfo: ArtistInfo)
+    fun insertArtistInfo(artistInfo: NYTArtistInfo)
 
-    fun getArtistInfo(artist: String): ArtistInfo?
+    fun getArtistInfo(artist: String): NYTArtistInfo?
 }
