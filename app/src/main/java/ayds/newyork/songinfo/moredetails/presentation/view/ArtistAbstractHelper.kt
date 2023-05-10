@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import java.util.*
 
@@ -15,14 +16,34 @@ private const val APOSTROPHE = "'"
 private const val SPACE = " "
 private const val PREFIX = "[*]"
 private const val NO_RESULTS = "No Results"
+private const val NO_ABSTRACT = "No Abstract"
+private const val EMPTY_STRING = ""
 
 interface ArtistAbstractHelper {
-    fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String
+    fun getArtistInfoAbstract(artistInfo: ArtistInfo): String
 }
 
 class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
 
-    fun getFormattedTextFromAbstract(artistName: String, abstract: String): String {
+    override fun getArtistInfoAbstract(artistInfo: ArtistInfo): String {
+        return when (artistInfo) {
+            is NYTArtistInfo -> buildArtistInfoAbstract(artistInfo)
+            else -> NO_RESULTS
+        }
+    }
+
+    private fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
+        val abstract = getAbstract(artistInfo)
+        val formattedAbstract = getFormattedAbstract(artistInfo.artist, abstract)
+        return if (artistInfo.isLocallyStored) PREFIX.plus(SPACE).plus(formattedAbstract)
+            else formattedAbstract
+    }
+
+    private fun getAbstract(artistInfo: NYTArtistInfo): String =
+        if (artistInfo.abstract == EMPTY_STRING) NO_ABSTRACT
+        else artistInfo.abstract
+
+    private fun getFormattedAbstract(artistName: String, abstract: String): String {
         val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
         val textFormatted = textWithBold(artistName, text)
         return textToHtml(textFormatted)
@@ -45,12 +66,5 @@ class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
             .append(text)
             .append(HTML_END)
             .toString()
-    }
-
-    override fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
-        return if (artistInfo.isLocallyStored)
-            PREFIX.plus(SPACE).plus("${artistInfo.abstract}")
-        else
-            artistInfo.abstract ?: NO_RESULTS
     }
 }

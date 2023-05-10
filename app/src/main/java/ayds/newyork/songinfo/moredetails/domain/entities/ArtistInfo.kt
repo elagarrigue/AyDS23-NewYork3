@@ -4,8 +4,8 @@ sealed class ArtistInfo {
 
     data class NYTArtistInfo(
         val artist: String,
-        var abstract: String?,
-        val url: String?,
+        var abstract: String,
+        val url: String,
         var isLocallyStored: Boolean = false
     ) : ArtistInfo()
 

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiEvent
 import ayds.newyork.songinfo.moredetails.presentation.presenter.OtherInfoUiState
@@ -94,9 +95,9 @@ class MoreDetailsView : AppCompatActivity() {
         }
     }
 
-    fun updateMoreDetailsText(artistInfo: NYTArtistInfo) {
+    fun updateMoreDetailsText(artistInfo: ArtistInfo) {
         runOnUiThread {
-            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelper.buildArtistInfoAbstract(artistInfo))
+            moreDetailsTextView.text = Html.fromHtml(artistAbstractHelper.getArtistInfoAbstract(artistInfo))
         }
     }
 
