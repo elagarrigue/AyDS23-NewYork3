@@ -1,7 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import android.util.Log
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.observer.Observer
 
@@ -32,7 +32,7 @@ internal class PresenterImpl: Presenter{
 
     private fun getInfo(){
         // searchArtistInfo() estaba en la vista
-        val artistInfo = ArtistInfo("artista","informacion","https://www.google.com.ar",true)
+        val artistInfo = NYTArtistInfo("artista","informacion","https://www.google.com.ar",true)
         moreDetailsView.updateState(artistInfo)
         moreDetailsView.updateMoreDetailsText(artistInfo)
     }

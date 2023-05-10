@@ -7,5 +7,5 @@ interface NYTimesArtistInfoLocalStorage {
 
     fun insertArtistInfo(artistInfo: NYTArtistInfo)
 
-    fun getArtistInfo(artist: String): ArtistInfo?
+    fun getArtistInfo(artist: String): NYTArtistInfo?
 }

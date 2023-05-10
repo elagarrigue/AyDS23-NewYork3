@@ -36,7 +36,7 @@ internal class NYTimesArtistInfoLocalStorageImpl(
     }
 
 
-    override fun getArtistInfo(artist: String): ArtistInfo? {
+    override fun getArtistInfo(artist: String): ArtistInfo.NYTArtistInfo? {
         val cursor = getCursor(artist)
         val artistInfo = cursorToArtistInfoMapper.map(cursor)
         cursor.close()
