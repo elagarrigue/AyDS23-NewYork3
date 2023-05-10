@@ -1,26 +1,25 @@
 package ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.io.IOException
 
 interface NYTimesToArtistInfoResolver {
-    fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): ArtistInfo?
+    fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYTArtistInfo?
 }
 
 private const val RESPONSE = "response"
-private const val NO_RESULTS = "No Results"
 private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
 
 internal class JsonToArtistInfoResolver : NYTimesToArtistInfoResolver{
 
-    override fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): ArtistInfo? {
+    override fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYTArtistInfo? {
         return try {
             serviceData?.getFirstItem()?.let { item ->
-                ArtistInfo(
+                NYTArtistInfo(
                     artistName, item.getAbstract(), item.getUrl()
                 )
             }
@@ -41,5 +40,4 @@ internal class JsonToArtistInfoResolver : NYTimesToArtistInfoResolver{
 
     private fun JsonObject.getUrl(): String = get(WEB_URL).asString
 
-    private fun getTextFromAbstract(abstract: String) = if (abstract != "") abstract else NO_RESULTS
 }
