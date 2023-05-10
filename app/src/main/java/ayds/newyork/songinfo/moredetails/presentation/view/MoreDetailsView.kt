@@ -111,14 +111,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
-        const val TITLE_IMAGE_URL =
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-        private const val NEW_YORK_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
-        private val newYorkTimesRetrofit = Retrofit.Builder()
-            .baseUrl(NEW_YORK_TIMES_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(
-            NYTimesAPI::class.java)
+        const val TITLE_IMAGE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
     }
+
 }

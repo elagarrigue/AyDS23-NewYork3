@@ -14,7 +14,7 @@ private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
 
-internal class JsonToArtistInfoResolver : NYTimesToArtistInfoResolver{
+internal class JsonToArtistInfoResolver : NYTimesToArtistInfoResolver {
 
     override fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYTArtistInfo? {
         return try {
