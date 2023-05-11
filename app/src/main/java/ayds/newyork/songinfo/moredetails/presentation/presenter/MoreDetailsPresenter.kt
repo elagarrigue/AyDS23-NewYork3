@@ -4,7 +4,6 @@ import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
-import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelper
 import ayds.observer.Observable
 import ayds.observer.Subject
 

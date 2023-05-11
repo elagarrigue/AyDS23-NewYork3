@@ -14,7 +14,7 @@ import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.*
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
-import ayds.newyork.songinfo.moredetails.presentation.view.ArtistAbstractHelperImpl
+import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelperImpl
 
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
