@@ -49,7 +49,7 @@ class MoreDetailsView : AppCompatActivity() {
         presenter.uiStateObservable.subscribe(observer)
     }
 
-    private fun initModule(){
+    private fun initModule() {
         MoreDetailsInjector.init(this)
         presenter = MoreDetailsInjector.getPresenter()
     }

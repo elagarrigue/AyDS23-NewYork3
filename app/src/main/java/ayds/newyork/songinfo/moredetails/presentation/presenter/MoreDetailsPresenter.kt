@@ -31,7 +31,7 @@ internal class MoreDetailsPresenterImpl(
         }.start()
     }
 
-    private fun notifyUpdate(uiState: MoreDetailsUIState){
+    private fun notifyUpdate(uiState: MoreDetailsUIState) {
         uiStateObservable.notify(uiState)
     }
 
