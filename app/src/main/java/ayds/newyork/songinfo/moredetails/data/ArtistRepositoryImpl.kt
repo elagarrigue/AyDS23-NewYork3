@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.data
 
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.NYTimesArtistInfoService
+import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesArtistInfoService
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo

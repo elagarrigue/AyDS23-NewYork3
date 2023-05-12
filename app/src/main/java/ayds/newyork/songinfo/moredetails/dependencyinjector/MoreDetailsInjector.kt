@@ -2,11 +2,9 @@ package ayds.newyork.songinfo.moredetails.dependencyinjector
 
 import android.content.Context
 import ayds.newyork.songinfo.moredetails.data.ArtistRepositoryImpl
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.NYTimesArtistInfoService
+import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.*
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.JsonToArtistInfoResolver
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesAPI
 import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesArtistInfoServiceImpl
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesToArtistInfoResolver
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
