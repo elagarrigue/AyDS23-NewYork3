@@ -1,5 +1,7 @@
 package ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb
 
+const val DATABASE_VERSION = 1
+const val DATABASE_NAME = "artistInfo.db"
 const val TABLE_NAME = "artists"
 const val COLUMN_ID = "id"
 const val COLUMN_ARTIST = "artist"

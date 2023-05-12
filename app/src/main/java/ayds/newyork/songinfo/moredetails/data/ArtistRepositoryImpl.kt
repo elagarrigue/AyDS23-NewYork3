@@ -11,6 +11,7 @@ class ArtistRepositoryImpl(
     private val artistLocalStorage: NYTimesArtistInfoLocalStorage,
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService
 ) : ArtistRepository {
+
     override fun searchArtistInfo(artist: String): ArtistInfo {
         var artistInfo = artistLocalStorage.getArtistInfo(artist)
         when {

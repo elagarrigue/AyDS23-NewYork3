@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 
-private const val DATABASE_VERSION = 1
-private const val DATABASE_NAME = "artistInfo.db"
-
 internal class NYTimesArtistInfoLocalStorageImpl(
     context: Context,
     private val cursorToArtistInfoMapper: CursorToArtistInfoMapper,
