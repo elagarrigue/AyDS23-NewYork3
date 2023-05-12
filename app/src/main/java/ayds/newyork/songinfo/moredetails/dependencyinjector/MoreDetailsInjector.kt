@@ -20,10 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 object MoreDetailsInjector {
 
     private const val NEW_YORK_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
-    private val newYorkTimesRetrofit = Retrofit.Builder()
-        .baseUrl(NEW_YORK_TIMES_URL)
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .build()
+    private val newYorkTimesRetrofit = buildRetrofit()
 
     private val newYorkTimesAPI: NYTimesAPI = newYorkTimesRetrofit.create(NYTimesAPI::class.java)
     private val newYorkTimesToArtistInfoResolver: NYTimesToArtistInfoResolver = JsonToArtistInfoResolver()
@@ -49,4 +46,11 @@ object MoreDetailsInjector {
     }
 
     fun getPresenter(): Presenter = moreDetailsPresenter
+
+    private fun buildRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(NEW_YORK_TIMES_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+    }
 }
