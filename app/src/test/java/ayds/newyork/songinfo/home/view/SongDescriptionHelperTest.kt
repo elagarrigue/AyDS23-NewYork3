@@ -8,7 +8,7 @@ import org.junit.Test
 
 class SongDescriptionHelperTest {
 
-    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl() }
+    private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(SongDateFactoryImpl()) }
 
     @Test
     fun `given a local song it should return the description`() {
@@ -18,9 +18,10 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
+            "year",
             "url",
-            "url",
-            true,
+            "imageUrl",
+            true
         )
 
         val result = songDescriptionHelper.getSongDescriptionText(song)
@@ -29,7 +30,7 @@ class SongDescriptionHelperTest {
             "Song: Plush [*]\n" +
                     "Artist: Stone Temple Pilots\n" +
                     "Album: Core\n" +
-                    "Year: 1992"
+                    "Release date: 1992 (leap year)"
 
         Assert.assertEquals(expected, result)
     }
@@ -42,9 +43,10 @@ class SongDescriptionHelperTest {
             "Stone Temple Pilots",
             "Core",
             "1992-01-01",
+            "year",
             "url",
-            "url",
-            false,
+            "imageUrl",
+            false
         )
 
         val result = songDescriptionHelper.getSongDescriptionText(song)
@@ -53,7 +55,7 @@ class SongDescriptionHelperTest {
             "Song: Plush \n" +
                     "Artist: Stone Temple Pilots\n" +
                     "Album: Core\n" +
-                    "Year: 1992"
+                    "Release date: 1992 (leap year)"
 
         Assert.assertEquals(expected, result)
     }
