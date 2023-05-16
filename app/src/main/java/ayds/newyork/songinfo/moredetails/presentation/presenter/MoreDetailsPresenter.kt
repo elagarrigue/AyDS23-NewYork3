@@ -19,7 +19,7 @@ internal class MoreDetailsPresenterImpl(
 ): Presenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()
-    override val uiStateObservable = onActionSubject
+    override var uiStateObservable = onActionSubject
     private var uiState = MoreDetailsUIState()
 
     override fun getArtistInfo(artistName: String) {
