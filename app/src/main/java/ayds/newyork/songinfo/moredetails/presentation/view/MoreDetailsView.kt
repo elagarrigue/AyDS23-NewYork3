@@ -73,6 +73,7 @@ class MoreDetailsView : AppCompatActivity() {
 
     private fun updateMoreDetailsText(artistInfo: String) {
         runOnUiThread {
+            println(artistInfo)
             moreDetailsTextView.text = HtmlCompat.fromHtml(artistInfo, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
