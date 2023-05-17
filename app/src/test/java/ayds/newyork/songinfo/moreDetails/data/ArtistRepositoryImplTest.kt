@@ -1,7 +1,7 @@
 package ayds.newyork.songinfo.moreDetails.data
 
 import ayds.newyork.songinfo.moredetails.data.ArtistRepositoryImpl
-import ayds.newyork.songinfo.moredetails.data.external.nytimes.artistinfo.NYTimesArtistInfoService
+import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
@@ -27,7 +27,7 @@ class ArtistRepositoryImplTest {
         artistInfo = NYTArtistInfo(
             "artist",
             "abstract",
-            "url",
+            "url"
         )
     }
 
@@ -43,8 +43,14 @@ class ArtistRepositoryImplTest {
 
     @Test
     fun `given non existing artist name should get info from service, store and return it`() {
+        val externalServiceArtistInfo = ayds.ny3.newyorktimes.external.NYTArtistInfo(
+            "artist",
+            "abstract",
+            "url"
+        )
+
         every { artistLocalStorage.getArtistInfo("artist") } returns null
-        every { newYorkTimesArtistInfoService.getArtistInfo("artist") } returns artistInfo
+        every { newYorkTimesArtistInfoService.getArtistInfo("artist") } returns externalServiceArtistInfo
 
         val result = artistRepository.searchArtistInfo("artist")
 
