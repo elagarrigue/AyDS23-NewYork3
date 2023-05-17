@@ -1,21 +1,14 @@
 package ayds.newyork.songinfo.moreDetails.presentation
-import ayds.newyork.songinfo.home.controller.HomeControllerImpl
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelper
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
-import ayds.newyork.songinfo.moredetails.presentation.presenter.Presenter
-import ayds.observer.Observable
-import ayds.observer.Observer
 import ayds.observer.Subject
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 class MoreDetailsPresenterTest {
     private val artistRepository: ArtistRepository = mockk()
@@ -26,10 +19,6 @@ class MoreDetailsPresenterTest {
 
     private val presenter by lazy {
         MoreDetailsPresenterImpl(artistRepository,artistAbstractHelper)
-    }
-
-    @Before
-    fun setup() {
     }
 
     @Test
