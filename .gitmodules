@@ -1,0 +1,3 @@
+[submodule "libs/NewYorkTimes"]
+	path = libs/NewYorkTimes
+	url = https://github.com/AgusF22/AyDS23-NewYork3-NewYorkTimes.git
