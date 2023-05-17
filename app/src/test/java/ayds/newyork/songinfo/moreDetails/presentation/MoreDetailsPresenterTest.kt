@@ -14,26 +14,22 @@ import ayds.observer.Subject
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 class MoreDetailsPresenterTest {
     private val artistRepository: ArtistRepository = mockk()
     private val artistAbstractHelper: ArtistAbstractHelper = mockk()
 
-    private lateinit var uiStateObservable: Subject<MoreDetailsUIState>
     private lateinit var uiState: MoreDetailsUIState
-    private val observer: Observer<MoreDetailsUIState> = mockk(relaxUnitFun = true)
-    private val onActionSubject = Subject<MoreDetailsUIState>()
+    private val onActionSubject: Subject<MoreDetailsUIState> = Subject()
 
     private val presenter by lazy {
-        MoreDetailsPresenterImpl(artistRepository, artistAbstractHelper)
+        MoreDetailsPresenterImpl(artistRepository,artistAbstractHelper)
     }
 
     @Before
     fun setup() {
-        uiStateObservable = onActionSubject
-        uiState = MoreDetailsUIState()
-
     }
 
     @Test
@@ -46,8 +42,10 @@ class MoreDetailsPresenterTest {
 
         presenter.getArtistInfo("artist")
 
-        verify { onActionSubject.notify(uiState) }
+        Thread.sleep(1000)
+        assertEquals(expectedUiState, presenter.uiState)
     }
+
 
     @Test
     fun `getArtistInfo should update UI state as empty when EmptyArtistInfo`() {
@@ -58,7 +56,7 @@ class MoreDetailsPresenterTest {
         every { artistAbstractHelper.getInfo(artistInfo) } returns ""
 
         presenter.getArtistInfo("artist")
-
-        verify { onActionSubject.notify(expectedUiState) }
+        Thread.sleep(1000)
+        assertEquals(expectedUiState, presenter.uiState)
     }
 }
