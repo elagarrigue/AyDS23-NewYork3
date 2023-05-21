@@ -7,7 +7,7 @@ import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-interface Presenter {
+interface MoreDetailsPresenter {
 
     val uiStateObservable: Observable<MoreDetailsUIState>
     val uiState: MoreDetailsUIState
@@ -17,7 +17,7 @@ interface Presenter {
 internal class MoreDetailsPresenterImpl(
     var artistInfoRepository: ArtistRepository,
     var artistAbstractHelper: ArtistAbstractHelper
-): Presenter {
+): MoreDetailsPresenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()
     override var uiStateObservable = onActionSubject
