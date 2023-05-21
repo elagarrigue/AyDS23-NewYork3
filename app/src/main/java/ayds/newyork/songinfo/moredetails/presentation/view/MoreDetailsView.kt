@@ -24,7 +24,7 @@ class MoreDetailsView : AppCompatActivity() {
     private lateinit var openUrlButton: Button
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private lateinit var artistName: String
-    private lateinit var presenter: Presenter
+    private lateinit var presenter: MoreDetailsPresenter
     private val observer: Observer<MoreDetailsUIState> =
         Observer {
                 value -> updateMoreDetailsView(value)
@@ -73,7 +73,6 @@ class MoreDetailsView : AppCompatActivity() {
 
     private fun updateMoreDetailsText(artistInfo: String) {
         runOnUiThread {
-            println(artistInfo)
             moreDetailsTextView.text = HtmlCompat.fromHtml(artistInfo, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
