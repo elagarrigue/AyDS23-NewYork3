@@ -9,7 +9,6 @@ import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUISta
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class MoreDetailsPresenterTest {
@@ -21,9 +20,10 @@ class MoreDetailsPresenterTest {
     }
 
     @Test
-    fun `on getArtistInfo it should notify the update`() {
+    fun `getArtistInfo should notify update UI state with artist info`() {
         val artistInfo = NYTArtistInfo("artist","abstract", "url")
         val presenterTester: (MoreDetailsUIState) -> Unit = mockk(relaxed = true)
+        val expectedUiState = MoreDetailsUIState("abstract", "url", true)
         every { artistRepository.searchArtistInfo("artist") } returns artistInfo
         every { artistAbstractHelper.getInfo(artistInfo) } returns "abstract"
 
@@ -32,33 +32,22 @@ class MoreDetailsPresenterTest {
         }
         presenter.getArtistInfo("artist")
 
-        verify { presenterTester(presenter.uiState) }
+        verify { presenterTester(expectedUiState) }
     }
 
     @Test
-    fun `getArtistInfo should update UI state with artist info`() {
-        val artistInfo = NYTArtistInfo("artist","abstract", "url")
-        val expectedUiState = MoreDetailsUIState("abstract", "url", true)
-
-        every { artistRepository.searchArtistInfo("artist") } returns artistInfo
-        every { artistAbstractHelper.getInfo(artistInfo) } returns "abstract"
-
-        presenter.getArtistInfo("artist")
-
-        Thread.sleep(1000)
-        assertEquals(expectedUiState, presenter.uiState)
-    }
-
-    @Test
-    fun `getArtistInfo should update UI state as empty when EmptyArtistInfo`() {
+    fun `getArtistInfo should notify update UI state as empty when EmptyArtistInfo`() {
         val artistInfo = EmptyArtistInfo
+        val presenterTester: (MoreDetailsUIState) -> Unit = mockk(relaxed = true)
         val expectedUiState = MoreDetailsUIState("", "", false)
-
         every { artistRepository.searchArtistInfo("artist") } returns artistInfo
         every { artistAbstractHelper.getInfo(artistInfo) } returns ""
 
+        presenter.uiStateObservable.subscribe {
+            presenterTester(it)
+        }
         presenter.getArtistInfo("artist")
-        Thread.sleep(1000)
-        assertEquals(expectedUiState, presenter.uiState)
+
+        verify { presenterTester(expectedUiState) }
     }
 }
