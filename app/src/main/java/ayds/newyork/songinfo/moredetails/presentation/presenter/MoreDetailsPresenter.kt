@@ -7,20 +7,21 @@ import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-interface Presenter {
+interface MoreDetailsPresenter {
 
     val uiStateObservable: Observable<MoreDetailsUIState>
+    val uiState: MoreDetailsUIState
     fun getArtistInfo(artistName: String)
 }
 
 internal class MoreDetailsPresenterImpl(
-    private var artistInfoRepository: ArtistRepository,
-    private val artistAbstractHelper: ArtistAbstractHelper
-): Presenter {
+    var artistInfoRepository: ArtistRepository,
+    var artistAbstractHelper: ArtistAbstractHelper
+): MoreDetailsPresenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()
-    override val uiStateObservable = onActionSubject
-    private var uiState = MoreDetailsUIState()
+    override var uiStateObservable = onActionSubject
+    override var uiState = MoreDetailsUIState()
 
     override fun getArtistInfo(artistName: String) {
         Thread {

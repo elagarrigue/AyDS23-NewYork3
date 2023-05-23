@@ -23,7 +23,6 @@ class ArtistRepositoryImpl(
                         artistLocalStorage.insertArtistInfo(it)
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     artistInfo = null
                 }
             }
