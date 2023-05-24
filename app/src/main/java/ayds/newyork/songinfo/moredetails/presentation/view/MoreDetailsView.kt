@@ -1,19 +1,22 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
+//import CarouselAdapter
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.viewpager2.widget.ViewPager2
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
-import ayds.newyork.songinfo.moredetails.presentation.presenter.*
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState.Companion.TITLE_IMAGE_URL
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
-import ayds.observer.*
+import ayds.observer.Observer
 
 const val ARTIST_NAME_EXTRA = "artistName"
 
@@ -29,10 +32,15 @@ class MoreDetailsView : AppCompatActivity() {
         Observer {
                 value -> updateMoreDetailsView(value)
         }
+    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+        //setContentView(R.layout.carousel_layout)
+        //viewPager = findViewById(R.id.viewPager)
+        //val adapter = CarouselAdapter()
+        //viewPager.adapter = adapter
         initModule()
         initProperties()
         updateTitleImageView()
