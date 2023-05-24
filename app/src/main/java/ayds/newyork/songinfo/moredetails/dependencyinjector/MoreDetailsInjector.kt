@@ -5,12 +5,13 @@ import ayds.newyork.songinfo.moredetails.data.ArtistRepositoryImpl
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.*
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtistInfoMapperImpl
 import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelperImpl
-import ayds.ny3.newyorktimes.external.*
+import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
+import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
 
 object MoreDetailsInjector {
 
