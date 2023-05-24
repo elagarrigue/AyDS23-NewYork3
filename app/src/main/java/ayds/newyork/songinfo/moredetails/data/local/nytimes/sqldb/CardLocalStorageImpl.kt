@@ -5,38 +5,42 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.CardLocalStorage
+import ayds.newyork.songinfo.moredetails.domain.entities.Card
 
-internal class NYTimesArtistInfoLocalStorageImpl(
+internal class CardLocalStorageImpl(
     context: Context,
-    private val cursorToArtistInfoMapper: CursorToArtistInfoMapper,
+    private val cursorToCardMapper: CursorToCardMapper,
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
-    NYTimesArtistInfoLocalStorage {
+    CardLocalStorage {
 
     private val projection = arrayOf(
-        COLUMN_ID,
-        COLUMN_ARTIST,
-        COLUMN_INFO,
-        COLUMN_URL
+        COLUMN_DESCRIPTION,
+        COLUMN_INFO_URL,
+        COLUMN_SOURCE,
+        COLUMN_SOURCE_LOGO
     )
 
-    override fun insertArtistInfo(artistInfo: NYTArtistInfo) {
+    override fun insertArtistInfo(artistInfo: Card) {
         val values = ContentValues().apply {
-            put(COLUMN_ARTIST, artistInfo.artist)
-            put(COLUMN_INFO, artistInfo.abstract)
-            put(COLUMN_SOURCE, NYTIMES_SOURCE)
-            put(COLUMN_URL, artistInfo.url)
+            put(COLUMN_DESCRIPTION, artistInfo.description)
+            put(COLUMN_INFO_URL, artistInfo.infoUrl)
+            put(COLUMN_SOURCE, artistInfo.source)
+            put(COLUMN_SOURCE_LOGO, artistInfo.sourceLogoUrl)
         }
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
 
-    override fun getArtistInfo(artist: String): NYTArtistInfo? {
+    override fun getArtistInfo(artist: String): List<Card>? {
         val cursor = getCursor(artist)
-        val artistInfo = cursorToArtistInfoMapper.map(cursor)
+        val cards = mutableListOf<Card>()
+        while (cursor.moveToNext()) {
+            val artistInfo = cursorToCardMapper.map(cursor)
+            artistInfo?.let { cards.add(artistInfo)}
+        }
         cursor.close()
-        return artistInfo
+        return cards
     }
 
     private fun getCursor(artist: String): Cursor {

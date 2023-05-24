@@ -2,10 +2,11 @@ package ayds.newyork.songinfo.moredetails.data.local.nytimes
 
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.Card
 
-interface NYTimesArtistInfoLocalStorage {
+interface CardLocalStorage {
 
-    fun insertArtistInfo(artistInfo: NYTArtistInfo)
+    fun insertArtistInfo(artistInfo: Card)
 
-    fun getArtistInfo(artist: String): NYTArtistInfo?
+    fun getArtistInfo(artist: String):  List<Card>?
 }

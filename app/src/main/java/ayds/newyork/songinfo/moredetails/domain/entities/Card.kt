@@ -1,8 +1,9 @@
 package ayds.newyork.songinfo.moredetails.domain.entities
 
 data class Card(
-    private val description: String,
-    private val infoUrl: String,
-    private val source: String,
-    private val sourceLogoUrl: String
+    val description: String,
+    val infoUrl: String,
+    val source: String,
+    val sourceLogoUrl: String,
+    var isLocallyStored: Boolean = false
 )
