@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.domain.entities
 
-sealed class Card(
+data class Card(
     private val description: String,
     private val infoUrl: String,
     private val source: String,
