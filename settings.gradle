@@ -3,3 +3,5 @@ include 'observer'
 rootProject.name = "AK New York"
 include ':newyorktimes'
 project(':newyorktimes').projectDir = new File('libs/NewYorkTimes')
+include ':wikipedia'
+project(':wikipedia').projectDir = new File('libs/Wikipedia')
