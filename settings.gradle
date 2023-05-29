@@ -5,3 +5,5 @@ include ':newyorktimes'
 project(':newyorktimes').projectDir = new File('libs/NewYorkTimes')
 include ':wikipedia'
 project(':wikipedia').projectDir = new File('libs/Wikipedia')
+include ':LastFMService'
+project (':LastFMService').projectDir = new File('libs/LastFMService')
