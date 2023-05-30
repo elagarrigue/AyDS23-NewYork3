@@ -4,12 +4,12 @@ import ayds.newyork.songinfo.moredetails.data.external.ArtistInfoBroker
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.CardLocalStorage
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
-import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 
-class ArtistRepositoryImpl(
+class CardRepositoryImpl(
     private val cardLocalStorage: CardLocalStorage,
     private val artistInfoBroker: ArtistInfoBroker
-) : ArtistRepository {
+) : CardRepository {
 
     override fun searchArtistInfo(artist: String): List<Card?>? {
         var cards: List<Card?>?

@@ -1,7 +1,7 @@
 package ayds.newyork.songinfo.moreDetails.presentation.presenter
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelper
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
@@ -11,14 +11,14 @@ import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Test
 class MoreDetailsPresenterTest {
-    private val artistRepository: ArtistRepository = mockk()
+    private val cardRepository: CardRepository = mockk()
     private val artistAbstractHelper: ArtistAbstractHelper = mockk()
 
     private lateinit var uiState: MoreDetailsUIState
     private val onActionSubject: Subject<MoreDetailsUIState> = Subject()
 
     private val presenter by lazy {
-        MoreDetailsPresenterImpl(artistRepository,artistAbstractHelper)
+        MoreDetailsPresenterImpl(cardRepository,artistAbstractHelper)
     }
 
     @Test
@@ -26,7 +26,7 @@ class MoreDetailsPresenterTest {
         val artistInfo = NYTArtistInfo("artist","abstract", "url")
         val expectedUiState = MoreDetailsUIState("abstract", "url", true)
 
-        every { artistRepository.searchArtistInfo("artist") } returns artistInfo
+        every { cardRepository.searchArtistInfo("artist") } returns artistInfo
         every { artistAbstractHelper.getInfo(artistInfo) } returns "abstract"
 
         presenter.getArtistInfo("artist")
@@ -41,7 +41,7 @@ class MoreDetailsPresenterTest {
         val artistInfo = EmptyArtistInfo
         val expectedUiState = MoreDetailsUIState("", "", false)
 
-        every { artistRepository.searchArtistInfo("artist") } returns artistInfo
+        every { cardRepository.searchArtistInfo("artist") } returns artistInfo
         every { artistAbstractHelper.getInfo(artistInfo) } returns ""
 
         presenter.getArtistInfo("artist")

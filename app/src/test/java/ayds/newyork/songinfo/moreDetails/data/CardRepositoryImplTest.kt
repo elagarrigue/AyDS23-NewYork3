@@ -12,7 +12,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-class ArtistRepositoryImplTest {
+class CardRepositoryImplTest {
 
     private val artistLocalStorage: NYTimesArtistInfoLocalStorage = mockk(relaxUnitFun = true)
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = mockk(relaxUnitFun = true)
