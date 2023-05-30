@@ -25,7 +25,7 @@ internal class CardLocalStorageImpl(
         val values = ContentValues().apply {
             put(COLUMN_DESCRIPTION, artistInfo.description)
             put(COLUMN_INFO_URL, artistInfo.infoUrl)
-            put(COLUMN_SOURCE, artistInfo.source)
+            put(COLUMN_SOURCE, artistInfo.source.name)
             put(COLUMN_SOURCE_LOGO, artistInfo.sourceLogoUrl)
         }
         this.writableDatabase.insert(TABLE_NAME, null, values)
