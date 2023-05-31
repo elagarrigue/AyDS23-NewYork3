@@ -1,8 +1,5 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
@@ -79,22 +76,4 @@ internal class MoreDetailsPresenterImpl(
         artistAbstractHelper.getInfo(lastFMCard)
         return MoreDetailsUIState(newYorkTimesCard, wikipediaCard, lastFMCard)
     }
-/*
-    private fun updateArtistInfoUiState(artistInfo: NYTArtistInfo) {
-        uiState = uiState.copy(
-            abstract = artistAbstractHelper.getInfo(artistInfo),
-            url = artistInfo.url,
-            actionsEnabled = true
-        )
-    }
-
-    private fun updateEmptyUiState() {
-        uiState = uiState.copy(
-            abstract = artistAbstractHelper.getInfo(EmptyArtistInfo),
-            url = "",
-            actionsEnabled = false
-        )
-    }
-    */
-
 }
