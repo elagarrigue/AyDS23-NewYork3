@@ -15,6 +15,7 @@ internal class CardLocalStorageImpl(
     CardLocalStorage {
 
     private val projection = arrayOf(
+        COLUMN_NAME,
         COLUMN_DESCRIPTION,
         COLUMN_INFO_URL,
         COLUMN_SOURCE,
@@ -23,6 +24,7 @@ internal class CardLocalStorageImpl(
 
     override fun insertArtistInfo(artistInfo: Card) {
         val values = ContentValues().apply {
+            put(COLUMN_NAME, artistInfo.artistName)
             put(COLUMN_DESCRIPTION, artistInfo.description)
             put(COLUMN_INFO_URL, artistInfo.infoUrl)
             put(COLUMN_SOURCE, artistInfo.source.name)

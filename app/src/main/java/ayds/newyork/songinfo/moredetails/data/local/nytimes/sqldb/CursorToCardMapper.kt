@@ -11,14 +11,13 @@ internal class CursorToCardMapperImpl: CursorToCardMapper {
     override fun map(cursor: Cursor): Card? =
         try {
             with(cursor) {
-                if (moveToFirst()) {
                     Card(
+                        artistName= cursor.getString(getColumnIndexOrThrow(COLUMN_NAME)),
                         description = cursor.getString(getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                         infoUrl = cursor.getString(getColumnIndexOrThrow(COLUMN_INFO_URL)),
                         source = Source.valueOf(cursor.getString(getColumnIndexOrThrow(COLUMN_SOURCE))),
                         sourceLogoUrl = cursor.getString(getColumnIndexOrThrow(COLUMN_SOURCE_LOGO)),
                     )
-                } else null
             }
         } catch (err: IllegalArgumentException) {
             err.printStackTrace()

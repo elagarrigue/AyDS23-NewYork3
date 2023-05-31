@@ -11,12 +11,10 @@ class CardRepositoryImpl(
 ) : CardRepository {
 
     override fun searchArtistInfo(artist: String): List<Card> {
-        var cards: List<Card>?
-        val cardInfo = cardLocalStorage.getArtistInfo(artist)
+        var cards = cardLocalStorage.getArtistInfo(artist)
         when {
-            cardInfo != null -> {
-                markCardAsLocal(cardInfo)
-                cards = cardInfo
+            cards != null -> {
+                markCardAsLocal(cards)
             }
             else -> {
                 try {
