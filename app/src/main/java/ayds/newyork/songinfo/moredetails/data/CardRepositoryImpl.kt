@@ -11,7 +11,7 @@ class CardRepositoryImpl(
     private val artistInfoBroker: ArtistInfoBroker
 ) : CardRepository {
 
-    override fun searchArtistInfo(artist: String): List<Card?>? {
+    override fun searchArtistInfo(artist: String): List<Card?> {
         var cards: List<Card?>?
         val cardInfo = cardLocalStorage.getArtistInfo(artist)
         when {
@@ -32,7 +32,7 @@ class CardRepositoryImpl(
                 }
             }
         }
-        return cards
+        return emptyList()
     }
 
     private fun markCardAsLocal(card: List<Card>) {
