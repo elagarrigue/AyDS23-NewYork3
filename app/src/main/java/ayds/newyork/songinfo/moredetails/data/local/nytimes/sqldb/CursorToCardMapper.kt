@@ -3,7 +3,6 @@ package ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb
 import android.database.Cursor
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
-
 interface CursorToCardMapper {
     fun map(cursor: Cursor): Card?
 }

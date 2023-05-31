@@ -32,7 +32,7 @@ class CardRepositoryImpl(
                 }
             }
         }
-        return emptyList()
+        return cards ?: emptyList()
     }
 
     private fun markCardAsLocal(card: List<Card>) {

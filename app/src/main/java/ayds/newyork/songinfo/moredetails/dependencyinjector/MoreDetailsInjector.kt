@@ -1,24 +1,34 @@
 package ayds.newyork.songinfo.moredetails.dependencyinjector
 
 import android.content.Context
-import ayds.newyork.songinfo.moredetails.data.ArtistRepositoryImpl
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.NYTimesArtistInfoLocalStorage
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.NYTimesArtistInfoLocalStorageImpl
+import ayds.newyork.songinfo.moredetails.data.CardRepositoryImpl
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.CardLocalStorage
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CardLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
-import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToArtistInfoMapperImpl
-import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.data.local.nytimes.sqldb.CursorToCardMapperImpl
+import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelperImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
+import ayds.lastfmservice.LastFMInjector
+import ayds.newyork.songinfo.moredetails.data.external.*
+import ayds.winchester2.wikipediaexternal.injector.WikipediaInjector
 
 object MoreDetailsInjector {
 
-    private lateinit var moreDetailsModel: ArtistRepository
+    private lateinit var moreDetailsModel: CardRepository
     private lateinit var moreDetailsPresenter: MoreDetailsPresenter
     private lateinit var uiState: MoreDetailsUIState
+
+    private val lastFMProxy = LastFMProxyImpl(LastFMInjector.getService())
+    private val wikipediaProxy = WikipediaProxyImpl(WikipediaInjector.wikipediaTrackService)
+    private val newYorkTimesProxy = NewYorkTimesProxyImpl(NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl)
+
+    private val artistInfoBroker = ArtistInfoBrokerImpl(lastFMProxy,newYorkTimesProxy,wikipediaProxy)
+
 
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl
 
@@ -28,10 +38,10 @@ object MoreDetailsInjector {
     }
 
     private fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
-        val newYorkTimesArtistInfoLocalStorage: NYTimesArtistInfoLocalStorage = NYTimesArtistInfoLocalStorageImpl(
-            moreDetailsView as Context, CursorToArtistInfoMapperImpl()
+        val newYorkTimesArtistInfoLocalStorage: CardLocalStorage = CardLocalStorageImpl(
+            moreDetailsView as Context, CursorToCardMapperImpl()
         )
-        moreDetailsModel = ArtistRepositoryImpl(newYorkTimesArtistInfoLocalStorage, newYorkTimesArtistInfoService)
+        moreDetailsModel = CardRepositoryImpl(newYorkTimesArtistInfoLocalStorage, artistInfoBroker)
     }
 
     fun getPresenter(): MoreDetailsPresenter = moreDetailsPresenter

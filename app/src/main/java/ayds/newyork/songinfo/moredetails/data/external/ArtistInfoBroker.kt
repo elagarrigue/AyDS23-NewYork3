@@ -7,9 +7,9 @@ interface ArtistInfoBroker {
 }
 
 class ArtistInfoBrokerImpl(
-    private val proxyLisboa: LisboaProxy,
+    private val proxyLisboa: LastFMProxy,
     private val proxyNewYorkTimes: NewYorkTimesProxy,
-    private val proxyWinchester:WinchesterProxy
+    private val proxyWinchester:WikipediaProxy
 ): ArtistInfoBroker {
 
     override fun getArtistInfo(artist: String): List<Card?> {

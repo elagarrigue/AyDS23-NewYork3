@@ -1,8 +1,11 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
+
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
+import ayds.ny3.newyorktimes.external.NYTArtistInfo
+
 
 interface NewYorkTimesProxy {
     fun getArtistInfo(artist: String): Card?
@@ -13,19 +16,15 @@ class NewYorkTimesProxyImpl(
 ): NewYorkTimesProxy {
 
     override fun getArtistInfo(artist: String) =
-        newYorkTimesArtistInfoService.getArtistInfo(artist)?.convert()
+        newYorkTimesArtistInfoService.getArtistInfo(artist)?.toCard()
 
-    private fun ayds.ny3.newyorktimes.external.NYTArtistInfo.convert(): Card? {
+    private fun NYTArtistInfo.toCard(): Card {
         return Card(
             description = abstract,
+            artistName = artist,
             infoUrl = url,
             source = Source.NYTimes,
-            sourceLogoUrl = NYT_IMAGE
+            sourceLogoUrl = nytLogoUrl,
         )
-    }
-
-    companion object {
-        const val NYT_STRING = "New York Times"
-        const val NYT_IMAGE = "https: //encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
     }
 }
