@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
 //import CarouselAdapter
+import CarouselAdapter
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -33,14 +34,15 @@ class MoreDetailsView : AppCompatActivity() {
                 value -> updateMoreDetailsView(value)
         }
     private lateinit var viewPager: ViewPager2
+    private lateinit var carouselAdapter: CarouselAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         //setContentView(R.layout.carousel_layout)
-        //viewPager = findViewById(R.id.viewPager)
-        //val adapter = CarouselAdapter()
-        //viewPager.adapter = adapter
+        viewPager = findViewById(R.id.viewPager)
+        carouselAdapter = CarouselAdapter(emptyList(), this)
+        viewPager.adapter = carouselAdapter
         initModule()
         initProperties()
         updateTitleImageView()
@@ -86,9 +88,16 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
+        carouselAdapter.cards = listOf(
+            uiState.nYTimesCard,
+            uiState.wikipediaCard,
+            uiState.lastFMCard
+        )
+        carouselAdapter.notifyDataSetChanged()
+        /*
         updateMoreDetailsText(uiState.abstract)
         updateUrl(uiState.url)
-        enableActions(uiState.actionsEnabled)
+        enableActions(uiState.actionsEnabled)*/
     }
 
     private fun enableActions(enable: Boolean) {

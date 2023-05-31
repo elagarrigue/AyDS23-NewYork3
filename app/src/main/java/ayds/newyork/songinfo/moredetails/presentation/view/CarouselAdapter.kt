@@ -15,7 +15,7 @@ import ayds.newyork.songinfo.utils.UtilsInjector
 import com.squareup.picasso.Picasso
 
 class CarouselAdapter(
-    private val cards: List<Card>,
+    var cards: List<Card>,
     private val moreDetailsView: MoreDetailsView
 ): RecyclerView.Adapter<CarouselAdapter.CarouselViewHolder>() {
 
