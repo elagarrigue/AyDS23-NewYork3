@@ -11,8 +11,8 @@ class CardRepositoryImpl(
     private val artistInfoBroker: ArtistInfoBroker
 ) : CardRepository {
 
-    override fun searchArtistInfo(artist: String): List<Card?> {
-        var cards: List<Card?>?
+    override fun searchArtistInfo(artist: String): List<Card> {
+        var cards: List<Card>?
         val cardInfo = cardLocalStorage.getArtistInfo(artist)
         when {
             cardInfo != null -> {
@@ -23,9 +23,7 @@ class CardRepositoryImpl(
                 try {
                     cards = artistInfoBroker.getArtistInfo(artist)
                     cards.forEach { card ->
-                        card?.let {
-                            cardLocalStorage.insertArtistInfo(it)
-                        }
+                        cardLocalStorage.insertArtistInfo(card)
                     }
                 } catch (e: Exception) {
                     cards = null
@@ -37,13 +35,5 @@ class CardRepositoryImpl(
 
     private fun markCardAsLocal(card: List<Card>) {
         card.forEach { it.isLocallyStored = true}
-    }
-
-    private fun ayds.ny3.newyorktimes.external.NYTArtistInfo.convert(): NYTArtistInfo {
-        return NYTArtistInfo(
-            artist = this.artist,
-            abstract = this.abstract,
-            url = this.url
-        )
     }
 }

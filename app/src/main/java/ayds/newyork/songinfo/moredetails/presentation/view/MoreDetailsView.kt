@@ -1,6 +1,5 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
-import CarouselAdapter
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -11,12 +10,9 @@ import androidx.viewpager2.widget.ViewPager2
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
-import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
-import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
-import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observer
 
 const val ARTIST_NAME_EXTRA = "artistName"
@@ -39,9 +35,6 @@ class MoreDetailsView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_other_info)
         setContentView(R.layout.carousel_layout)
-
-
-
 /*
         //para probar carousel
         var cardItems = mutableListOf<Card>()
@@ -51,12 +44,10 @@ class MoreDetailsView : AppCompatActivity() {
         cardItems.add(Card(textPrueba, "artista 2","https://www.facebook.com/",Source.Wikipedia, "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png", true))
         cardItems.add(Card(textPrueba, "artista 3","https://www.twitter.com/",Source.LastFM, "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lastfm_logo.svg/320px-Lastfm_logo.svg.png", true))
 
-        carouselAdapter = CarouselAdapter(cardItems, this)
+        carouselAdapter = ayds.newyork.songinfo.moredetails.presentation.view.CarouselAdapter(cardItems, this)
         viewPager.adapter = carouselAdapter
         //
-
  */
-
         initModule()
         initProperties()
         initArtistName()

@@ -21,7 +21,6 @@ object MoreDetailsInjector {
 
     private lateinit var moreDetailsModel: CardRepository
     private lateinit var moreDetailsPresenter: MoreDetailsPresenter
-    private lateinit var uiState: MoreDetailsUIState
 
     private val lastFMProxy = LastFMProxyImpl(LastFMInjector.getService())
     private val wikipediaProxy = WikipediaProxyImpl(WikipediaInjector.wikipediaTrackService)
@@ -29,12 +28,9 @@ object MoreDetailsInjector {
 
     private val artistInfoBroker = ArtistInfoBrokerImpl(lastFMProxy,newYorkTimesProxy,wikipediaProxy)
 
-
-    private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl
-
     fun init(moreDetailsView: MoreDetailsView) {
         initMoreDetailsModel(moreDetailsView)
-        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel, ArtistAbstractHelperImpl(), uiState)
+        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel, ArtistAbstractHelperImpl(), MoreDetailsUIState())
     }
 
     private fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {

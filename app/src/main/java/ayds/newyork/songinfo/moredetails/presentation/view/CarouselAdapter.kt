@@ -1,16 +1,15 @@
-import android.text.Html
+package ayds.newyork.songinfo.moredetails.presentation.view
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
-import ayds.newyork.songinfo.moredetails.domain.entities.Source
-import ayds.newyork.songinfo.moredetails.domain.entities.Source.*
-import ayds.newyork.songinfo.moredetails.presentation.view.MoreDetailsView
 import ayds.newyork.songinfo.utils.UtilsInjector
 import com.squareup.picasso.Picasso
 
@@ -42,9 +41,8 @@ class CarouselAdapter(
         urlButton.setOnClickListener { UtilsInjector.navigationUtils.openExternalUrl(moreDetailsView, infoUrl) }
     }
 
-    @Suppress("DEPRECATION")
     private fun setTextViewHtml(textView: TextView, text: String) {
-        textView.text = Html.fromHtml(text)
+        textView.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     private fun setTextView(textView: TextView, text: String) {

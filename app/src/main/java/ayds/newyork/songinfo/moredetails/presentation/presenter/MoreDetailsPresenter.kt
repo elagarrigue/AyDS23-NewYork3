@@ -25,7 +25,7 @@ internal class MoreDetailsPresenterImpl(
     override fun getArtistInfo(artistName: String) {
         Thread {
             val cards = cardRepository.searchArtistInfo(artistName)
-            updateUiState()
+            updateUiState(cards)
             notifyUpdate(uiState)
         }.start()
     }
@@ -33,7 +33,7 @@ internal class MoreDetailsPresenterImpl(
     private fun notifyUpdate(uiState: MoreDetailsUIState) {
         uiStateObservable.notify(uiState)
     }
-
+/*
     private fun updateUiState() {
         val cards = ArrayList<Card>()
         cards.add(
@@ -50,9 +50,9 @@ internal class MoreDetailsPresenterImpl(
         )
         getUiState(cards)
         notifyUpdate(uiState)
-    }
+    }*/
 
-    private fun getUiState(cards: List<Card>) {
+    private fun updateUiState(cards: List<Card>) {
         cards.forEach { card ->
             card.description = artistAbstractHelper.getInfo(card)
         }
