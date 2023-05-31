@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
+import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 
 interface NewYorkTimesProxy {
@@ -18,7 +19,7 @@ class NewYorkTimesProxyImpl(
         return Card(
             description = abstract,
             infoUrl = url,
-            source = NYT_STRING,
+            source = Source.NYTimes,
             sourceLogoUrl = NYT_IMAGE
         )
     }

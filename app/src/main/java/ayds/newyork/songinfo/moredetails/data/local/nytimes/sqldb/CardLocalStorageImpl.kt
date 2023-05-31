@@ -31,7 +31,6 @@ internal class CardLocalStorageImpl(
         this.writableDatabase.insert(TABLE_NAME, null, values)
     }
 
-
     override fun getArtistInfo(artist: String): List<Card>? {
         val cursor = getCursor(artist)
         val cards = mutableListOf<Card>()

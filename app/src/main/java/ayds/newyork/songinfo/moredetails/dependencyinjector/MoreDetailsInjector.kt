@@ -10,6 +10,7 @@ import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelperImpl
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
 
@@ -17,12 +18,13 @@ object MoreDetailsInjector {
 
     private lateinit var moreDetailsModel: ArtistRepository
     private lateinit var moreDetailsPresenter: MoreDetailsPresenter
+    private lateinit var uiState: MoreDetailsUIState
 
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService = NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl
 
     fun init(moreDetailsView: MoreDetailsView) {
         initMoreDetailsModel(moreDetailsView)
-        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel, ArtistAbstractHelperImpl())
+        moreDetailsPresenter = MoreDetailsPresenterImpl(moreDetailsModel, ArtistAbstractHelperImpl(), uiState)
     }
 
     private fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
