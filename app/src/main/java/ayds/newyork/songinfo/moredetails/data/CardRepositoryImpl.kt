@@ -2,7 +2,6 @@ package ayds.newyork.songinfo.moredetails.data
 
 import ayds.newyork.songinfo.moredetails.data.external.ArtistInfoBroker
 import ayds.newyork.songinfo.moredetails.data.local.nytimes.CardLocalStorage
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 

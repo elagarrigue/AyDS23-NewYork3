@@ -39,7 +39,7 @@ internal class CardLocalStorageImpl(
             artistInfo?.let { cards.add(artistInfo)}
         }
         cursor.close()
-        return cards
+        return if (cards.size > 0) cards else null
     }
 
     private fun getCursor(artist: String): Cursor {
