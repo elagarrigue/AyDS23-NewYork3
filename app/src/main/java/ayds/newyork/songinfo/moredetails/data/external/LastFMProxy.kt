@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
+
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.lastfmservice.ArtistService
 import ayds.lastfmservice.Artist.LastFMArtist
@@ -15,11 +16,11 @@ class LastFMProxyImpl(
 
     override fun getArtistInfo(artist: String): Card? {
         val lastFMArtist = artistService.getArtist(artist)
-        return lastFMArtist?.toCard()
+        return lastFMArtist?.toCard(artist)
     }
-    private fun LastFMArtist.toCard():Card =
+    private fun LastFMArtist.toCard(artistName:String):Card =
             Card(
-                artistName=this.name,
+                artistName=artistName,
                 description=this.info,
                 infoUrl=this.url,
                 source= Source.LastFM,
