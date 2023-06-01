@@ -13,7 +13,10 @@ import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHe
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
 import ayds.lastfmservice.LastFMInjector
-import ayds.newyork.songinfo.moredetails.data.external.*
+import ayds.newyork.songinfo.moredetails.data.external.ArtistInfoBrokerImpl
+import ayds.newyork.songinfo.moredetails.data.external.LastFMProxyImpl
+import ayds.newyork.songinfo.moredetails.data.external.NewYorkTimesProxyImpl
+import ayds.newyork.songinfo.moredetails.data.external.WikipediaProxyImpl
 import ayds.winchester2.wikipediaexternal.injector.WikipediaInjector
 
 object MoreDetailsInjector {
