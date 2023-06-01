@@ -47,44 +47,37 @@ class CardRepositoryImplTest {
     }
 
     @Test
-    fun `given non existing artist name should get info from service, store and return it`() {
-        val externalServiceArtistInfo = ayds.ny3.newyorktimes.external.NYTArtistInfo(
-            "artist",
-            "abstract",
-            "url"
-        )
-
+    fun `given non existing artist name should get card from service, store and return it`() {
         every { cardLocalStorage.getArtistInfo("artist") } returns null
-        every { artistInfoBroker.getArtistInfo("artist") } returns externalServiceArtistInfo
+        every { artistInfoBroker.getArtistInfo("artist") } returns cardList
 
         val result = cardRepository.searchArtistInfo("artist")
 
-        assertEquals(card, result)
+        assertEquals(cardList, result)
         assertFalse(card.isLocallyStored)
-        verify { cardLocalStorage.insertArtistInfo(card) }
+        verify(exactly = 1) { cardLocalStorage.insertArtistInfo(card) }
     }
 
     @Test
-    fun `given non existing artist should return emptyArtistInfo`() {
+    fun `given non existing artist should return emptyCard`() {
         every { cardLocalStorage.getArtistInfo("artist") } returns null
-        every { artistInfoBroker.getArtistInfo("artist") } returns null
+        every { artistInfoBroker.getArtistInfo("artist") } returns emptyList()
 
         val result = cardRepository.searchArtistInfo("artist")
 
-        //revisar que sea emptyList()
-        assertEquals(EmptyArtistInfo, result)
+        assertEquals(emptyList<Card>(), result)
         assertFalse(card.isLocallyStored)
         verify(exactly = 0) { cardLocalStorage.insertArtistInfo(any()) }
     }
 
     @Test
-    fun `given service exception should return emptyArtistInfo`() {
+    fun `given service exception should return emptyCard`() {
         every { cardLocalStorage.getArtistInfo("artist") } returns null
         every { artistInfoBroker.getArtistInfo("artist") } throws mockk<Exception>()
 
         val result = cardRepository.searchArtistInfo("artist")
 
-        assertEquals(EmptyArtistInfo, result)
+        assertEquals(emptyList<Card>(), result)
         assertFalse(card.isLocallyStored)
         verify(exactly = 0) { cardLocalStorage.insertArtistInfo(any()) }
     }
