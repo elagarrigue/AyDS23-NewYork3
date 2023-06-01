@@ -30,7 +30,7 @@ class CardRepositoryImpl(
         return cards ?: emptyList()
     }
 
-    private fun markCardAsLocal(card: List<Card>) {
-        card.forEach { it.isLocallyStored = true}
+    private fun markCardAsLocal(cards: List<Card>) {
+        cards.forEach { it.isLocallyStored = true}
     }
 }
