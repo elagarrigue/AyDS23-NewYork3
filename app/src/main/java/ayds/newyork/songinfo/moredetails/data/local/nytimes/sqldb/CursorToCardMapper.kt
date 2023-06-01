@@ -16,7 +16,7 @@ internal class CursorToCardMapperImpl: CursorToCardMapper {
                         artistName= cursor.getString(getColumnIndexOrThrow(COLUMN_NAME)),
                         description = cursor.getString(getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                         infoUrl = cursor.getString(getColumnIndexOrThrow(COLUMN_INFO_URL)),
-                        source = Source.valueOf(cursor.getString(getColumnIndexOrThrow(COLUMN_SOURCE))),
+                        source = Source.values()[cursor.getString(getColumnIndexOrThrow(COLUMN_SOURCE)).toInt()],
                         sourceLogoUrl = cursor.getString(getColumnIndexOrThrow(COLUMN_SOURCE_LOGO)),
                     )
             }
