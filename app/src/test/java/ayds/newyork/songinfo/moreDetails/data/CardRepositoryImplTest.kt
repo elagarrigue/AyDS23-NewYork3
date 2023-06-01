@@ -59,7 +59,7 @@ class CardRepositoryImplTest {
     }
 
     @Test
-    fun `given non existing artist should return emptyCard`() {
+    fun `given non existing artist should return empty list`() {
         every { cardLocalStorage.getArtistInfo("artist") } returns null
         every { artistInfoBroker.getArtistInfo("artist") } returns emptyList()
 
@@ -71,7 +71,7 @@ class CardRepositoryImplTest {
     }
 
     @Test
-    fun `given service exception should return emptyCard`() {
+    fun `given service exception should return empty list`() {
         every { cardLocalStorage.getArtistInfo("artist") } returns null
         every { artistInfoBroker.getArtistInfo("artist") } throws mockk<Exception>()
 

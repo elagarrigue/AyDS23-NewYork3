@@ -9,7 +9,6 @@ const val COLUMN_DESCRIPTION = "description"
 const val COLUMN_INFO_URL = "infoUrl"
 const val COLUMN_SOURCE = "source"
 const val COLUMN_SOURCE_LOGO = "sourceLogo"
-const val NYTIMES_SOURCE = 1
 const val SELECTION_FILTER = "$COLUMN_NAME = ?"
 const val SELECTION_ORDER = "$COLUMN_NAME desc"
 const val DATABASE_CREATION_QUERY: String =

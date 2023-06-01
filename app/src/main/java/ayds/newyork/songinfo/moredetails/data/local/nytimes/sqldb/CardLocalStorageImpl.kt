@@ -38,7 +38,7 @@ internal class CardLocalStorageImpl(
         val cards = mutableListOf<Card>()
         while (cursor.moveToNext()) {
             val artistInfo = cursorToCardMapper.map(cursor)
-            artistInfo?.let { cards.add(artistInfo)}
+            artistInfo?.let { cards.add(artistInfo) }
         }
         cursor.close()
         return if (cards.size > 0) cards else null

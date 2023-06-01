@@ -21,7 +21,7 @@ interface ArtistAbstractHelper {
     fun getInfo(card: Card): String
 }
 
-class ArtistAbstractHelperImpl(): ArtistAbstractHelper {
+class ArtistAbstractHelperImpl: ArtistAbstractHelper {
 
     override fun getInfo(card: Card): String {
         return buildArtistInfoAbstract(card)

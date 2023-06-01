@@ -21,5 +21,4 @@ class ArtistInfoBrokerImpl(
 
         return cardList
     }
-
 }

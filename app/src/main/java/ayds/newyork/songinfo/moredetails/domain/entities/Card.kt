@@ -9,7 +9,7 @@ data class Card(
     var isLocallyStored: Boolean = false
 )
 
-enum class Source{
+enum class Source {
     NYTimes,
     Wikipedia,
     LastFM

@@ -24,5 +24,4 @@ class WikipediaProxyImpl(
                 source= Source.Wikipedia,
                 sourceLogoUrl=this.wikipediaLogoURL,
             )
-
 }

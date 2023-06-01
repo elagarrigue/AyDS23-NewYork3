@@ -6,7 +6,6 @@ import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelper
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenterImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
-import ayds.observer.Subject
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,14 +32,15 @@ class MoreDetailsPresenterTest {
         val cardList = listOf(card)
         val presenterTester: (MoreDetailsUIState) -> Unit = mockk(relaxed = true)
         val expectedUiState = MoreDetailsUIState(cardList)
-        every { cardRepository.searchArtistInfo("artist") } returns cardList
+        every { cardRepository.searchArtistInfo("artistName") } returns cardList
         every { artistAbstractHelper.getInfo(card) } returns "description"
 
         presenter.uiStateObservable.subscribe {
             presenterTester(it)
         }
-        presenter.getArtistInfo("artist")
+        presenter.getArtistInfo("artistName")
 
+        Thread.sleep(1000)
         verify { presenterTester(expectedUiState) }
     }
 
@@ -56,6 +56,7 @@ class MoreDetailsPresenterTest {
         }
         presenter.getArtistInfo("artist")
 
+        Thread.sleep(1000)
         verify { presenterTester(expectedUiState) }
     }
 }

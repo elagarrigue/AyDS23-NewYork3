@@ -1,11 +1,9 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
-
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.ny3.newyorktimes.external.NYTArtistInfo
-
 
 interface NewYorkTimesProxy {
     fun getArtistInfo(artist: String): Card?

@@ -1,6 +1,5 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
-
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.lastfmservice.ArtistService
 import ayds.lastfmservice.Artist.LastFMArtist
@@ -26,5 +25,4 @@ class LastFMProxyImpl(
                 source= Source.LastFM,
                 sourceLogoUrl=this.urlImageLastFM,
             )
-
 }
