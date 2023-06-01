@@ -9,7 +9,7 @@ internal class SpotifyTrackServiceImpl(
     private val spotifyTrackAPI: SpotifyTrackAPI,
     private val spotifyAccountService: SpotifyAccountService,
     private val spotifyToSongResolver: SpotifyToSongResolver,
-) : SpotifyTrackService {
+): SpotifyTrackService {
 
     override fun getSong(title: String): SpotifySong? {
         val callResponse = getSongFromService(title)

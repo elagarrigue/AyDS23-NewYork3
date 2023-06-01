@@ -11,7 +11,7 @@ class ArtistAbstractHelperTest {
     private lateinit var artistAbstractHelper: ArtistAbstractHelper
 
     @Before
-    fun setUp(){
+    fun setUp() {
         artistAbstractHelper = ArtistAbstractHelperImpl()
     }
 

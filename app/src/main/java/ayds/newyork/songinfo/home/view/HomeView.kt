@@ -32,7 +32,7 @@ interface HomeView {
     fun openExternalLink(url: String)
 }
 
-class HomeViewActivity : AppCompatActivity(), HomeView {
+class HomeViewActivity: AppCompatActivity(), HomeView {
 
     private val onActionSubject = Subject<HomeUiEvent>()
     private lateinit var homeModel: HomeModel

@@ -13,7 +13,7 @@ private const val DATABASE_NAME = "songs.db"
 internal class SpotifyLocalStorageImpl(
     context: Context,
     private val cursorToSpotifySongMapper: CursorToSpotifySongMapper,
-) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
+): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
     SpotifyLocalStorage {
 
     private val projection = arrayOf(

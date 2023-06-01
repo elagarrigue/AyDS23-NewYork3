@@ -14,7 +14,7 @@ interface  HomeModel {
     fun getSongById(id: String): Song
 }
 
-internal class HomeModelImpl(private val repository: SongRepository) : HomeModel {
+internal class HomeModelImpl(private val repository: SongRepository): HomeModel {
 
     override val songObservable = Subject<Song>()
 

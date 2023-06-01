@@ -53,7 +53,7 @@ class CarouselAdapter(
         return cards.size
     }
 
-    inner class CarouselViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CarouselViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textSource: TextView = itemView.findViewById(R.id.textSource)
         val textMoreDetails: TextView = itemView.findViewById(R.id.textMoreDetails)

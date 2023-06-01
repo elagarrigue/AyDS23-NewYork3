@@ -8,7 +8,7 @@ import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 class CardRepositoryImpl(
     private val cardLocalStorage: CardLocalStorage,
     private val artistInfoBroker: ArtistInfoBroker
-) : CardRepository {
+): CardRepository {
 
     override fun searchArtistInfo(artist: String): List<Card> {
         var cards = cardLocalStorage.getArtistInfo(artist)

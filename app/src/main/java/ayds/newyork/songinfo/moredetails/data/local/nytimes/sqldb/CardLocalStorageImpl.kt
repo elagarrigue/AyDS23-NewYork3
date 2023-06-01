@@ -11,7 +11,7 @@ import ayds.newyork.songinfo.moredetails.domain.entities.Card
 internal class CardLocalStorageImpl(
     context: Context,
     private val cursorToCardMapper: CursorToCardMapper,
-) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
+): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
     CardLocalStorage {
 
     private val projection = arrayOf(

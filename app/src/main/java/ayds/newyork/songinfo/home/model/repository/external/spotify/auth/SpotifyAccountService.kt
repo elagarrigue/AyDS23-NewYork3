@@ -16,7 +16,7 @@ interface SpotifyAccountService {
 internal class SpotifyAccountServiceImpl(
   private val spotifyTokenAPI: SpotifyAuthAPI,
   private val resolver: SpotifyToTokenResolver
-) : SpotifyAccountService {
+): SpotifyAccountService {
 
     override var token: String? = null
         get() {

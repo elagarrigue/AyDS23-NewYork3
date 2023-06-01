@@ -18,12 +18,12 @@ class MoreDetailsPresenterTest {
     private val onActionSubject: Subject<MoreDetailsUIState> = Subject()
 
     private val presenter by lazy {
-        MoreDetailsPresenterImpl(cardRepository,artistAbstractHelper)
+        MoreDetailsPresenterImpl(cardRepository, artistAbstractHelper)
     }
 
     @Test
     fun `getArtistInfo should update UI state with artist info`() {
-        val artistInfo = NYTArtistInfo("artist","abstract", "url")
+        val artistInfo = NYTArtistInfo("artist", "abstract", "url")
         val expectedUiState = MoreDetailsUIState("abstract", "url", true)
 
         every { cardRepository.searchArtistInfo("artist") } returns artistInfo

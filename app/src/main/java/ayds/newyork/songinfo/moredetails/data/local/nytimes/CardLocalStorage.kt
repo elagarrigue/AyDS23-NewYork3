@@ -6,5 +6,5 @@ interface CardLocalStorage {
 
     fun insertArtistInfo(artistInfo: Card)
 
-    fun getArtistInfo(artist: String):  List<Card>?
+    fun getArtistInfo(artist: String): List<Card>?
 }

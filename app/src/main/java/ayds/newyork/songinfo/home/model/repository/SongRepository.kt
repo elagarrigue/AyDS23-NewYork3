@@ -14,7 +14,7 @@ interface SongRepository {
 internal class SongRepositoryImpl(
     private val spotifyLocalStorage: SpotifyLocalStorage,
     private val spotifyTrackService: SpotifyTrackService
-) : SongRepository {
+): SongRepository {
 
     override fun getSongByTerm(term: String): Song {
         var spotifySong = spotifyLocalStorage.getSongByTerm(term)

@@ -9,7 +9,7 @@ interface SpotifyToTokenResolver {
 
 private const val ACCESS_TOKEN = "access_token"
 
-internal class JsonToTokenResolver : SpotifyToTokenResolver {
+internal class JsonToTokenResolver: SpotifyToTokenResolver {
 
     private val gson = Gson()
 
