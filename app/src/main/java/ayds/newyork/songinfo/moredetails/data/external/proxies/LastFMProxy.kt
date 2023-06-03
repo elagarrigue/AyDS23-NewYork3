@@ -1,11 +1,11 @@
-package ayds.newyork.songinfo.moredetails.data.external
+package ayds.newyork.songinfo.moredetails.data.external.proxies
 
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.lastfmservice.ArtistService
 import ayds.lastfmservice.Artist.LastFMArtist
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 
-class LastFMProxyImpl(
+internal class LastFMProxyImpl(
     private val artistService: ArtistService
 ): Proxy {
 

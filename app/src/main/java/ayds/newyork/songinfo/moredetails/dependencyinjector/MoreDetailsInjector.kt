@@ -14,9 +14,9 @@ import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUISta
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
 import ayds.lastfmservice.LastFMInjector
 import ayds.newyork.songinfo.moredetails.data.external.ArtistInfoBrokerImpl
-import ayds.newyork.songinfo.moredetails.data.external.LastFMProxyImpl
-import ayds.newyork.songinfo.moredetails.data.external.NewYorkTimesProxyImpl
-import ayds.newyork.songinfo.moredetails.data.external.WikipediaProxyImpl
+import ayds.newyork.songinfo.moredetails.data.external.proxies.LastFMProxyImpl
+import ayds.newyork.songinfo.moredetails.data.external.proxies.NewYorkTimesProxyImpl
+import ayds.newyork.songinfo.moredetails.data.external.proxies.WikipediaProxyImpl
 import ayds.winchester2.wikipediaexternal.injector.WikipediaInjector
 
 object MoreDetailsInjector {
@@ -27,8 +27,9 @@ object MoreDetailsInjector {
     private val lastFMProxy = LastFMProxyImpl(LastFMInjector.getService())
     private val wikipediaProxy = WikipediaProxyImpl(WikipediaInjector.wikipediaTrackService)
     private val newYorkTimesProxy = NewYorkTimesProxyImpl(NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl)
+    private val proxyList = listOf(lastFMProxy, newYorkTimesProxy, wikipediaProxy)
 
-    private val artistInfoBroker = ArtistInfoBrokerImpl(listOf(lastFMProxy, newYorkTimesProxy, wikipediaProxy))
+    private val artistInfoBroker = ArtistInfoBrokerImpl(proxyList)
 
     fun init(moreDetailsView: MoreDetailsView) {
         initMoreDetailsModel(moreDetailsView)

@@ -1,11 +1,11 @@
-package ayds.newyork.songinfo.moredetails.data.external
+package ayds.newyork.songinfo.moredetails.data.external.proxies
 
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.winchester2.wikipediaexternal.data.wikipedia.WikipediaTrackService
 import ayds.winchester2.wikipediaexternal.data.wikipedia.entity.ArtistInfo
 
-class WikipediaProxyImpl(
+internal class WikipediaProxyImpl(
     private val artistService: WikipediaTrackService
 ): Proxy {
 

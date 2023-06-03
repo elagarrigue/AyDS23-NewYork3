@@ -1,11 +1,11 @@
-package ayds.newyork.songinfo.moredetails.data.external
+package ayds.newyork.songinfo.moredetails.data.external.proxies
 
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.ny3.newyorktimes.external.NYTArtistInfo
 
-class NewYorkTimesProxyImpl(
+internal class NewYorkTimesProxyImpl(
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService
 ): Proxy {
 

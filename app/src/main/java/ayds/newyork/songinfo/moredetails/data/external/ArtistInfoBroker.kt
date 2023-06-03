@@ -1,12 +1,13 @@
 package ayds.newyork.songinfo.moredetails.data.external
 
+import ayds.newyork.songinfo.moredetails.data.external.proxies.Proxy
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
 
 interface ArtistInfoBroker {
     fun getArtistInfo(artist: String): List<Card>
 }
 
-class ArtistInfoBrokerImpl(
+internal class ArtistInfoBrokerImpl(
     private val proxyList: List<Proxy>
 ): ArtistInfoBroker {
 
