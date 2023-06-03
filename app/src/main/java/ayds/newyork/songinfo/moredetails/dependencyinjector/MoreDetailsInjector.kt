@@ -11,7 +11,7 @@ import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPrese
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
 import ayds.newyork.songinfo.moredetails.presentation.presenter.ArtistAbstractHelperImpl
 import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
-import ayds.ny3.newyorktimes.external.NYTimesArtistInfoServiceInjector
+import ayds.ny3.newyorktimes.external.injector.NYTimesArtistInfoServiceInjector
 import ayds.lastfmservice.LastFMInjector
 import ayds.newyork.songinfo.moredetails.data.external.ArtistInfoBrokerImpl
 import ayds.newyork.songinfo.moredetails.data.external.proxies.LastFMProxyImpl
