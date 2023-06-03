@@ -48,7 +48,7 @@ class CardRepositoryImplTest {
 
     @Test
     fun `given non existing artist name should get card from service, store and return it`() {
-        every { cardLocalStorage.getArtistInfo("artist") } returns null
+        every { cardLocalStorage.getArtistInfo("artist") } returns emptyList()
         every { artistInfoBroker.getArtistInfo("artist") } returns cardList
 
         val result = cardRepository.searchArtistInfo("artist")
@@ -60,7 +60,7 @@ class CardRepositoryImplTest {
 
     @Test
     fun `given non existing artist should return empty list`() {
-        every { cardLocalStorage.getArtistInfo("artist") } returns null
+        every { cardLocalStorage.getArtistInfo("artist") } returns emptyList()
         every { artistInfoBroker.getArtistInfo("artist") } returns emptyList()
 
         val result = cardRepository.searchArtistInfo("artist")
@@ -72,7 +72,7 @@ class CardRepositoryImplTest {
 
     @Test
     fun `given service exception should return empty list`() {
-        every { cardLocalStorage.getArtistInfo("artist") } returns null
+        every { cardLocalStorage.getArtistInfo("artist") } returns emptyList()
         every { artistInfoBroker.getArtistInfo("artist") } throws mockk<Exception>()
 
         val result = cardRepository.searchArtistInfo("artist")

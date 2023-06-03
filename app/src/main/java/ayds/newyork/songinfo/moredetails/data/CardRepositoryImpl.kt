@@ -13,7 +13,7 @@ class CardRepositoryImpl(
     override fun searchArtistInfo(artist: String): List<Card> {
         var cards = cardLocalStorage.getArtistInfo(artist)
         when {
-            cards != null -> {
+            cards.isNotEmpty() -> {
                 markCardsAsLocals(cards)
             }
             else -> {
@@ -23,11 +23,11 @@ class CardRepositoryImpl(
                         cardLocalStorage.insertArtistInfo(card)
                     }
                 } catch (e: Exception) {
-                    cards = null
+                    cards = emptyList()
                 }
             }
         }
-        return cards ?: emptyList()
+        return cards
     }
 
     private fun markCardsAsLocals(cards: List<Card>) {
