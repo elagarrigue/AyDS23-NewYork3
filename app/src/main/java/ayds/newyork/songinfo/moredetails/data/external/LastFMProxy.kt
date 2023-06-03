@@ -5,18 +5,15 @@ import ayds.lastfmservice.ArtistService
 import ayds.lastfmservice.Artist.LastFMArtist
 import ayds.newyork.songinfo.moredetails.domain.entities.Source
 
-interface LastFMProxy {
-    fun getArtistInfo(artist: String): Card?
-}
-
 class LastFMProxyImpl(
     private val artistService: ArtistService
-): LastFMProxy {
+): Proxy {
 
     override fun getArtistInfo(artist: String): Card? {
         val lastFMArtist = artistService.getArtist(artist)
         return lastFMArtist?.toCard(artist)
     }
+
     private fun LastFMArtist.toCard(artistName:String):Card =
             Card(
                 artistName=artistName,

@@ -28,7 +28,7 @@ object MoreDetailsInjector {
     private val wikipediaProxy = WikipediaProxyImpl(WikipediaInjector.wikipediaTrackService)
     private val newYorkTimesProxy = NewYorkTimesProxyImpl(NYTimesArtistInfoServiceInjector.newYorkTimesArtistInfoServiceImpl)
 
-    private val artistInfoBroker = ArtistInfoBrokerImpl(lastFMProxy,newYorkTimesProxy,wikipediaProxy)
+    private val artistInfoBroker = ArtistInfoBrokerImpl(listOf(lastFMProxy, newYorkTimesProxy, wikipediaProxy))
 
     fun init(moreDetailsView: MoreDetailsView) {
         initMoreDetailsModel(moreDetailsView)

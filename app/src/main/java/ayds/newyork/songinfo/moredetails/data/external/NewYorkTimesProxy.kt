@@ -5,13 +5,9 @@ import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.ny3.newyorktimes.external.NYTimesArtistInfoService
 import ayds.ny3.newyorktimes.external.NYTArtistInfo
 
-interface NewYorkTimesProxy {
-    fun getArtistInfo(artist: String): Card?
-}
-
 class NewYorkTimesProxyImpl(
     private val newYorkTimesArtistInfoService: NYTimesArtistInfoService
-): NewYorkTimesProxy {
+): Proxy {
 
     override fun getArtistInfo(artist: String) =
         newYorkTimesArtistInfoService.getArtistInfo(artist)?.toCard()
