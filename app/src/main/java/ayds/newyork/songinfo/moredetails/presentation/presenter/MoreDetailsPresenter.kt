@@ -16,6 +16,7 @@ internal class MoreDetailsPresenterImpl(
     private var cardRepository: CardRepository,
     private var artistAbstractHelper: ArtistAbstractHelper,
     override var uiState: MoreDetailsUIState
+
 ): MoreDetailsPresenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()

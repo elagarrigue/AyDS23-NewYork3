@@ -39,7 +39,6 @@ class MoreDetailsPresenterTest {
             presenterTester(it)
         }
         presenter.getArtistInfo("artistName")
-
         Thread.sleep(1000)
         verify { presenterTester(expectedUiState) }
     }
@@ -55,7 +54,6 @@ class MoreDetailsPresenterTest {
             presenterTester(it)
         }
         presenter.getArtistInfo("artist")
-
         Thread.sleep(1000)
         verify { presenterTester(expectedUiState) }
     }

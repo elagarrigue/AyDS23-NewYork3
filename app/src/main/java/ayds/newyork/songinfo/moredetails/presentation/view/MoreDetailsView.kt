@@ -64,6 +64,7 @@ class MoreDetailsView: AppCompatActivity() {
     private fun updateAdapter(cards: List<Card>) {
         carouselAdapter.cards = cards
         carouselAdapter.notifyItemChanged(0)
+
     }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
