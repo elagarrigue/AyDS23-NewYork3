@@ -25,10 +25,7 @@ class CarouselAdapter(
 
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val card = cards[position]
-        setImageView(holder.imageView, card.sourceLogoUrl)
-        setTextView(holder.textSource, card.source.name)
-        setTextViewHtml(holder.textMoreDetails, card.description)
-        updateListenerUrl(holder.urlButton, card.infoUrl)
+        holder.configureCard(card)
     }
 
     private fun setImageView(imageView: ImageView, image: String) {
@@ -54,9 +51,16 @@ class CarouselAdapter(
     }
 
     inner class CarouselViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val textSource: TextView = itemView.findViewById(R.id.textSource)
-        val textMoreDetails: TextView = itemView.findViewById(R.id.textMoreDetails)
-        val urlButton: Button = itemView.findViewById(R.id.openUrlButton)
+        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val textSource: TextView = itemView.findViewById(R.id.textSource)
+        private val textMoreDetails: TextView = itemView.findViewById(R.id.textMoreDetails)
+        private val urlButton: Button = itemView.findViewById(R.id.openUrlButton)
+
+        fun configureCard(card: Card) {
+            setImageView(this.imageView, card.sourceLogoUrl)
+            setTextView(this.textSource, card.source.name)
+            setTextViewHtml(this.textMoreDetails, card.description)
+            updateListenerUrl(this.urlButton, card.infoUrl)
+        }
     }
 }
