@@ -14,7 +14,7 @@ class CardRepositoryImpl(
         var cards = cardLocalStorage.getArtistInfo(artist)
         when {
             cards != null -> {
-                markCardAsLocal(cards)
+                markCardsAsLocals(cards)
             }
             else -> {
                 try {
@@ -30,7 +30,7 @@ class CardRepositoryImpl(
         return cards ?: emptyList()
     }
 
-    private fun markCardAsLocal(cards: List<Card>) {
+    private fun markCardsAsLocals(cards: List<Card>) {
         cards.forEach { it.isLocallyStored = true}
     }
 }
