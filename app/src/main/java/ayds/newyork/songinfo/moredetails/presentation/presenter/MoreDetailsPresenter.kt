@@ -42,7 +42,7 @@ internal class MoreDetailsPresenterImpl(
         if (cards.isNotEmpty())
             uiState.cardList = cards
         else{
-            val emptyCard = Card("No hay conexion", "artist", "url", null, "logoUrl", false)
+            val emptyCard = Card("No hay conexión", "artist", "url", null, "logoUrl", false)
             uiState.cardList = mutableListOf(emptyCard)
         }
 
