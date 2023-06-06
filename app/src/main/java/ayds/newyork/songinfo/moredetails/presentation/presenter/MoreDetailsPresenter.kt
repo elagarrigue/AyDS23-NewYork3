@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
 import ayds.newyork.songinfo.moredetails.domain.entities.Card
+import ayds.newyork.songinfo.moredetails.domain.entities.Source
 import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
@@ -38,6 +39,12 @@ internal class MoreDetailsPresenterImpl(
         cards.forEach { card ->
             card.description = artistAbstractHelper.getInfo(card)
         }
-        uiState.cardList = cards
+        if (cards.isNotEmpty())
+            uiState.cardList = cards
+        else{
+            val emptyCard = Card("No hay conexion", "artist", "url", null, "logoUrl", false)
+            uiState.cardList = mutableListOf(emptyCard)
+        }
+
     }
 }

@@ -53,12 +53,16 @@ class CarouselAdapter(
     inner class CarouselViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val textSource: TextView = itemView.findViewById(R.id.textSource)
+        private val labelSource: TextView = itemView.findViewById(R.id.labelSource)
         private val textMoreDetails: TextView = itemView.findViewById(R.id.textMoreDetails)
         private val urlButton: Button = itemView.findViewById(R.id.openUrlButton)
 
         fun configureCard(card: Card) {
+            card.source?.name?.let {
+                setTextView(this.labelSource, "Source: ")
+                setTextView(this.textSource, it)
+            }
             setImageView(this.imageView, card.sourceLogoUrl)
-            setTextView(this.textSource, card.source.name)
             setTextViewHtml(this.textMoreDetails, card.description)
             updateListenerUrl(this.urlButton, card.infoUrl)
         }

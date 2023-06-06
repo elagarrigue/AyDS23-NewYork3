@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="Source:" />
+            android:text="" />
 
         <TextView
             android:id="@+id/textSource"
