@@ -9,15 +9,15 @@ internal class LastFMProxyImpl(
     private val lastFMArtistInfoService: ArtistService
 ): Proxy {
 
-    override fun getArtistInfo(artist: String): Card? =
+    override fun getArtistInfo(artist: String) =
         lastFMArtistInfoService.getArtist(artist)?.toCard(artist)
 
     private fun LastFMArtist.toCard(artistName:String):Card =
         Card(
-            artistName=artistName,
-            description=this.info,
-            infoUrl=this.url,
-            source= Source.LastFM,
-            sourceLogoUrl=this.urlImageLastFM,
+            artistName = artistName,
+            description = this.info,
+            infoUrl = this.url,
+            source = Source.LastFM,
+            sourceLogoUrl = this.urlImageLastFM,
         )
 }

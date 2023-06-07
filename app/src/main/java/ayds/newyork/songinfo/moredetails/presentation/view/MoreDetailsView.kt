@@ -84,7 +84,7 @@ class MoreDetailsView: AppCompatActivity() {
         }
     }
 
-    private fun makeVisible(view: View){
+    private fun makeVisible(view: View) {
         view.visibility = View.VISIBLE
         when (view) {
             (viewPager) -> { noResultsText.visibility = View.GONE

@@ -9,15 +9,15 @@ internal class WikipediaProxyImpl(
     private val wikipediaArtistInfoService: WikipediaTrackService
 ): Proxy {
 
-    override fun getArtistInfo(artist: String): Card? =
+    override fun getArtistInfo(artist: String) =
         wikipediaArtistInfoService.getInfo(artist)?.toCard(artist)
 
-    private fun ArtistInfo.toCard(artistName: String):Card =
+    private fun ArtistInfo.toCard(artistName: String): Card =
         Card(
-            artistName=artistName,
-            description=this.description,
-            infoUrl=this.wikipediaURL,
-            source= Source.Wikipedia,
-            sourceLogoUrl=this.wikipediaLogoURL,
+            artistName = artistName,
+            description = this.description,
+            infoUrl = this.wikipediaURL,
+            source = Source.Wikipedia,
+            sourceLogoUrl = this.wikipediaLogoURL,
         )
 }
