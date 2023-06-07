@@ -39,12 +39,6 @@ internal class MoreDetailsPresenterImpl(
         cards.forEach { card ->
             card.description = artistAbstractHelper.getInfo(card)
         }
-        if (cards.isNotEmpty())
-            uiState.cardList = cards
-        else{
-            val emptyCard = Card("No hay conexión", "artist", "url", null, "logoUrl", false)
-            uiState.cardList = mutableListOf(emptyCard)
-        }
-
+        uiState.cardList = cards
     }
 }

@@ -4,7 +4,7 @@ data class Card(
     var description: String = "",
     var artistName: String = "",
     var infoUrl: String = "",
-    var source: Source?,
+    var source: Source,
     var sourceLogoUrl: String = "",
     var isLocallyStored: Boolean = false
 )

@@ -1,6 +1,9 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import ayds.newyork.songinfo.R
@@ -21,6 +24,8 @@ class MoreDetailsView: AppCompatActivity() {
     }
     private lateinit var viewPager: ViewPager2
     private lateinit var carouselAdapter: CarouselAdapter
+    private lateinit var noResultsText: TextView
+    private lateinit var spinner: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,17 +64,33 @@ class MoreDetailsView: AppCompatActivity() {
 
     private fun initProperties() {
         viewPager = findViewById(R.id.viewPager)
+        noResultsText = findViewById(R.id.noResultsText)
+        spinner = findViewById(R.id.spinner)
     }
 
     private fun updateAdapter(cards: List<Card>) {
         carouselAdapter.cards = cards
         carouselAdapter.notifyItemChanged(0)
-
     }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
         runOnUiThread {
-            updateAdapter(uiState.cardList)
+            if (uiState.cardList.isEmpty()) {
+                makeVisible(noResultsText)
+            } else {
+                updateAdapter(uiState.cardList)
+                makeVisible(viewPager)
+            }
+        }
+    }
+
+    private fun makeVisible(view: View){
+        view.visibility = View.VISIBLE
+        when (view) {
+            (viewPager) -> { noResultsText.visibility = View.GONE
+                            spinner.visibility = View.GONE }
+            (noResultsText) -> { viewPager.visibility = View.GONE
+                            spinner.visibility = View.GONE }
         }
     }
 }

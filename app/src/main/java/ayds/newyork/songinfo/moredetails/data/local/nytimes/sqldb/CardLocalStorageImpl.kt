@@ -27,7 +27,7 @@ internal class CardLocalStorageImpl(
             put(COLUMN_NAME, artistInfo.artistName)
             put(COLUMN_DESCRIPTION, artistInfo.description)
             put(COLUMN_INFO_URL, artistInfo.infoUrl)
-            put(COLUMN_SOURCE, artistInfo.source?.ordinal)
+            put(COLUMN_SOURCE, artistInfo.source.ordinal)
             put(COLUMN_SOURCE_LOGO, artistInfo.sourceLogoUrl)
         }
         this.writableDatabase.insert(TABLE_NAME, null, values)
