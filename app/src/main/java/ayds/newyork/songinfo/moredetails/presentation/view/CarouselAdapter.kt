@@ -58,10 +58,8 @@ class CarouselAdapter(
         private val urlButton: Button = itemView.findViewById(R.id.openUrlButton)
 
         fun configureCard(card: Card) {
-            card.source?.name?.let {
-                setTextView(this.labelSource, "Source: ")
-                setTextView(this.textSource, it)
-            }
+            setTextView(this.labelSource, "Source: ")
+            setTextView(this.textSource, card.source.name)
             setImageView(this.imageView, card.sourceLogoUrl)
             setTextViewHtml(this.textMoreDetails, card.description)
             updateListenerUrl(this.urlButton, card.infoUrl)
