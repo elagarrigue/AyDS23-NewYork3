@@ -12,13 +12,12 @@ internal class NewYorkTimesProxyImpl(
     override fun getArtistInfo(artist: String) =
         newYorkTimesArtistInfoService.getArtistInfo(artist)?.toCard()
 
-    private fun NYTArtistInfo.toCard(): Card {
-        return Card(
+    private fun NYTArtistInfo.toCard(): Card =
+        Card(
             description = abstract,
             artistName = artist,
             infoUrl = url,
             source = Source.NYTimes,
             sourceLogoUrl = nytLogoUrl,
         )
-    }
 }

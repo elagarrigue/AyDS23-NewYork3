@@ -6,20 +6,18 @@ import ayds.winchester2.wikipediaexternal.data.wikipedia.WikipediaTrackService
 import ayds.winchester2.wikipediaexternal.data.wikipedia.entity.ArtistInfo
 
 internal class WikipediaProxyImpl(
-    private val artistService: WikipediaTrackService
+    private val wikipediaArtistInfoService: WikipediaTrackService
 ): Proxy {
 
-    override fun getArtistInfo(artist: String): Card? {
-        val wikipediaArtist = artistService.getInfo(artist)
-        return wikipediaArtist?.toCard(artist)
-    }
+    override fun getArtistInfo(artist: String): Card? =
+        wikipediaArtistInfoService.getInfo(artist)?.toCard(artist)
 
     private fun ArtistInfo.toCard(artistName: String):Card =
-            Card(
-                artistName=artistName,
-                description=this.description,
-                infoUrl=this.wikipediaURL,
-                source= Source.Wikipedia,
-                sourceLogoUrl=this.wikipediaLogoURL,
-            )
+        Card(
+            artistName=artistName,
+            description=this.description,
+            infoUrl=this.wikipediaURL,
+            source= Source.Wikipedia,
+            sourceLogoUrl=this.wikipediaLogoURL,
+        )
 }
