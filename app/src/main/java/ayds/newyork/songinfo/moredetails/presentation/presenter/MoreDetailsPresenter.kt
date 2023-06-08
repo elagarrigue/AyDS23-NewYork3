@@ -37,6 +37,7 @@ internal class MoreDetailsPresenterImpl(
         cards.forEach { card ->
             card.description = artistAbstractHelper.getInfo(card)
         }
-        uiState.cardList = cards
+        uiState.cardList.clear()
+        uiState.cardList.addAll(cards)
     }
 }
