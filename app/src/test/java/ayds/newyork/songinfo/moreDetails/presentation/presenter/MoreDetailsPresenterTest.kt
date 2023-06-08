@@ -29,7 +29,7 @@ class MoreDetailsPresenterTest {
             Source.NYTimes,
             "sourceLogoUrl"
         )
-        val cardList = mutableListOf(card)
+        val cardList = listOf(card)
         val presenterTester: (MoreDetailsUIState) -> Unit = mockk(relaxed = true)
         val expectedUiState = MoreDetailsUIState(cardList)
         every { cardRepository.searchArtistInfo("artistName") } returns cardList
@@ -45,7 +45,7 @@ class MoreDetailsPresenterTest {
 
     @Test
     fun `calling getArtistInfo should notify update UI state as empty when there are no cards`() {
-        val cardList = mutableListOf<Card>()
+        val cardList = emptyList<Card>()
         val presenterTester: (MoreDetailsUIState) -> Unit = mockk(relaxed = true)
         val expectedUiState = MoreDetailsUIState(cardList)
         every { cardRepository.searchArtistInfo("artist") } returns cardList
