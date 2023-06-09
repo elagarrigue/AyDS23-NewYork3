@@ -1,44 +1,47 @@
 package ayds.newyork.songinfo.moredetails.presentation.view
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
+import androidx.viewpager2.widget.ViewPager2
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.dependencyinjector.MoreDetailsInjector
-import ayds.newyork.songinfo.moredetails.presentation.presenter.*
-import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState.Companion.TITLE_IMAGE_URL
-import ayds.newyork.songinfo.utils.UtilsInjector
-import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
-import ayds.newyork.songinfo.utils.view.ImageLoader
-import ayds.observer.*
+import ayds.newyork.songinfo.moredetails.domain.entities.Card
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsPresenter
+import ayds.newyork.songinfo.moredetails.presentation.presenter.MoreDetailsUIState
+import ayds.observer.Observer
 
 const val ARTIST_NAME_EXTRA = "artistName"
 
-class MoreDetailsView : AppCompatActivity() {
+class MoreDetailsView: AppCompatActivity() {
 
-    private lateinit var moreDetailsTextView: TextView
-    private lateinit var titleImageView: ImageView
-    private lateinit var openUrlButton: Button
-    private val imageLoader: ImageLoader = UtilsInjector.imageLoader
     private lateinit var artistName: String
     private lateinit var presenter: MoreDetailsPresenter
-    private val observer: Observer<MoreDetailsUIState> =
-        Observer {
-                value -> updateMoreDetailsView(value)
-        }
+    private val observer: Observer<MoreDetailsUIState> = Observer { value ->
+        updateMoreDetailsView(value)
+    }
+    private lateinit var viewPager: ViewPager2
+    private lateinit var carouselAdapter: CarouselAdapter
+    private lateinit var noResultsText: TextView
+    private lateinit var spinner: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_other_info)
+        setContentView(R.layout.carousel_layout)
+
         initModule()
         initProperties()
-        updateTitleImageView()
         initArtistName()
         subscribeUiState()
+        initCarousel()
         getInfo()
+    }
+
+    private fun initCarousel() {
+        carouselAdapter = CarouselAdapter(emptyList(), this)
+        viewPager.adapter = carouselAdapter
     }
 
     private fun getInfo() {
@@ -60,36 +63,34 @@ class MoreDetailsView : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        moreDetailsTextView = findViewById(R.id.textMoreDetails)
-        titleImageView = findViewById(R.id.imageView)
-        openUrlButton = findViewById(R.id.openUrlButton)
+        viewPager = findViewById(R.id.viewPager)
+        noResultsText = findViewById(R.id.noResultsText)
+        spinner = findViewById(R.id.spinner)
     }
 
-    private fun updateTitleImageView() {
-        runOnUiThread {
-            imageLoader.loadImageIntoView(TITLE_IMAGE_URL, titleImageView)
-        }
-    }
-
-    private fun updateMoreDetailsText(artistInfo: String) {
-        runOnUiThread {
-            moreDetailsTextView.text = HtmlCompat.fromHtml(artistInfo, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        }
+    private fun updateAdapter(cards: List<Card>) {
+        carouselAdapter.cards = cards
+        carouselAdapter.notifyItemChanged(0)
     }
 
     private fun updateMoreDetailsView(uiState: MoreDetailsUIState) {
-        updateMoreDetailsText(uiState.abstract)
-        updateUrl(uiState.url)
-        enableActions(uiState.actionsEnabled)
-    }
-
-    private fun enableActions(enable: Boolean) {
         runOnUiThread {
-            openUrlButton.isEnabled = enable
+            if (uiState.cardList.isEmpty()) {
+                makeVisible(noResultsText)
+            } else {
+                updateAdapter(uiState.cardList)
+                makeVisible(viewPager)
+            }
         }
     }
 
-    private fun updateUrl(url: String) {
-        openUrlButton.setOnClickListener { navigationUtils.openExternalUrl(this, url) }
+    private fun makeVisible(view: View) {
+        view.visibility = View.VISIBLE
+        when (view) {
+            (viewPager) -> { noResultsText.visibility = View.GONE
+                            spinner.visibility = View.GONE }
+            (noResultsText) -> { viewPager.visibility = View.GONE
+                            spinner.visibility = View.GONE }
+        }
     }
 }

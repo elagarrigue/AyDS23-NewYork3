@@ -21,7 +21,7 @@ private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
 
-internal class JsonToSongResolver : SpotifyToSongResolver {
+internal class JsonToSongResolver: SpotifyToSongResolver {
 
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {

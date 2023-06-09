@@ -1,9 +1,7 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.EmptyArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.repository.ArtistRepository
+import ayds.newyork.songinfo.moredetails.domain.entities.Card
+import ayds.newyork.songinfo.moredetails.domain.repository.CardRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
 
@@ -15,18 +13,18 @@ interface MoreDetailsPresenter {
 }
 
 internal class MoreDetailsPresenterImpl(
-    var artistInfoRepository: ArtistRepository,
-    var artistAbstractHelper: ArtistAbstractHelper
+    private var cardRepository: CardRepository,
+    private var artistAbstractHelper: ArtistAbstractHelper,
+    override var uiState: MoreDetailsUIState
 ): MoreDetailsPresenter {
 
     private val onActionSubject = Subject<MoreDetailsUIState>()
     override var uiStateObservable = onActionSubject
-    override var uiState = MoreDetailsUIState()
 
     override fun getArtistInfo(artistName: String) {
         Thread {
-            val artistInfo = artistInfoRepository.searchArtistInfo(artistName)
-            updateUiState(artistInfo)
+            val cards = cardRepository.searchArtistInfo(artistName)
+            updateUiState(cards)
             notifyUpdate(uiState)
         }.start()
     }
@@ -35,26 +33,12 @@ internal class MoreDetailsPresenterImpl(
         uiStateObservable.notify(uiState)
     }
 
-    private fun updateUiState(artistInfo: ArtistInfo) {
-        when (artistInfo) {
-            is NYTArtistInfo -> updateArtistInfoUiState(artistInfo)
-            EmptyArtistInfo -> updateEmptyUiState()
+    private fun updateUiState(cards: List<Card>) {
+        cards.forEach { card ->
+            card.description = artistAbstractHelper.getInfo(card)
         }
-    }
-
-    private fun updateArtistInfoUiState(artistInfo: NYTArtistInfo) {
         uiState = uiState.copy(
-            abstract = artistAbstractHelper.getInfo(artistInfo),
-            url = artistInfo.url,
-            actionsEnabled = true
-        )
-    }
-
-    private fun updateEmptyUiState() {
-        uiState = uiState.copy(
-            abstract = artistAbstractHelper.getInfo(EmptyArtistInfo),
-            url = "",
-            actionsEnabled = false
+            cardList = cards
         )
     }
 }

@@ -10,7 +10,7 @@ interface ImageLoader {
 
 internal class ImageLoaderImpl(
     private val picasso: Picasso
-) : ImageLoader {
+): ImageLoader {
 
     override fun loadImageIntoView(url: String, imageView: ImageView) {
         picasso.load(url).into(imageView)

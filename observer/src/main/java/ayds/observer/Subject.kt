@@ -2,7 +2,7 @@ package ayds.observer
 
 import java.util.*
 
-class Subject<T> : Observable<T>, Publisher<T> {
+class Subject<T>: Observable<T>, Publisher<T> {
     
     private val observers: MutableList<Observer<T>> = ArrayList()
     

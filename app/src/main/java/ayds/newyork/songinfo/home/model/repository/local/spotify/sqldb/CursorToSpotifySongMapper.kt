@@ -9,7 +9,7 @@ interface CursorToSpotifySongMapper {
     fun map(cursor: Cursor): SpotifySong?
 }
 
-internal class CursorToSpotifySongMapperImpl : CursorToSpotifySongMapper {
+internal class CursorToSpotifySongMapperImpl: CursorToSpotifySongMapper {
 
     override fun map(cursor: Cursor): SpotifySong? =
         try {

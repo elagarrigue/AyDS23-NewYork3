@@ -1,7 +1,6 @@
 package ayds.newyork.songinfo.moredetails.presentation.presenter
 
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.domain.entities.ArtistInfo.NYTArtistInfo
+import ayds.newyork.songinfo.moredetails.domain.entities.Card
 import java.util.*
 
 private const val HTML_START = "<html><div width=400>"
@@ -15,32 +14,29 @@ private const val HTML_BOLD_TAG_CLOSE = "</b>"
 private const val APOSTROPHE = "'"
 private const val SPACE = " "
 private const val PREFIX = "[*]"
-private const val NO_RESULTS = "No Results"
 private const val NO_ABSTRACT = "No Abstract"
 private const val EMPTY_STRING = ""
 
 interface ArtistAbstractHelper {
-    fun getInfo(artistInfo: ArtistInfo): String
+    fun getInfo(card: Card): String
 }
 
-class ArtistAbstractHelperImpl() : ArtistAbstractHelper {
+class ArtistAbstractHelperImpl: ArtistAbstractHelper {
 
-    override fun getInfo(artistInfo: ArtistInfo): String {
-        return when (artistInfo) {
-            is NYTArtistInfo -> buildArtistInfoAbstract(artistInfo)
-            else -> NO_RESULTS
-        }
+    override fun getInfo(card: Card): String {
+        return buildArtistInfoAbstract(card)
     }
-    private fun buildArtistInfoAbstract(artistInfo: NYTArtistInfo): String {
-        val abstract = getAbstract(artistInfo)
-        val formattedAbstract = getFormattedAbstract(artistInfo.artist, abstract)
-        return if (artistInfo.isLocallyStored) PREFIX.plus(SPACE).plus(formattedAbstract)
+
+    private fun buildArtistInfoAbstract(card: Card): String {
+        val abstract = getAbstract(card.description)
+        val formattedAbstract = getFormattedAbstract(card.artistName, abstract)
+        return if (card.isLocallyStored) PREFIX.plus(SPACE).plus(formattedAbstract)
             else formattedAbstract
     }
 
-    private fun getAbstract(artistInfo: NYTArtistInfo): String =
-        if (artistInfo.abstract == EMPTY_STRING) NO_ABSTRACT
-        else artistInfo.abstract
+    private fun getAbstract(description: String): String =
+        if (description == EMPTY_STRING) NO_ABSTRACT
+        else description
 
     private fun getFormattedAbstract(artistName: String, abstract: String): String {
         val text = abstract.replace(LINE_BREAK_ESCAPE_SEQ, LINE_BREAK)
